@@ -30,6 +30,7 @@ import {
   WARNING_DARK,
   WARNING_LIGHT,
   WARNING_MAIN,
+  BACKGROUND_DEFAULT,
 } from './token'
 
 export const palette: PaletteOptions = {
@@ -58,7 +59,7 @@ export const palette: PaletteOptions = {
     dark: WARNING_DARK,
     light: WARNING_LIGHT,
   },
-  background: { default: '#FCFCFC' },
+  background: { default: BACKGROUND_DEFAULT },
   grey: {
     '50': GREY_50,
     '100': GREY_100,

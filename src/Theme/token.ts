@@ -35,4 +35,4 @@ export const GREY_A700 = '#14142A'
 export const COMMON_BLACK = '#111111'
 export const COMMON_WHITE = '#ffffff'
 
-export const BACKGROUND_DEFAULT = '#FCFCFC'
+export const BACKGROUND_DEFAULT = '#FFFFFF'
