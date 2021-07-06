@@ -1,5 +1,5 @@
 import { ThemeProvider, CssBaseline, Container, makeStyles } from '@material-ui/core'
-import { Login } from './section'
+import { Login, SignUp } from './section'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { PegasusUI } from './Theme'
 
@@ -17,6 +17,9 @@ export const App = () => {
       <Container maxWidth="xl" className={container}>
         <Route path="/login" exact>
           <Login />
+        </Route>
+        <Route path="/signup" exact>
+          <SignUp />
         </Route>
       </Container>
     </Switch>
