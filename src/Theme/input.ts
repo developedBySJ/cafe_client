@@ -1,17 +1,6 @@
-import {
-  FilledInputClassKey,
-  InputBaseClassKey,
-  lighten,
-  StyleRules,
-} from '@material-ui/core'
+import { FilledInputClassKey, InputBaseClassKey, lighten, StyleRules } from '@material-ui/core'
 import { palette } from './palette'
-import {
-  ERROR_LIGHT,
-  ERROR_MAIN,
-  GREY_300,
-  PRIMARY_MAIN,
-  SECONDARY_MAIN,
-} from './token'
+import { ERROR_LIGHT, ERROR_MAIN, GREY_300, PRIMARY_MAIN, SECONDARY_MAIN } from './token'
 
 export const MuiFilledInput: Partial<StyleRules<FilledInputClassKey, {}>> = {
   root: {
