@@ -3,7 +3,6 @@ import {
   TextField,
   Button,
   makeStyles,
-  Box,
   Typography,
   useTheme,
   Paper,
@@ -14,6 +13,9 @@ const useStyle = makeStyles((theme) => ({
     padding: '4rem 2rem',
     margin: '2rem 0',
     backgroundColor: theme.palette.grey[50],
+    [theme.breakpoints.down('xs')]: {
+      padding: '2rem 1rem',
+    },
   },
   margin: {
     margin: '0.5rem 0',
@@ -28,14 +30,17 @@ const useStyle = makeStyles((theme) => ({
     height: '80vh',
     minHeight: '300px',
     flexDirection: 'column',
+    [theme.breakpoints.down('xs')]: {
+      padding: 0,
+    },
   },
-  button: {
+  marginTop: {
     marginTop: '1.5rem',
   },
 }))
 
 export const Login = () => {
-  const { wrapper, margin, container, heading, button } = useStyle()
+  const { wrapper, margin, container, heading, marginTop } = useStyle()
   const theme = useTheme()
   return (
     <Container maxWidth="sm" className={container}>
@@ -49,9 +54,7 @@ export const Login = () => {
           variant="filled"
           fullWidth
           type="email"
-          size="small"
           className={margin}
-          margin="dense"
         />
         <TextField
           id="password"
@@ -59,13 +62,12 @@ export const Login = () => {
           variant="filled"
           fullWidth
           type="password"
-          size="small"
           className={margin}
         />
-        <Button variant="contained" color="primary" fullWidth className={button}>
+        <Button variant="contained" color="primary" fullWidth size="large" className={marginTop}>
           Login
         </Button>
-        <Typography color="textSecondary" className={margin} align="center">
+        <Typography color="textSecondary" className={marginTop} align="center">
           Don't Have Account ? <Link to="/signup">Sign Up</Link>
         </Typography>
       </Paper>
