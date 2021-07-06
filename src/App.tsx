@@ -1,19 +1,32 @@
-import { ThemeProvider } from '@material-ui/core'
-import Button from '@material-ui/core/Button'
-import { BrowserRouter } from 'react-router-dom'
+import { ThemeProvider, CssBaseline, Container, makeStyles } from '@material-ui/core'
+import { Login } from './section'
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { PegasusUI } from './Theme'
 
+const useStyle = makeStyles((theme) => ({
+  container: {
+    backgroundColor: theme.palette.grey[100],
+    minHeight: '100vh',
+  },
+}))
+
 export const App = () => {
+  const { container } = useStyle()
   return (
-    <Button variant="contained" color="primary">
-      Hello World
-    </Button>
+    <Switch>
+      <Container maxWidth="xl" className={container}>
+        <Route path="/login" exact>
+          <Login />
+        </Route>
+      </Container>
+    </Switch>
   )
 }
 
 const AppWrapper = () => {
   return (
     <ThemeProvider theme={PegasusUI}>
+      <CssBaseline />
       <BrowserRouter>
         <App />
       </BrowserRouter>
