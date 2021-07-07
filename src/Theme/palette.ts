@@ -81,7 +81,7 @@ export const palette: PaletteOptions = {
   },
   action: {
     disabled: GREY_400,
-    disabledBackground: GREY_100,
+    disabledBackground: GREY_300,
     hover: GREY_400,
   },
   type: 'light',

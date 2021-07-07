@@ -1,6 +1,6 @@
-export const PRIMARY_MAIN = '#5F2EEA'
-export const PRIMARY_DARK = '#2A00A2'
-export const PRIMARY_LIGHT = '#BCA4FF'
+export const PRIMARY_MAIN = '#F5474A'
+export const PRIMARY_DARK = '#c4393b'
+export const PRIMARY_LIGHT = '#F99192'
 
 export const SECONDARY_MAIN = '#1CC8EE'
 export const SECONDARY_DARK = '#0096B7'

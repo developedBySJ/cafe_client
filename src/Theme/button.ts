@@ -3,7 +3,7 @@ import { ButtonClassKey, StyleRules } from '@material-ui/core'
 export const MuiButton: Partial<StyleRules<ButtonClassKey, {}>> = {
   root: {
     boxShadow: 'none',
-    borderRadius: 10000,
+    borderRadius: 16,
     padding: '0.72rem 3rem',
     '&:hover': {
       boxShadow: 'none',
