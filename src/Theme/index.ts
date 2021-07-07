@@ -12,6 +12,7 @@ export const PegasusUI = createMuiTheme({
   overrides: {
     MuiButton,
     MuiFilledInput,
+    MuiInputBase: MuiFilledInput,
     MuiButtonGroup: {
       root: {
         borderRadius: 1000,
