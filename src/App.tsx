@@ -6,6 +6,7 @@ import { PegasusUI } from './Theme'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { SnackbarProvider } from 'notistack'
 import { ERROR_MAIN, SUCCESS_MAIN, WARNING_MAIN } from './Theme/token'
+import { ResetPassword } from './section/ResetPassword'
 
 const useStyle = makeStyles((theme) => ({
   container: {
@@ -57,6 +58,9 @@ export const App = () => {
           </Route>
           <Route path="/forgot-password" exact>
             <ForgotPassword />
+          </Route>
+          <Route path="/reset-password/:token" exact>
+            <ResetPassword />
           </Route>
         </Container>
       </Switch>
