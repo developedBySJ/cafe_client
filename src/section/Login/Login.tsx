@@ -1,12 +1,4 @@
-import {
-  Container,
-  TextField,
-  Button,
-  makeStyles,
-  Typography,
-  useTheme,
-  Paper,
-} from '@material-ui/core'
+import { Container, TextField, Button, makeStyles, Typography, Paper } from '@material-ui/core'
 import { useFormik } from 'formik'
 import { useMutation } from 'react-query'
 import { Link } from 'react-router-dom'
@@ -124,6 +116,9 @@ export const Login = () => {
             helperText={formik.touched.password && formik.errors.password}
             required
           />
+          <Typography color="textSecondary" className={margin} align="right">
+            <Link to="/forgot-password">Forgot Password?</Link>
+          </Typography>
           <Button
             variant="contained"
             color="primary"
