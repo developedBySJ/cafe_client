@@ -9,8 +9,11 @@ import {
   Paper,
 } from '@material-ui/core'
 import { useFormik } from 'formik'
+import { useMutation } from 'react-query'
 import { Link } from 'react-router-dom'
 import * as yup from 'yup'
+import { SignUpPayload, SIGN_UP } from '../../lib/api/Mutation/signup'
+import { useOnErrorNotify, useOnSuccessNotify } from '../../lib/hooks'
 
 const useStyle = makeStyles((theme) => ({
   wrapper: {
@@ -79,19 +82,31 @@ export const SignUp = () => {
   const { wrapper, margin, container, heading, marginTop, gridItem } = useStyle()
   const theme = useTheme()
 
+  const notifyError = useOnErrorNotify()
+  const notifySuccess = useOnSuccessNotify()
+
+  const { isLoading, mutate } = useMutation(SIGN_UP)
+
+  const onSubmit = (values: SignUpPayload) => {
+    mutate(values, {
+      onError: notifyError,
+      onSuccess: ({ data }) => {
+        notifySuccess(`Welcome ${data.firstName} `)
+      },
+    })
+  }
+
   const formik = useFormik({
     initialValues: {
       firstName: '',
-      lastName: '',
+      lastName: undefined,
       email: '',
       password: '',
     },
     validationSchema: validationSchema,
     validateOnBlur: true,
     validateOnChange: true,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2))
-    },
+    onSubmit,
   })
 
   return (
@@ -162,7 +177,14 @@ export const SignUp = () => {
             helperText={formik.touched.password && formik.errors.password}
             required
           />
-          <Button variant="contained" color="primary" size="large" fullWidth className={marginTop}>
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            fullWidth
+            type="submit"
+            className={marginTop}
+          >
             Sign Up
           </Button>
           <Typography color="textSecondary" className={marginTop} align="center">
