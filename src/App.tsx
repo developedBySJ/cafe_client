@@ -1,5 +1,5 @@
 import { ThemeProvider, CssBaseline, Container, makeStyles } from '@material-ui/core'
-import { Login, SignUp } from './section'
+import { Login, SignUp, ForgotPassword } from './section'
 import { Navbar } from './lib/component'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { PegasusUI } from './Theme'
@@ -54,6 +54,9 @@ export const App = () => {
           </Route>
           <Route path="/signup" exact>
             <SignUp />
+          </Route>
+          <Route path="/forgot-password" exact>
+            <ForgotPassword />
           </Route>
         </Container>
       </Switch>
