@@ -3,13 +3,9 @@ import { Login, SignUp } from './section'
 import { Navbar } from './lib/component'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { PegasusUI } from './Theme'
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from 'react-query'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { SnackbarProvider } from 'notistack'
+import { ERROR_MAIN, SUCCESS_MAIN, WARNING_MAIN } from './Theme/token'
 
 const useStyle = makeStyles((theme) => ({
   container: {
@@ -21,6 +17,28 @@ const useStyle = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       paddingTop: '64px',
     },
+  },
+}))
+const useSnackBarStyles = makeStyles(() => ({
+  root: {
+    '& *': {
+      boxShadow: 'none !important',
+    },
+  },
+  variantSuccess: {
+    backgroundColor: SUCCESS_MAIN,
+    fontWeight: 500,
+  },
+  variantError: {
+    backgroundColor: ERROR_MAIN,
+    fontWeight: 500,
+  },
+  variantInfo: {
+    fontWeight: 500,
+  },
+  variantWarning: {
+    backgroundColor: WARNING_MAIN,
+    fontWeight: 500,
   },
 }))
 
@@ -46,12 +64,15 @@ export const App = () => {
 const queryClient = new QueryClient()
 
 const AppWrapper = () => {
+  const classes = useSnackBarStyles()
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={PegasusUI}>
         <CssBaseline />
         <BrowserRouter>
-          <App />
+          <SnackbarProvider autoHideDuration={3000} preventDuplicate classes={classes}>
+            <App />
+          </SnackbarProvider>
         </BrowserRouter>
       </ThemeProvider>
     </QueryClientProvider>
