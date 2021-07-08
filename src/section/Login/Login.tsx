@@ -8,8 +8,13 @@ import {
   Paper,
 } from '@material-ui/core'
 import { useFormik } from 'formik'
+import { useMutation } from 'react-query'
 import { Link } from 'react-router-dom'
 import * as yup from 'yup'
+import { LOGIN } from '../../lib/api/Mutation'
+import { LoginPayload } from '../../lib/api/Mutation/login'
+import { useOnErrorNotify } from '../../lib/hooks/useOnErrorNotify'
+import { useOnSuccessNotify } from '../../lib/hooks/useOnSuccessNotify'
 
 const useStyle = makeStyles((theme) => ({
   wrapper: {
@@ -58,7 +63,21 @@ const validationSchema = yup.object({
 
 export const Login = () => {
   const { wrapper, margin, container, heading, marginTop } = useStyle()
-  const theme = useTheme()
+
+  const notifyError = useOnErrorNotify()
+  const notifySuccess = useOnSuccessNotify()
+
+  const { data, isLoading, mutate } = useMutation(LOGIN)
+
+  const onSubmit = (values: LoginPayload) => {
+    mutate(values, {
+      onError: notifyError,
+      onSuccess: (data) => {
+        notifySuccess('Login Successfully')
+      },
+    })
+  }
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -67,9 +86,7 @@ export const Login = () => {
     validationSchema: validationSchema,
     validateOnBlur: true,
     validateOnChange: true,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2))
-    },
+    onSubmit,
   })
 
   return (
@@ -114,8 +131,9 @@ export const Login = () => {
             size="large"
             className={marginTop}
             type="submit"
+            disabled={isLoading}
           >
-            Login
+            {isLoading ? 'Loading' : 'Login'}
           </Button>
         </form>
         <Typography color="textSecondary" className={marginTop} align="center">
