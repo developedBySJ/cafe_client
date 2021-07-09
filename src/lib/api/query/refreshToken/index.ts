@@ -1,2 +1,2 @@
-export * from './whoAmI'
 export * from './refreshToken'
+export * from './refresh.type'
