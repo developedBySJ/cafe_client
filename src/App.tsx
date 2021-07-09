@@ -3,10 +3,14 @@ import { Login, SignUp, ForgotPassword } from './section'
 import { Navbar } from './lib/component'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { PegasusUI } from './Theme'
-import { QueryClient, QueryClientProvider } from 'react-query'
+import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
 import { SnackbarProvider } from 'notistack'
 import { ERROR_MAIN, SUCCESS_MAIN, WARNING_MAIN } from './Theme/token'
 import { ResetPassword } from './section/ResetPassword'
+import { useState } from 'react'
+import { WHO_AM_I } from './lib/api/query'
+import { REFRESH_TOKEN } from './lib/api/query/refreshToken'
+import { Viewer } from './lib/types/viewer'
 
 const useStyle = makeStyles((theme) => ({
   container: {
@@ -43,15 +47,39 @@ const useSnackBarStyles = makeStyles(() => ({
   },
 }))
 
+const initialState: Viewer = {
+  didRequest: false,
+}
+
+const Demo = () => {
+  return (
+    <div>
+      <h1>HII</h1>
+    </div>
+  )
+}
+
 export const App = () => {
   const { container, wrapper } = useStyle()
+  const [viewer, setViewer] = useState(initialState)
+
+  useQuery('whoAmI', WHO_AM_I, {
+    refetchOnMount: false,
+    onSuccess: ({ data }) => setViewer({ ...data, didRequest: true } || { didRequest: true }),
+  })
+  useQuery('refreshToken', REFRESH_TOKEN, {
+    refetchOnMount: false,
+    enabled: !!viewer?.id,
+    refetchInterval: 850 * 1000,
+  })
+
   return (
     <div id="my-app-wrapper" className={wrapper}>
-      <Navbar />
+      <Navbar viewer={viewer} />
       <Switch>
         <Container maxWidth="xl" className={container}>
           <Route path="/login" exact>
-            <Login />
+            <Login viewer={viewer} setViewer={setViewer} />
           </Route>
           <Route path="/signup" exact>
             <SignUp />
