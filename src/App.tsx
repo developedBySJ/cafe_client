@@ -1,16 +1,16 @@
 import { ThemeProvider, CssBaseline, Container, makeStyles } from '@material-ui/core'
-import { Login, SignUp, ForgotPassword } from './section'
 import { Navbar } from './lib/component'
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { PegasusUI } from './Theme'
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
 import { SnackbarProvider } from 'notistack'
 import { ERROR_MAIN, SUCCESS_MAIN, WARNING_MAIN } from './Theme/token'
-import { ResetPassword } from './section/ResetPassword'
 import { useState } from 'react'
 import { WHO_AM_I } from './lib/api/query'
 import { REFRESH_TOKEN } from './lib/api/query/refreshToken'
 import { Viewer } from './lib/types/viewer'
+import { AppRouter } from './Router'
+import { Login, SignUp } from './section'
 
 const useStyle = makeStyles((theme) => ({
   container: {
@@ -84,12 +84,7 @@ export const App = () => {
           <Route path="/signup" exact>
             <SignUp />
           </Route>
-          <Route path="/forgot-password" exact>
-            <ForgotPassword />
-          </Route>
-          <Route path="/reset-password/:token" exact>
-            <ResetPassword />
-          </Route>
+          <AppRouter viewer={viewer} setViewer={setViewer} />
         </Container>
       </Switch>
     </div>
