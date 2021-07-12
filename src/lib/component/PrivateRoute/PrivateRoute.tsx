@@ -1,17 +1,13 @@
 import React from 'react'
-import { Route, RouteComponentProps, RouteProps, useHistory } from 'react-router-dom'
-import { Viewer } from '../../types/viewer'
+import { Route, RouteComponentProps, useHistory } from 'react-router-dom'
+import { IPrivateRouterProps } from './privateRouter.type'
 
-interface IPrivateRouterProps extends RouteProps {
-  viewer: Partial<Viewer>
-  component:
-    | React.ComponentType<RouteComponentProps<any> & { viewer: Viewer }>
-    | React.ComponentType<{ viewer: Viewer }>
-}
-
-export type PrivateRouteComponent<T = {}> = React.ComponentType<T & { viewer: Viewer }>
-
-const PrivateRoute: React.FC<IPrivateRouterProps> = ({ viewer, component: Component, ...rest }) => {
+const PrivateRoute: React.FC<IPrivateRouterProps> = ({
+  viewer,
+  setViewer,
+  component: Component,
+  ...rest
+}) => {
   const { didRequest, id } = viewer
   const history = React.useRef(useHistory())
   const [authorized, setAuthorized] = React.useState(false)
@@ -27,7 +23,7 @@ const PrivateRoute: React.FC<IPrivateRouterProps> = ({ viewer, component: Compon
     <Route
       {...rest}
       render={(props: RouteComponentProps) =>
-        Component ? <Component viewer={viewer as Viewer} {...props} /> : null
+        Component ? <Component viewer={viewer} setViewer={setViewer} {...props} /> : null
       }
     />
   ) : (
