@@ -1,5 +1,5 @@
 import { RouteComponentProps, RouteProps } from 'react-router-dom'
-import { PrivateRouteComponentType } from '../lib/component/PrivateRoute'
+import { PrivateRouteComponentType } from '../lib/components/PrivateRoute'
 import { Viewer } from '../lib/types/viewer'
 import { ForgotPassword, Login, SignUp } from '../section'
 import MenuItemsList from '../section/MenuItemsList/MenuItemsList'

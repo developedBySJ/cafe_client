@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
-import { PrivateRoute, PrivateRouteComponentType } from '../lib/component/PrivateRoute'
+import { PrivateRoute, PrivateRouteComponentType } from '../lib/components/PrivateRoute'
 import { Viewer } from '../lib/types/viewer'
 import { ROUTES } from './routes'
 

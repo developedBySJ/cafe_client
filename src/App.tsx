@@ -1,5 +1,5 @@
 import { ThemeProvider, CssBaseline, Container, makeStyles } from '@material-ui/core'
-import { Navbar } from './lib/component'
+import { Navbar } from './lib/components'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { PegasusUI } from './Theme'
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
