@@ -15,14 +15,14 @@ export type MenuItemsResponse = PaginationResponse<IMenuItems>
 
 export interface MenuItemsQuery extends PageOptions {
   search?: string
-  isAvailable: any
-  isVeg: any
+  isAvailable?: boolean
+  isVeg?: boolean
   priceGte?: number
   priceLte?: number
   discount?: number
   prepTime?: number
-  menu: string
-  sortBy: MenuItemSortBy
+  menu?: string
+  sortBy?: MenuItemSortBy
   sort?: Sort
   ingredients?: string
 }
