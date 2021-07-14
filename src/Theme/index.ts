@@ -1,11 +1,11 @@
-import { createMuiTheme } from '@material-ui/core'
+import { createTheme } from '@material-ui/core/styles'
 import { MuiButton } from './button'
 import { MuiFilledInput } from './input'
 import { palette } from './palette'
 import { shadows } from './shadows'
 import { typography } from './typography'
 
-export const PegasusUI = createMuiTheme({
+export const PegasusUI = createTheme({
   palette,
   typography,
   shadows,
@@ -13,6 +13,12 @@ export const PegasusUI = createMuiTheme({
     MuiButton,
     MuiFilledInput,
     MuiInputBase: MuiFilledInput,
+    MuiBackdrop: {
+      root: {
+        background: 'rgba(250,250,250,0.8)',
+        backdropFilter: 'saturate(180%) blur(8px)',
+      },
+    },
     MuiButtonGroup: {
       root: {
         borderRadius: 1000,
