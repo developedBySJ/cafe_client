@@ -1,12 +1,14 @@
 import { Container, TextField, Button, makeStyles, Typography, Paper } from '@material-ui/core'
 import { useFormik } from 'formik'
+import React from 'react'
 import { useMutation } from 'react-query'
-import { Link } from 'react-router-dom'
+import { Link, Redirect, useHistory } from 'react-router-dom'
 import * as yup from 'yup'
 import { LOGIN } from '../../lib/api/Mutation'
 import { LoginPayload } from '../../lib/api/Mutation/login'
 import { useOnErrorNotify } from '../../lib/hooks/useOnErrorNotify'
 import { useOnSuccessNotify } from '../../lib/hooks/useOnSuccessNotify'
+import { Viewer } from '../../lib/types/viewer'
 
 const useStyle = makeStyles((theme) => ({
   wrapper: {
@@ -53,8 +55,15 @@ const validationSchema = yup.object({
     .required('Password is required'),
 })
 
-export const Login = () => {
+interface LoginProps {
+  viewer: Viewer
+  setViewer: (viewer: Viewer) => void
+}
+
+export const Login: React.FC<LoginProps> = ({ viewer, setViewer }) => {
   const { wrapper, margin, container, heading, marginTop } = useStyle()
+
+  const history = useHistory()
 
   const notifyError = useOnErrorNotify()
   const notifySuccess = useOnSuccessNotify()
@@ -64,8 +73,10 @@ export const Login = () => {
   const onSubmit = (values: LoginPayload) => {
     mutate(values, {
       onError: notifyError,
-      onSuccess: (data) => {
-        notifySuccess('Login Successfully')
+      onSuccess: ({ data }) => {
+        notifySuccess(`Welcome ${data.firstName} `)
+        setViewer(data)
+        setTimeout(() => history.push('/'), 1000)
       },
     })
   }
@@ -80,6 +91,10 @@ export const Login = () => {
     validateOnChange: true,
     onSubmit,
   })
+
+  if (viewer?.didRequest && viewer?.id) {
+    return <Redirect to="/" />
+  }
 
   return (
     <Container maxWidth="sm" className={container}>
