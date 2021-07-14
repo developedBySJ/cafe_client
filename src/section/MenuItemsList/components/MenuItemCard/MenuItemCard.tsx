@@ -10,8 +10,8 @@ import { Box, makeStyles } from '@material-ui/core'
 import { IMenuItems } from '../../../../lib/api/types/menuItems.type'
 import { Link } from 'react-router-dom'
 
-const useStyle = makeStyles({
-  image: { height: 164 },
+const useStyle = makeStyles((theme) => ({
+  image: { height: '25vw', maxHeight: 256, minHeight: 200 },
   title: {
     fontWeight: 500,
     textOverflow: 'ellipsis',
@@ -25,7 +25,7 @@ const useStyle = makeStyles({
   price: { whiteSpace: 'nowrap' },
   cardAction: { padding: 0 },
   button: { borderTopLeftRadius: 0, borderTopRightRadius: 0 },
-})
+}))
 
 export const MenuItemCard: React.FC<{ menuItem: IMenuItems }> = ({ menuItem }) => {
   const { images, title, subTitle, id, prepTime, isVeg, isAvailable, price } = menuItem
