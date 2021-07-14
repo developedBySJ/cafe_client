@@ -13,9 +13,7 @@ import { AppRouter } from './Router'
 import { Login, SignUp } from './section'
 
 const useStyle = makeStyles((theme) => ({
-  container: {
-    minHeight: '200vh',
-  },
+  container: {},
   wrapper: {
     backgroundColor: theme.palette.grey[100],
     paddingTop: '56px',
@@ -49,14 +47,6 @@ const useSnackBarStyles = makeStyles(() => ({
 
 const initialState: Viewer = {
   didRequest: false,
-}
-
-const Demo = () => {
-  return (
-    <div>
-      <h1>HII</h1>
-    </div>
-  )
 }
 
 export const App = () => {
