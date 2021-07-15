@@ -13,7 +13,9 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Slider,
 } from '@material-ui/core'
+import { Checkbox } from '@material-ui/core'
 import { useState } from 'react'
 import { ChevronDown } from 'react-feather'
 import { useQuery } from 'react-query'
@@ -116,7 +118,53 @@ const MenuItemsList = () => {
 
         <Grid container spacing={2}>
           <Grid item xs={12} md={4} lg={3}>
-            Filter
+            <Typography variant="h5" component="h1" gutterBottom>
+              Filter By
+            </Typography>
+            <Box>
+              <FormControl component="fieldset">
+                <FormLabel component="legend">
+                  <Typography variant="h6" component="h1" color="textPrimary">
+                    Availability
+                  </Typography>
+                </FormLabel>
+                <RadioGroup name="sortBy" value={value} onChange={handleChange} color="primary" row>
+                  <FormControlLabel
+                    key={'Available'}
+                    value={true}
+                    control={<Radio color="primary" size="small" />}
+                    label="Available"
+                  />
+                  <FormControlLabel
+                    key={'Not_Available'}
+                    value={false}
+                    control={<Radio color="primary" size="small" />}
+                    label="Not Available"
+                  />
+                </RadioGroup>
+              </FormControl>
+              <FormControl component="fieldset">
+                <FormLabel component="legend">
+                  <Typography variant="h6" component="h1" color="textPrimary">
+                    Type
+                  </Typography>
+                </FormLabel>
+                <Box display="flex" justifyContent="space-between">
+                  <FormControlLabel
+                    control={<Checkbox onChange={handleChange} color="primary" />}
+                    label="Veg"
+                  />
+                  <FormControlLabel
+                    control={<Checkbox onChange={handleChange} color="primary" />}
+                    label="Non Veg"
+                  />
+                </Box>
+              </FormControl>
+              <Typography variant="h6" component="h1" color="textPrimary">
+                Price
+              </Typography>
+              <Slider valueLabelDisplay="auto" aria-labelledby="range-slider" />
+            </Box>
           </Grid>
           <Grid item xs={12} md={8} lg={9}>
             <Box textAlign="right" marginBottom="2rem">
