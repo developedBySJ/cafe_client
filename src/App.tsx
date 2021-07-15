@@ -13,9 +13,10 @@ import { AppRouter } from './Router'
 import { Login, SignUp } from './section'
 
 const useStyle = makeStyles((theme) => ({
-  container: {},
+  container: { padding: 0 },
   wrapper: {
     backgroundColor: theme.palette.grey[100],
+
     paddingTop: '56px',
     [theme.breakpoints.up('sm')]: {
       paddingTop: '64px',
