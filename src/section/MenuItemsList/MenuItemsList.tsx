@@ -13,17 +13,16 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Slider,
 } from '@material-ui/core'
-import { Checkbox } from '@material-ui/core'
 import { useState } from 'react'
-import { ChevronDown } from 'react-feather'
+import { ChevronDown, Filter } from 'react-feather'
 import { useQuery } from 'react-query'
 import { MENU_ITEMS } from '../../lib/api/query/menuItems'
 import { MenuItemSortBy, MenuItemsQuery } from '../../lib/api/query/menuItems/menuItems.type'
 import { ResponsiveDialog } from '../../lib/components/'
 import { Sort } from '../../lib/types'
 import { MenuItemCard } from './components'
+import { MenuFilter } from './components/MenuFilter'
 
 const MenuItemSortList = [
   { label: 'Price', value: MenuItemSortBy.Price },
@@ -41,6 +40,21 @@ const useStyles = makeStyles((theme) => ({
     padding: '1rem 0',
     background: 'rgba(250,250,250,0.8)',
     backdropFilter: 'saturate(180%) blur(8px)',
+  },
+  sticky: {
+    [theme.breakpoints.up('md')]: {
+      position: 'sticky',
+      alignSelf: 'flex-start',
+      top: 64,
+    },
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
+  },
+  hideFilter: {
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
+    },
   },
 }))
 
@@ -108,6 +122,20 @@ const MenuItemsList = () => {
           </Button>
         </DialogActions>
       </ResponsiveDialog>
+
+      {/* #### FILTER BY #### */}
+      <ResponsiveDialog open={false} fullWidth maxWidth="sm">
+        <DialogTitle>Filter By</DialogTitle>
+        <DialogContent>
+          <MenuFilter />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setIsSortOpen(false)}>Cancel</Button>
+          <Button onClick={() => setIsSortOpen(false)} variant="contained" color="primary">
+            Sort
+          </Button>
+        </DialogActions>
+      </ResponsiveDialog>
       <Container>
         <Typography variant="h4" style={{ padding: '3rem 0' }}>
           Search Result for "Food"
@@ -117,65 +145,34 @@ const MenuItemsList = () => {
         </Typography>
 
         <Grid container spacing={2}>
-          <Grid item xs={12} md={4} lg={3}>
-            <Typography variant="h5" component="h1" gutterBottom>
-              Filter By
-            </Typography>
-            <Box>
-              <FormControl component="fieldset">
-                <FormLabel component="legend">
-                  <Typography variant="h6" component="h1" color="textPrimary">
-                    Availability
-                  </Typography>
-                </FormLabel>
-                <RadioGroup name="sortBy" value={value} onChange={handleChange} color="primary" row>
-                  <FormControlLabel
-                    key={'Available'}
-                    value={true}
-                    control={<Radio color="primary" size="small" />}
-                    label="Available"
-                  />
-                  <FormControlLabel
-                    key={'Not_Available'}
-                    value={false}
-                    control={<Radio color="primary" size="small" />}
-                    label="Not Available"
-                  />
-                </RadioGroup>
-              </FormControl>
-              <FormControl component="fieldset">
-                <FormLabel component="legend">
-                  <Typography variant="h6" component="h1" color="textPrimary">
-                    Type
-                  </Typography>
-                </FormLabel>
-                <Box display="flex" justifyContent="space-between">
-                  <FormControlLabel
-                    control={<Checkbox onChange={handleChange} color="primary" />}
-                    label="Veg"
-                  />
-                  <FormControlLabel
-                    control={<Checkbox onChange={handleChange} color="primary" />}
-                    label="Non Veg"
-                  />
-                </Box>
-              </FormControl>
-              <Typography variant="h6" component="h1" color="textPrimary">
-                Price
-              </Typography>
-              <Slider valueLabelDisplay="auto" aria-labelledby="range-slider" />
-            </Box>
+          <Grid item md={4} lg={3} className={classes.sticky}>
+            <MenuFilter />
           </Grid>
           <Grid item xs={12} md={8} lg={9}>
-            <Box textAlign="right" marginBottom="2rem">
-              <Button
-                variant="outlined"
-                onClick={() => setIsSortOpen(true)}
-                size="small"
-                endIcon={<ChevronDown strokeWidth="1.5px" />}
-              >
-                Sort By : Recommended
-              </Button>
+            <Box textAlign="right" marginBottom="1.5rem">
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6} md={8}>
+                  <Button
+                    variant="outlined"
+                    fullWidth
+                    onClick={() => setIsSortOpen(true)}
+                    startIcon={<Filter strokeWidth="1.5px" />}
+                    className={classes.hideFilter}
+                  >
+                    Filter
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <Button
+                    variant="outlined"
+                    onClick={() => setIsSortOpen(true)}
+                    endIcon={<ChevronDown strokeWidth="1.5px" />}
+                    fullWidth
+                  >
+                    Sort By
+                  </Button>
+                </Grid>
+              </Grid>
             </Box>
             <Grid container spacing={2}>
               {data?.data.result.map((menuItem) => (
