@@ -15,7 +15,7 @@ import { Login, SignUp } from './section'
 const useStyle = makeStyles((theme) => ({
   container: { padding: 0 },
   wrapper: {
-    backgroundColor: theme.palette.grey[100],
+    // backgroundColor: theme.palette.grey[100],
 
     paddingTop: '56px',
     [theme.breakpoints.up('sm')]: {
