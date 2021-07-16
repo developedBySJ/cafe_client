@@ -1,8 +1,9 @@
-import { createTheme } from '@material-ui/core/styles'
+import { createTheme, lighten } from '@material-ui/core/styles'
 import { MuiButton } from './button'
 import { MuiFilledInput } from './input'
 import { palette } from './palette'
 import { shadows } from './shadows'
+import { MuiAccordion } from './accordion'
 import { typography } from './typography'
 
 export const PegasusUI = createTheme({
@@ -19,6 +20,7 @@ export const PegasusUI = createTheme({
         backdropFilter: 'saturate(180%) blur(8px)',
       },
     },
+    MuiAccordion,
     MuiButtonGroup: {
       root: {
         borderRadius: 1000,
