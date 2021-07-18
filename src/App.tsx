@@ -11,6 +11,11 @@ import { REFRESH_TOKEN } from './lib/api/query/refreshToken'
 import { Viewer } from './lib/types/viewer'
 import { AppRouter } from './Router'
 import { Login, SignUp } from './section'
+import SwiperCore, { Navigation, Thumbs, Pagination, Scrollbar, A11y } from 'swiper'
+
+import 'swiper/swiper-bundle.css'
+
+SwiperCore.use([Thumbs, Navigation, Pagination, Scrollbar, A11y])
 
 const useStyle = makeStyles((theme) => ({
   container: { padding: 0 },
