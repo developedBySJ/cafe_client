@@ -1,6 +1,5 @@
-import React from 'react'
-import { Container, Grid } from '@material-ui/core'
-import { ProductCardSlider } from '../../lib/components/ProductCardSlider'
+import { Container, Grid, Typography } from '@material-ui/core'
+import { MenuItemImg } from './MenuItemImg'
 
 const mock = {
   id: '9e4a1aae-20fd-46a7-a80b-eb57649c78b0',
@@ -29,15 +28,26 @@ const mock = {
 }
 
 export const MenuItemDetails = () => {
-  const { images } = mock
+  const { images, title, subTitle, description, price } = mock
   return (
     <Container>
-      {/* <Grid container>
-        <Grid item>
-          <img src="" alt="" />
+      <Grid container spacing={6}>
+        <Grid item xs={12} md={8}>
+          <MenuItemImg images={images} />
         </Grid>
-        <Grid item></Grid>
-      </Grid> */}
+        <Grid item xs={12} md={4}>
+          <Typography variant="body1">{subTitle}</Typography>
+          <Typography variant="h5" gutterBottom>
+            {title}
+          </Typography>
+          <Typography variant="body2" style={{ lineHeight: '150%' }} gutterBottom>
+            {description}
+          </Typography>
+          <Typography variant="h4" style={{ lineHeight: '150%' }}>
+            Rs. {price}
+          </Typography>
+        </Grid>
+      </Grid>
     </Container>
   )
 }
