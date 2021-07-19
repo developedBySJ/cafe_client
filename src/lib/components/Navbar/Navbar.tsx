@@ -17,6 +17,7 @@ const useStyle = makeStyles((theme) => ({
   appBar: {
     background: 'rgba(250,250,250,0.8)',
     backdropFilter: 'saturate(180%) blur(8px)',
+    margin: 0,
   },
   margin: {
     margin: '0 0.5rem',
@@ -44,9 +45,9 @@ export const Navbar: React.FC<NavbarProps> = ({ viewer }) => {
     setAnchorEl(null)
   }
   return (
-    <AppBar style={{ margin: 0 }} className={appBar} id="my-navbar" elevation={0}>
+    <AppBar className={appBar} id="my-navbar" elevation={0}>
       <Container>
-        <Toolbar>
+        <Toolbar style={{ padding: 0 }}>
           <IconButton
             edge="start"
             color="primary"
