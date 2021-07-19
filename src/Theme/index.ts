@@ -20,6 +20,11 @@ export const PegasusUI = createTheme({
         backdropFilter: 'saturate(180%) blur(8px)',
       },
     },
+    MuiChip: {
+      root: {
+        fontWeight: 500,
+      },
+    },
     MuiAccordion,
     MuiButtonGroup: {
       root: {
