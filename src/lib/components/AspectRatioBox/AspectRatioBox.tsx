@@ -12,10 +12,14 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const AspectRatioBox: React.FC<{ ratio?: number }> = ({ children, ratio = 1 }) => {
+const AspectRatioBox: React.FC<{ ratio?: number; borderRadius?: number }> = ({
+  children,
+  ratio = 1,
+  borderRadius = 16,
+}) => {
   const classes = useStyles()
   return (
-    <div className={classes.root}>
+    <div className={classes.root} style={{ borderRadius, overflow: 'hidden' }}>
       <div className={classes.wrapper}>{children}</div>
       <div style={{ paddingBottom: (1 / ratio) * 100 + '%' }} />
     </div>
