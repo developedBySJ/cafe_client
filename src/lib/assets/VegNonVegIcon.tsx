@@ -6,10 +6,10 @@ interface UseStyleProps {
   size: number
 }
 
-const VegColor = '#00BA88'
-const NonVegColor = '#F5474A'
+export const VEG_COLOR = '#00BA88'
+export const NON_VEG_COLOR = '#F5474A'
 
-const _getColor = (isVeg: boolean) => (isVeg ? VegColor : NonVegColor)
+const _getColor = (isVeg: boolean) => (isVeg ? VEG_COLOR : NON_VEG_COLOR)
 
 const useStyle = makeStyles((theme) => ({
   border: {
@@ -35,16 +35,18 @@ interface VegNonVegIconProps {
   isVeg?: boolean
   size?: number
   className?: string
+  style?: React.CSSProperties
 }
 
 export const VegNonVegIcon: React.FC<VegNonVegIconProps> = ({
   isVeg = false,
   size = 18,
   className,
+  style,
 }) => {
   const classes = useStyle({ isVeg, size })
   return (
-    <div className={className}>
+    <div className={className} style={style}>
       <div className={classes.border}>
         <div className={classes.point}></div>
       </div>
