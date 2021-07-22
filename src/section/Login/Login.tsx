@@ -1,9 +1,19 @@
-import { Container, TextField, Button, makeStyles, Typography, Paper } from '@material-ui/core'
+import {
+  Container,
+  TextField,
+  Button,
+  makeStyles,
+  Typography,
+  Paper,
+  CircularProgress,
+  Box,
+} from '@material-ui/core'
 import { useFormik } from 'formik'
-import React from 'react'
+import React, { useState } from 'react'
 import { useMutation } from 'react-query'
 import { Link, Redirect, useHistory } from 'react-router-dom'
 import * as yup from 'yup'
+import { Spinner } from '../../lib'
 import { LOGIN } from '../../lib/api/Mutation'
 import { LoginPayload } from '../../lib/api/Mutation/login'
 import { useOnErrorNotify } from '../../lib/hooks/useOnErrorNotify'
@@ -69,13 +79,14 @@ export const Login: React.FC<LoginProps> = ({ viewer, setViewer }) => {
   const notifySuccess = useOnSuccessNotify()
 
   const { data, isLoading, mutate } = useMutation(LOGIN)
-
+  const [showSpinner, setShowSpinner] = useState(false)
   const onSubmit = (values: LoginPayload) => {
     mutate(values, {
       onError: notifyError,
       onSuccess: ({ data }) => {
         notifySuccess(`Welcome ${data.firstName} `)
         setViewer(data)
+        setShowSpinner(true)
         setTimeout(() => history.push('/'), 1000)
       },
     })
@@ -94,6 +105,13 @@ export const Login: React.FC<LoginProps> = ({ viewer, setViewer }) => {
 
   if (viewer?.didRequest && viewer?.id) {
     return <Redirect to="/" />
+  }
+  if (showSpinner) {
+    return (
+      <Box height="80vh">
+        <Spinner size={52} label="Redirecting To Home" fullWidth />
+      </Box>
+    )
   }
 
   return (
