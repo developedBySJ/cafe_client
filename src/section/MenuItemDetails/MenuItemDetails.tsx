@@ -1,15 +1,26 @@
 import { Box, Button, Chip, Container, darken, Grid, lighten, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { Clock, Heart, ShoppingBag, Star } from 'react-feather'
+import { Rating } from '@material-ui/lab'
+import { Clock, Heart, Star } from 'react-feather'
+import { ProductCardSlider } from '../../lib'
+import { MENU_ITEMS } from '../../lib/api/query/menuItems'
+import { MenuItemsQuery } from '../../lib/api/query/menuItems/menuItems.type'
 import { NON_VEG_COLOR, VegNonVegIcon, VEG_COLOR } from '../../lib/assets/VegNonVegIcon'
-import { WARNING_DARK, WARNING_LIGHT, WARNING_MAIN } from '../../Theme/token'
+import { Reviews } from '../../lib/components/Reviews'
+import { WARNING_MAIN } from '../../Theme/token'
+import { MenuItemCard, MenuItemSkeleton } from '../MenuItemsList'
 import { MenuItemImg } from './MenuItemImg'
+import { useQuery } from 'react-query'
 
 const mock = {
   id: '9e4a1aae-20fd-46a7-a80b-eb57649c78b0',
   title: 'Dulce de Leche Cheesecake Brownie',
   subTitle: 'World Cuisine',
-  images: ['https://d3gy1em549lxx2.cloudfront.net/12c23c5a-fae4-455e-8f04-79205ef64d00.JPG'],
+  images: [
+    'https://d3gy1em549lxx2.cloudfront.net/12c23c5a-fae4-455e-8f04-79205ef64d00.JPG',
+    'https://d3gy1em549lxx2.cloudfront.net/12c23c5a-fae4-455e-8f04-79205ef64d00.JPG',
+    'https://d3gy1em549lxx2.cloudfront.net/12c23c5a-fae4-455e-8f04-79205ef64d00.JPG',
+  ],
   isAvailable: true,
   isVeg: false,
   price: 149,
@@ -69,7 +80,13 @@ const useStyle = makeStyles((theme) => ({
 export const MenuItemDetails = () => {
   const { images, title, subTitle, description, price, isVeg, prepTime, discount } = mock
   const classes = useStyle({ isVeg })
-
+  const { data, isError, isLoading } = useQuery(
+    ['users', {} as MenuItemsQuery],
+    () => MENU_ITEMS({}),
+    {
+      onSuccess: ({ data }) => console.log(data),
+    },
+  )
   return (
     <Container className={classes.wrapper}>
       <Grid container spacing={6}>
@@ -135,8 +152,37 @@ export const MenuItemDetails = () => {
           >
             Favorite
           </Button>
+          {/* REVIEW */}
+          <Typography variant="h5">Reviews</Typography>
+          <Box display="flex" alignItems="flex-start" justifyContent="space-between">
+            <div>
+              <Box display="flex" alignItems="center">
+                <Rating name="customized-empty" defaultValue={3.5} precision={0.5} readOnly />
+                <Typography variant="h6">33</Typography>
+              </Box>
+              <Typography variant="body1">Rated 3.5 out of 5</Typography>
+            </div>
+            <div>
+              <Typography style={{ fontWeight: 500, fontSize: 20, textDecoration: 'underline' }}>
+                Write a review
+              </Typography>
+            </div>
+          </Box>
+          <Reviews />
+          <Reviews />
+
+          <Button fullWidth>See All Reviews</Button>
         </Grid>
       </Grid>
+      <Box marginBottom={'2rem'}>
+        <ProductCardSlider
+          cards={data?.data.result.map((menuItem) => <MenuItemCard menuItem={menuItem} />) || []}
+          error={isError}
+          isLoading={isLoading}
+          skeltonCard={<MenuItemSkeleton />}
+          title="People Also Buy"
+        />
+      </Box>
     </Container>
   )
 }
