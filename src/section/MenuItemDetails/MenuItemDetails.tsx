@@ -43,7 +43,7 @@ const mock = {
 }
 
 const useStyle = makeStyles((theme) => ({
-  wrapper: {
+  container: {
     paddingTop: '2rem',
   },
   headingWrapper: {
@@ -88,7 +88,7 @@ export const MenuItemDetails = () => {
     },
   )
   return (
-    <Container className={classes.wrapper}>
+    <Container className={classes.container}>
       <Grid container spacing={6}>
         <Grid item xs={12} md={8}>
           <MenuItemImg images={images} />
