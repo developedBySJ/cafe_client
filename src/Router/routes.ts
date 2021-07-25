@@ -1,10 +1,7 @@
-import { RouteComponentProps, RouteProps } from 'react-router-dom'
+import { RouteProps } from 'react-router-dom'
 import { PrivateRouteComponentType } from '../lib/components/PrivateRoute'
-import { Viewer } from '../lib/types/viewer'
-import { ForgotPassword, Login, MenuItemDetails, SignUp } from '../section'
+import { ForgotPassword, MenuItemDetails, ResetPassword, MenuItemsList, Home } from '../section'
 import Cart from '../section/Cart/Cart'
-import { MenuItemsList } from '../section/MenuItemsList/MenuItemsList'
-import { ResetPassword } from '../section/ResetPassword'
 
 interface RoutesProps extends RouteProps {
   isPrivate?: false
@@ -22,4 +19,5 @@ export const ROUTES: Routes[] = [
   { path: '/dishes', component: MenuItemsList, exact: true },
   { path: '/dishes/:id', component: MenuItemDetails, exact: true },
   { path: '/cart', component: Cart, exact: true },
+  { path: '/', component: Home, exact: true },
 ]
