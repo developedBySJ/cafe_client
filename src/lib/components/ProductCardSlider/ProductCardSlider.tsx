@@ -10,6 +10,7 @@ interface IProductCardSliderProps {
   isLoading: boolean
   error: boolean
   skeltonCard: JSX.Element
+  sliderPerView?: [number, number, number]
 }
 
 const ProductCardSlider = ({
@@ -18,6 +19,7 @@ const ProductCardSlider = ({
   isLoading,
   skeltonCard,
   error,
+  sliderPerView,
 }: IProductCardSliderProps) => {
   const navigation = (
     <>
@@ -66,17 +68,17 @@ const ProductCardSlider = ({
         navigation={{ nextEl: '#slider-next', prevEl: '#slider-prev' }}
         breakpoints={{
           320: {
-            slidesPerView: 1.1,
+            slidesPerView: (sliderPerView && sliderPerView[0]) || 1.1,
             spaceBetween: 6,
           },
 
           600: {
-            slidesPerView: 2.2,
+            slidesPerView: (sliderPerView && sliderPerView[1]) || 2.2,
             spaceBetween: 14,
           },
 
           900: {
-            slidesPerView: 4,
+            slidesPerView: (sliderPerView && sliderPerView[2]) || 4,
             spaceBetween: 16,
           },
         }}
