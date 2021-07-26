@@ -24,10 +24,9 @@ import { MenuItemsQuery } from '../../lib/api/query/menuItems/menuItems.type'
 import { MenuItemCard, MenuItemSkeleton } from '..'
 
 const useStyle = makeStyles((theme) => ({
-  appBar: {
-    background: 'rgba(250,250,250,0.8)',
-    backdropFilter: 'saturate(180%) blur(8px)',
-    margin: 0,
+  wrapper: {
+    marginTop: '-1.5rem',
+    position: 'relative',
   },
   heading: {
     fontSize: 92,
@@ -41,9 +40,36 @@ const useStyle = makeStyles((theme) => ({
       fontSize: 56,
     },
   },
+  homeBackgroundImg: {
+    position: 'relative',
+    height: '90vh',
+    backgroundImage: `url(${homeImg})`,
+    backgroundPosition: 'center',
+    backgroundPositionX: '80%',
+    [theme.breakpoints.down('xs')]: {
+      backgroundImage: `linear-gradient(0deg , rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.6) 100%),url(${homeImg})`,
+    },
+  },
   input: {
-    margin: '0 0.5rem',
     flexGrow: 1,
+    height: '61.6px',
+    width: '100%',
+  },
+  searchButton: {
+    paddingLeft: 0,
+    paddingRight: 0,
+    width: '100%',
+  },
+  searchBtnText: {
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
+    },
+  },
+  searchBtnIcon: {
+    display: 'block',
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
   },
   searchIcon: {
     margin: '0 1rem',
@@ -69,16 +95,8 @@ export const Home = () => {
     },
   )
   return (
-    <div style={{ marginTop: '-1.5rem', position: 'relative' }}>
-      <Box
-        position="relative"
-        height="90vh"
-        style={{
-          backgroundImage: `url(${homeImg})`,
-          backgroundPosition: 'center',
-          backgroundPositionX: '80%',
-        }}
-      >
+    <div className={classes.wrapper}>
+      <Box className={classes.homeBackgroundImg}>
         <Container>
           <Grid container alignItems="center" style={{ height: '90vh' }}>
             <Grid item xs={12} sm={11} md={8} lg={7}>
@@ -95,49 +113,67 @@ export const Home = () => {
                 </Typography>
                 Restaurant
               </Typography>
-              <Box display="flex" marginTop="2rem">
-                <InputBase
-                  placeholder="Search Here..."
-                  className={classes.input}
-                  startAdornment={
-                    <Search className={classes.searchIcon} color={theme.palette.grey[900]} />
-                  }
-                />
-                <Button size="large" variant="contained" color="primary">
-                  Search
-                </Button>
-              </Box>
+              <Grid container alignItems="center" spacing={1} style={{ marginTop: '1rem' }}>
+                <Grid item xs={9}>
+                  <InputBase
+                    placeholder="Search Here..."
+                    className={classes.input}
+                    startAdornment={
+                      <Search className={classes.searchIcon} color={theme.palette.grey[900]} />
+                    }
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <Button
+                    className={classes.searchButton}
+                    size="large"
+                    variant="contained"
+                    color="primary"
+                    // fullWidth
+                  >
+                    <span className={classes.searchBtnText}>Search</span>
+
+                    <Search
+                      size="24px"
+                      color={theme.palette.grey[50]}
+                      className={classes.searchBtnIcon}
+                    />
+                  </Button>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
-          <Box padding="4rem 0">
+          <Box padding="2rem 0">
             <ProductCardSlider
               skeltonCard={<></>}
               cards={offers}
               error={false}
               isLoading={false}
               title="Offers"
+              id={'offers'}
               sliderPerView={[1, 2, 2.5]}
             />
           </Box>
-          <Box padding="4rem 0">
+          <Box padding="2rem 0">
             <ProductCardSlider
               cards={
                 data?.data.result.map((menuItem) => <MenuItemCard menuItem={menuItem} />) || []
               }
               error={isError}
               isLoading={isLoading}
+              id={'new-dish'}
               skeltonCard={<MenuItemSkeleton />}
-              title="People Also Buy"
+              title="Explore New Dishes"
             />
           </Box>
         </Container>
         <Box>
           <Container>
-            <Box padding="4rem 0" textAlign="center">
-              <Typography variant="h3" style={{ color: '#454545' }} align="center">
+            <Box padding="2rem 0" textAlign="center">
+              <Typography variant="h3" align="center">
                 Become Member
               </Typography>
-              <Typography variant="h6" style={{ color: '#454545' }} align="center">
+              <Typography variant="h6" align="center" color="textSecondary">
                 Become Our Member To Get Amazing Offers
               </Typography>
               <Link to="/signup" style={{ textDecoration: 'none' }}>
