@@ -17,7 +17,11 @@ import offer4 from '../../lib/assets/home/offer4.jpg'
 import { Search } from 'react-feather'
 import { AspectRatioBox } from '../../lib/components/AspectRatioBox'
 import { ProductCardSlider, Slider } from '../../lib'
-import { Skeleton } from '@material-ui/lab'
+import { Link } from 'react-router-dom'
+import { useQuery } from 'react-query'
+import { MENU_ITEMS } from '../../lib/api/query/menuItems'
+import { MenuItemsQuery } from '../../lib/api/query/menuItems/menuItems.type'
+import { MenuItemCard, MenuItemSkeleton } from '..'
 
 const useStyle = makeStyles((theme) => ({
   appBar: {
@@ -49,7 +53,7 @@ const useStyle = makeStyles((theme) => ({
 const offers = [offer1, offer2, offer3, offer4].map((src, i) => {
   return (
     <AspectRatioBox key={i} ratio={5 / 4}>
-      <img src={src} alt="" style={{ objectFit: 'contain', objectPosition: 'center' }} />
+      <img src={src} alt="" style={{ objectFit: 'cover', objectPosition: 'center' }} />
     </AspectRatioBox>
   )
 })
@@ -57,6 +61,13 @@ const offers = [offer1, offer2, offer3, offer4].map((src, i) => {
 export const Home = () => {
   const theme = useTheme()
   const classes = useStyle()
+  const { data, isError, isLoading } = useQuery(
+    ['users', {} as MenuItemsQuery],
+    () => MENU_ITEMS({}),
+    {
+      onSuccess: ({ data }) => console.log(data),
+    },
+  )
   return (
     <div style={{ marginTop: '-1.5rem', position: 'relative' }}>
       <Box
@@ -98,15 +109,82 @@ export const Home = () => {
               </Box>
             </Grid>
           </Grid>
-          <ProductCardSlider
-            skeltonCard={<></>}
-            cards={offers}
-            error={false}
-            isLoading={false}
-            title="Offers"
-            sliderPerView={[1, 2, 2.5]}
-          />
+          <Box padding="4rem 0">
+            <ProductCardSlider
+              skeltonCard={<></>}
+              cards={offers}
+              error={false}
+              isLoading={false}
+              title="Offers"
+              sliderPerView={[1, 2, 2.5]}
+            />
+          </Box>
+          <Box padding="4rem 0">
+            <ProductCardSlider
+              cards={
+                data?.data.result.map((menuItem) => <MenuItemCard menuItem={menuItem} />) || []
+              }
+              error={isError}
+              isLoading={isLoading}
+              skeltonCard={<MenuItemSkeleton />}
+              title="People Also Buy"
+            />
+          </Box>
         </Container>
+        <Box>
+          <Container>
+            <Box padding="4rem 0" textAlign="center">
+              <Typography variant="h3" style={{ color: '#454545' }} align="center">
+                Become Member
+              </Typography>
+              <Typography variant="h6" style={{ color: '#454545' }} align="center">
+                Become Our Member To Get Amazing Offers
+              </Typography>
+              <Link to="/signup" style={{ textDecoration: 'none' }}>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  style={{ marginTop: '3rem' }}
+                  size="large"
+                >
+                  Create An Account
+                </Button>
+              </Link>
+            </Box>
+          </Container>
+        </Box>
+        <Box bgcolor={theme.palette.grey[300]} padding="1rem 0">
+          <Container>
+            <Grid container alignItems="center" justifyContent="center">
+              <Grid item>
+                <Button>About</Button>
+              </Grid>
+              <Grid item>
+                <Button>Explore Menu</Button>
+              </Grid>
+              <Grid item>
+                <Button>Login</Button>
+              </Grid>
+              <Grid item>
+                <Button>Help</Button>
+              </Grid>
+            </Grid>
+            <Box padding="1rem 0">
+              <Typography variant="subtitle2" align="center" color="textSecondary">
+                Made With
+              </Typography>
+              <Typography align="center" variant="subtitle2" color="textSecondary">
+                React | TypeScript | ♥ | NestJs | Postgres
+              </Typography>
+              <Typography align="center" variant="subtitle2" color="textSecondary">
+                By{' '}
+                <a href="https://github.com/developedBySJ" target="_blank" rel="noreferrer">
+                  Swapnil J
+                </a>
+              </Typography>
+            </Box>
+          </Container>
+        </Box>
       </Box>
     </div>
   )
