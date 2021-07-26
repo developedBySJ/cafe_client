@@ -11,6 +11,7 @@ interface IProductCardSliderProps {
   error: boolean
   skeltonCard: JSX.Element
   sliderPerView?: [number, number, number]
+  id?: string
 }
 
 const ProductCardSlider = ({
@@ -19,13 +20,14 @@ const ProductCardSlider = ({
   isLoading,
   skeltonCard,
   error,
-  sliderPerView,
+  sliderPerView = [1.1, 2.2, 4],
+  id = '',
 }: IProductCardSliderProps) => {
   const navigation = (
     <>
       <IconButton
         color="primary"
-        id="slider-prev"
+        id={`${id}-slider-prev`}
         style={{
           position: 'absolute',
           top: '50%',
@@ -38,7 +40,7 @@ const ProductCardSlider = ({
       </IconButton>
       <IconButton
         color="primary"
-        id="slider-next"
+        id={`${id}-slider-next`}
         style={{
           position: 'absolute',
           top: '50%',
@@ -65,20 +67,20 @@ const ProductCardSlider = ({
           zIndex: 0,
         }}
         scrollbar={{ snapOnRelease: true, hide: true }}
-        navigation={{ nextEl: '#slider-next', prevEl: '#slider-prev' }}
+        navigation={{ nextEl: `#${id}-slider-next`, prevEl: `#${id}-slider-prev` }}
         breakpoints={{
           320: {
-            slidesPerView: (sliderPerView && sliderPerView[0]) || 1.1,
+            slidesPerView: sliderPerView[0],
             spaceBetween: 6,
           },
 
           600: {
-            slidesPerView: (sliderPerView && sliderPerView[1]) || 2.2,
+            slidesPerView: sliderPerView[1],
             spaceBetween: 14,
           },
 
           900: {
-            slidesPerView: (sliderPerView && sliderPerView[2]) || 4,
+            slidesPerView: sliderPerView[2],
             spaceBetween: 16,
           },
         }}
