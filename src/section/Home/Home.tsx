@@ -9,8 +9,15 @@ import {
   makeStyles,
   Button,
 } from '@material-ui/core'
-import homeImg from '../../lib/assets/home.png'
+import homeImg from '../../lib/assets/home/home.png'
+import offer1 from '../../lib/assets/home/offer1.jpg'
+import offer2 from '../../lib/assets/home/offer2.png'
+import offer3 from '../../lib/assets/home/offer3.jpg'
+import offer4 from '../../lib/assets/home/offer4.jpg'
 import { Search } from 'react-feather'
+import { AspectRatioBox } from '../../lib/components/AspectRatioBox'
+import { ProductCardSlider, Slider } from '../../lib'
+import { Skeleton } from '@material-ui/lab'
 
 const useStyle = makeStyles((theme) => ({
   appBar: {
@@ -38,6 +45,14 @@ const useStyle = makeStyles((theme) => ({
     margin: '0 1rem',
   },
 }))
+
+const offers = [offer1, offer2, offer3, offer4].map((src, i) => {
+  return (
+    <AspectRatioBox key={i} ratio={5 / 4}>
+      <img src={src} alt="" style={{ objectFit: 'contain', objectPosition: 'center' }} />
+    </AspectRatioBox>
+  )
+})
 
 export const Home = () => {
   const theme = useTheme()
@@ -83,6 +98,14 @@ export const Home = () => {
               </Box>
             </Grid>
           </Grid>
+          <ProductCardSlider
+            skeltonCard={<></>}
+            cards={offers}
+            error={false}
+            isLoading={false}
+            title="Offers"
+            sliderPerView={[1, 2, 2.5]}
+          />
         </Container>
       </Box>
     </div>
