@@ -1,5 +1,5 @@
 import { ThemeProvider, CssBaseline, Container, makeStyles } from '@material-ui/core'
-import { Navbar } from './lib/components'
+import { Footer, Navbar } from './lib/components'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { PegasusUI } from './Theme'
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
@@ -61,7 +61,7 @@ export const App = () => {
 
   useQuery('whoAmI', WHO_AM_I, {
     refetchOnMount: false,
-    onSuccess: ({ data }) => setViewer({ ...data, didRequest: true } || { didRequest: true }),
+    onSuccess: ({ data }) => setViewer({ ...data, didRequest: true }),
   })
   useQuery('refreshToken', REFRESH_TOKEN, {
     refetchOnMount: false,
@@ -72,17 +72,8 @@ export const App = () => {
   return (
     <div id="my-app-wrapper" className={wrapper}>
       <Navbar viewer={viewer} />
-      <Switch>
-        <Container maxWidth="xl" className={container}>
-          <Route path="/login" exact>
-            <Login viewer={viewer} setViewer={setViewer} />
-          </Route>
-          <Route path="/signup" exact>
-            <SignUp />
-          </Route>
-          <AppRouter viewer={viewer} setViewer={setViewer} />
-        </Container>
-      </Switch>
+      <AppRouter viewer={viewer} setViewer={setViewer} />
+      <Footer />
     </div>
   )
 }
