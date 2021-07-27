@@ -1,8 +1,7 @@
-import { Box, Button, Chip, darken, Grid, lighten, makeStyles, Typography } from '@material-ui/core'
-import React from 'react'
+import { Box, Chip, darken, Grid, lighten, makeStyles, Typography } from '@material-ui/core'
 import { NON_VEG_COLOR, VegNonVegIcon, VEG_COLOR } from '../../../../lib/assets/VegNonVegIcon'
 import { AspectRatioBox } from '../../../../lib/components/AspectRatioBox'
-import { WARNING_MAIN } from '../../../../Theme/token'
+import { Link } from 'react-router-dom'
 import { QtyButton } from '../QtyButton'
 
 const mock = {
@@ -57,8 +56,11 @@ const useStyle = makeStyles((theme) => ({
 
 export const CartCard = () => {
   const { menuItem, qty } = mock
-  const { images, title, price, isVeg, prepTime } = menuItem
+  const { images, title, price, isVeg, prepTime, id } = menuItem
   const classes = useStyle({ isVeg })
+
+  const menuItemUrl = `dishes/${id}`
+
   return (
     <Grid container spacing={2} style={{ borderBottom: '1px solid #ddd', padding: '1rem 0' }}>
       <Grid item xs={4} md={3}>
@@ -71,17 +73,20 @@ export const CartCard = () => {
         </AspectRatioBox>
       </Grid>
       <Grid item xs={6} md={7}>
-        <Typography
-          variant="body1"
-          style={{
-            fontWeight: 500,
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-          }}
-        >
-          {title}
-        </Typography>
+        <Link to={menuItemUrl} style={{ textDecoration: 'none' }}>
+          <Typography
+            variant="body1"
+            color="textPrimary"
+            style={{
+              fontWeight: 500,
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+            }}
+          >
+            {title}
+          </Typography>
+        </Link>
         <Box className={classes.tagsWrapper}>
           <Chip
             icon={<VegNonVegIcon style={{ marginLeft: '12px' }} isVeg={isVeg} size={16} />}
