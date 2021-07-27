@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   Box,
   Container,
@@ -16,7 +15,7 @@ import offer3 from '../../lib/assets/home/offer3.jpg'
 import offer4 from '../../lib/assets/home/offer4.jpg'
 import { Search } from 'react-feather'
 import { AspectRatioBox } from '../../lib/components/AspectRatioBox'
-import { ProductCardSlider, Slider } from '../../lib'
+import { ProductCardSlider } from '../../lib'
 import { Link } from 'react-router-dom'
 import { useQuery } from 'react-query'
 import { MENU_ITEMS } from '../../lib/api/query/menuItems'
@@ -96,54 +95,58 @@ export const Home = () => {
   )
   return (
     <div className={classes.wrapper}>
-      <Box className={classes.homeBackgroundImg}>
-        <Container>
-          <Grid container alignItems="center" style={{ height: '90vh' }}>
-            <Grid item xs={12} sm={11} md={8} lg={7}>
-              <Typography variant="h1" className={classes.heading} style={{ color: '#454545' }}>
-                Welcome <br /> To Our
-                <Typography
-                  component="span"
-                  variant="h1"
-                  className={classes.heading}
-                  color="primary"
-                >
-                  {' '}
-                  Cuisine{' '}
-                </Typography>
-                Restaurant
-              </Typography>
-              <Grid container alignItems="center" spacing={1} style={{ marginTop: '1rem' }}>
-                <Grid item xs={9}>
-                  <InputBase
-                    placeholder="Search Here..."
-                    className={classes.input}
-                    startAdornment={
-                      <Search className={classes.searchIcon} color={theme.palette.grey[900]} />
-                    }
-                  />
-                </Grid>
-                <Grid item xs={3}>
-                  <Button
-                    className={classes.searchButton}
-                    size="large"
-                    variant="contained"
+      <Box>
+        <Box className={classes.homeBackgroundImg}>
+          <Container>
+            <Grid container alignItems="center" style={{ height: '90vh' }}>
+              <Grid item xs={12} sm={11} md={8} lg={7}>
+                <Typography variant="h1" className={classes.heading} style={{ color: '#454545' }}>
+                  Welcome <br /> To Our
+                  <Typography
+                    component="span"
+                    variant="h1"
+                    className={classes.heading}
                     color="primary"
-                    // fullWidth
                   >
-                    <span className={classes.searchBtnText}>Search</span>
-
-                    <Search
-                      size="24px"
-                      color={theme.palette.grey[50]}
-                      className={classes.searchBtnIcon}
+                    {' '}
+                    Cuisine{' '}
+                  </Typography>
+                  Restaurant
+                </Typography>
+                <Grid container alignItems="center" spacing={1} style={{ marginTop: '1rem' }}>
+                  <Grid item xs={9}>
+                    <InputBase
+                      placeholder="Search Here..."
+                      className={classes.input}
+                      startAdornment={
+                        <Search className={classes.searchIcon} color={theme.palette.grey[900]} />
+                      }
                     />
-                  </Button>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Button
+                      className={classes.searchButton}
+                      size="large"
+                      variant="contained"
+                      color="primary"
+                      // fullWidth
+                    >
+                      <span className={classes.searchBtnText}>Search</span>
+
+                      <Search
+                        size="24px"
+                        color={theme.palette.grey[50]}
+                        className={classes.searchBtnIcon}
+                      />
+                    </Button>
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
-          <Box padding="2rem 0">
+          </Container>
+        </Box>
+        <Box padding="2rem 0">
+          <Container>
             <ProductCardSlider
               skeltonCard={<></>}
               cards={offers}
@@ -153,8 +156,10 @@ export const Home = () => {
               id={'offers'}
               sliderPerView={[1, 2, 2.5]}
             />
-          </Box>
-          <Box padding="2rem 0">
+          </Container>
+        </Box>
+        <Box padding="2rem 0">
+          <Container>
             <ProductCardSlider
               cards={
                 data?.data.result.map((menuItem) => <MenuItemCard menuItem={menuItem} />) || []
@@ -165,11 +170,11 @@ export const Home = () => {
               skeltonCard={<MenuItemSkeleton />}
               title="Explore New Dishes"
             />
-          </Box>
-        </Container>
+          </Container>
+        </Box>
         <Box>
           <Container>
-            <Box padding="2rem 0" textAlign="center">
+            <Box padding="5rem 0" textAlign="center">
               <Typography variant="h3" align="center">
                 Become Member
               </Typography>
@@ -186,38 +191,6 @@ export const Home = () => {
                   Create An Account
                 </Button>
               </Link>
-            </Box>
-          </Container>
-        </Box>
-        <Box bgcolor={theme.palette.grey[300]} padding="1rem 0">
-          <Container>
-            <Grid container alignItems="center" justifyContent="center">
-              <Grid item>
-                <Button>About</Button>
-              </Grid>
-              <Grid item>
-                <Button>Explore Menu</Button>
-              </Grid>
-              <Grid item>
-                <Button>Login</Button>
-              </Grid>
-              <Grid item>
-                <Button>Help</Button>
-              </Grid>
-            </Grid>
-            <Box padding="1rem 0">
-              <Typography variant="subtitle2" align="center" color="textSecondary">
-                Made With
-              </Typography>
-              <Typography align="center" variant="subtitle2" color="textSecondary">
-                React | TypeScript | ♥ | NestJs | Postgres
-              </Typography>
-              <Typography align="center" variant="subtitle2" color="textSecondary">
-                By{' '}
-                <a href="https://github.com/developedBySJ" target="_blank" rel="noreferrer">
-                  Swapnil J
-                </a>
-              </Typography>
             </Box>
           </Container>
         </Box>
