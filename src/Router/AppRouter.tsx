@@ -1,7 +1,11 @@
+import { Box, Container } from '@material-ui/core'
 import React from 'react'
-import { Route } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom'
+import { Spinner } from '../lib'
 import { PrivateRoute, PrivateRouteComponentType } from '../lib/components/PrivateRoute'
 import { Viewer } from '../lib/types/viewer'
+import { Login, SignUp } from '../section'
+
 import { ROUTES } from './routes'
 
 interface AppRouterProps {
@@ -10,21 +14,39 @@ interface AppRouterProps {
 }
 
 export const AppRouter: React.FC<AppRouterProps> = ({ viewer, setViewer }) => {
+  if (!viewer.didRequest) {
+    return (
+      <Box height="80vh">
+        <Spinner fullWidth />
+      </Box>
+    )
+  }
+  console.log(viewer)
   return (
-    <>
-      {ROUTES.map(({ isPrivate, component, ...props }, key) => {
-        return isPrivate ? (
-          <PrivateRoute
-            key={key}
-            setViewer={setViewer}
-            component={component as PrivateRouteComponentType}
-            viewer={viewer}
-            {...props}
-          />
-        ) : (
-          <Route key={key} component={component} {...props} />
-        )
-      })}
-    </>
+    <Container maxWidth="xl" style={{ padding: 0 }}>
+      <Switch>
+        <Route path="/login" exact>
+          <Login viewer={viewer} setViewer={setViewer} />
+        </Route>
+        <Route path="/signup" exact>
+          <SignUp />
+        </Route>
+        {ROUTES.map(({ isPrivate, component, ...props }, key) => {
+          return isPrivate ? (
+            <PrivateRoute
+              key={key}
+              setViewer={setViewer}
+              component={component as PrivateRouteComponentType}
+              viewer={viewer}
+              sensitive={false}
+              {...props}
+            />
+          ) : (
+            <Route key={key} component={component} {...props} sensitive={false} />
+          )
+        })}
+        <Redirect to="/404" />
+      </Switch>
+    </Container>
   )
 }

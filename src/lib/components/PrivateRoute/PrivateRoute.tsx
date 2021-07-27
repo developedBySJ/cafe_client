@@ -1,5 +1,6 @@
+import { Box } from '@material-ui/core'
 import React from 'react'
-import { Route, RouteComponentProps, useHistory } from 'react-router-dom'
+import { Redirect, Route, RouteComponentProps, useHistory } from 'react-router-dom'
 import { IPrivateRouterProps } from './privateRouter.type'
 
 const PrivateRoute: React.FC<IPrivateRouterProps> = ({
@@ -8,18 +9,9 @@ const PrivateRoute: React.FC<IPrivateRouterProps> = ({
   component: Component,
   ...rest
 }) => {
-  const { didRequest, id } = viewer
-  const history = React.useRef(useHistory())
-  const [authorized, setAuthorized] = React.useState(false)
-  React.useEffect(() => {
-    if (didRequest && !id) {
-      history.current.push('/login')
-    }
-    if (id) {
-      setAuthorized(true)
-    }
-  }, [id, didRequest])
-  return authorized ? (
+  const { id } = viewer
+
+  return id ? (
     <Route
       {...rest}
       render={(props: RouteComponentProps) =>
@@ -27,7 +19,7 @@ const PrivateRoute: React.FC<IPrivateRouterProps> = ({
       }
     />
   ) : (
-    <h1>loading</h1>
+    <Redirect to="/login" />
   )
 }
 
