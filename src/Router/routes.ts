@@ -3,6 +3,7 @@ import { PrivateRouteComponentType } from '../lib/components/PrivateRoute'
 import { RouteNotImplemented } from '../lib/components/RouteNotImplemented'
 import { ForgotPassword, MenuItemDetails, ResetPassword, MenuItemsList, Home } from '../section'
 import Cart from '../section/Cart/Cart'
+import { NotFound } from '../section/NotFound'
 
 interface RoutesProps extends RouteProps {
   isPrivate?: false
@@ -16,7 +17,7 @@ type Routes = RoutesProps | PrivateRoutesProps
 
 export const ROUTES: Routes[] = [
   /* AUTH */
-  { path: '/404', component: RouteNotImplemented, exact: true, },
+  { path: '/404', component: NotFound, exact: true, },
   { path: '/admin', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/cart', component: Cart, exact: true, isPrivate: true },
   { path: '/favorites', component: RouteNotImplemented, exact: true, isPrivate: true },
