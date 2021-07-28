@@ -23,7 +23,7 @@ export const AppRouter: React.FC<AppRouterProps> = ({ viewer, setViewer }) => {
   }
   console.log(viewer)
   return (
-    <Container maxWidth="xl" style={{ padding: 0 }}>
+    <Container maxWidth="xl" style={{ padding: 0, minHeight: '80vh' }}>
       <Switch>
         <Route path="/login" exact>
           <Login viewer={viewer} setViewer={setViewer} />
