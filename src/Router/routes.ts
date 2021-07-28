@@ -4,6 +4,7 @@ import { RouteNotImplemented } from '../lib/components/RouteNotImplemented'
 import { ForgotPassword, MenuItemDetails, ResetPassword, MenuItemsList, Home } from '../section'
 import Cart from '../section/Cart/Cart'
 import { Favorite } from '../section/Favorite'
+import { Menus } from '../section/Menus'
 import { NotFound } from '../section/NotFound'
 
 interface RoutesProps extends RouteProps {
@@ -31,7 +32,7 @@ export const ROUTES: Routes[] = [
   { path: '/dishes/:id/edit', component: RouteNotImplemented, exact: true, isPrivate: true },
 
   /* MENUS */
-  { path: '/menus', component: RouteNotImplemented, exact: true },
+  { path: '/menus', component: Menus, exact: true },
   { path: '/menus/new', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/menus/:id', component: RouteNotImplemented, exact: true },
   { path: '/menus/:id/edit', component: RouteNotImplemented, exact: true, isPrivate: true },
