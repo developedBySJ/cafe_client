@@ -3,6 +3,7 @@ import { PrivateRouteComponentType } from '../lib/components/PrivateRoute'
 import { RouteNotImplemented } from '../lib/components/RouteNotImplemented'
 import { ForgotPassword, MenuItemDetails, ResetPassword, MenuItemsList, Home } from '../section'
 import Cart from '../section/Cart/Cart'
+import { Favorite } from '../section/Favorite'
 import { NotFound } from '../section/NotFound'
 
 interface RoutesProps extends RouteProps {
@@ -20,7 +21,7 @@ export const ROUTES: Routes[] = [
   { path: '/404', component: NotFound, exact: true, },
   { path: '/admin', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/cart', component: Cart, exact: true, isPrivate: true },
-  { path: '/favorites', component: RouteNotImplemented, exact: true, isPrivate: true },
+  { path: '/favorites', component: Favorite, exact: true, isPrivate: true },
   { path: '/forgot-password', component: ForgotPassword, exact: true },
   { path: '/reset-password/:token', exact: true, component: ResetPassword },
   /* DISHES */
