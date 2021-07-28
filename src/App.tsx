@@ -5,12 +5,11 @@ import { PegasusUI } from './Theme'
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
 import { SnackbarProvider } from 'notistack'
 import { ERROR_MAIN, SUCCESS_MAIN, WARNING_MAIN } from './Theme/token'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { WHO_AM_I } from './lib/api/query'
 import { REFRESH_TOKEN } from './lib/api/query/refreshToken'
 import { Viewer } from './lib/types/viewer'
 import { AppRouter } from './Router'
-import { Login, SignUp } from './section'
 import SwiperCore, { Navigation, Thumbs, Pagination, Scrollbar, A11y } from 'swiper'
 
 import 'swiper/swiper-bundle.css'
@@ -58,9 +57,11 @@ const initialState: Viewer = {
 export const App = () => {
   const { container, wrapper } = useStyle()
   const [viewer, setViewer] = useState(initialState)
+  const [enabled, setEnabled] = useState(true)
 
   useQuery('whoAmI', WHO_AM_I, {
     refetchOnMount: false,
+    enabled,
     onSuccess: ({ data }) => setViewer({ ...data, didRequest: true }),
   })
   useQuery('refreshToken', REFRESH_TOKEN, {
@@ -68,6 +69,10 @@ export const App = () => {
     enabled: !!viewer?.id,
     refetchInterval: 850 * 1000,
   })
+
+  useEffect(() => {
+    setEnabled(false)
+  }, [])
 
   return (
     <div id="my-app-wrapper" className={wrapper}>
