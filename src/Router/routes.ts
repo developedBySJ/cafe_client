@@ -4,6 +4,7 @@ import { RouteNotImplemented } from '../lib/components/RouteNotImplemented'
 import { ForgotPassword, MenuItemDetails, ResetPassword, MenuItemsList, Home } from '../section'
 import Cart from '../section/Cart/Cart'
 import { Favorite } from '../section/Favorite'
+import { MenuDetails } from '../section/MenuDetails'
 import { Menus } from '../section/Menus'
 import { NotFound } from '../section/NotFound'
 
@@ -19,7 +20,7 @@ type Routes = RoutesProps | PrivateRoutesProps
 
 export const ROUTES: Routes[] = [
   /* AUTH */
-  { path: '/404', component: NotFound, exact: true, },
+  { path: '/404', component: NotFound, exact: true },
   { path: '/admin', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/cart', component: Cart, exact: true, isPrivate: true },
   { path: '/favorites', component: Favorite, exact: true, isPrivate: true },
@@ -34,14 +35,13 @@ export const ROUTES: Routes[] = [
   /* MENUS */
   { path: '/menus', component: Menus, exact: true },
   { path: '/menus/new', component: RouteNotImplemented, exact: true, isPrivate: true },
-  { path: '/menus/:id', component: RouteNotImplemented, exact: true },
+  { path: '/menus/:id', component: MenuDetails, exact: true },
   { path: '/menus/:id/edit', component: RouteNotImplemented, exact: true, isPrivate: true },
 
   /* REVIEWS */
   { path: '/dishes/:menuId/reviews', component: RouteNotImplemented, exact: true },
   { path: '/reviews', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/reviews/:id/edit', component: RouteNotImplemented, exact: true, isPrivate: true },
-
 
   /* INVENTORIES */
   { path: '/inventories', component: RouteNotImplemented, exact: true, isPrivate: true },
@@ -55,7 +55,6 @@ export const ROUTES: Routes[] = [
   { path: '/orders/pending', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/orders/:id', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/orders/:id/edit', component: RouteNotImplemented, exact: true, isPrivate: true },
-
 
   /* CUSTOMERS */
   { path: '/users', component: RouteNotImplemented, exact: true, isPrivate: true },
