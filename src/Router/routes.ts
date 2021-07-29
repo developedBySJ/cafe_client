@@ -7,6 +7,7 @@ import { Favorite } from '../section/Favorite'
 import { MenuDetails } from '../section/MenuDetails'
 import { Menus } from '../section/Menus'
 import { NotFound } from '../section/NotFound'
+import { Reviews } from '../section/Reviews'
 
 interface RoutesProps extends RouteProps {
   isPrivate?: false
@@ -39,7 +40,7 @@ export const ROUTES: Routes[] = [
   { path: '/menus/:id/edit', component: RouteNotImplemented, exact: true, isPrivate: true },
 
   /* REVIEWS */
-  { path: '/dishes/:menuId/reviews', component: RouteNotImplemented, exact: true },
+  { path: '/dishes/:menuId/reviews', component: Reviews, exact: true },
   { path: '/reviews', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/reviews/:id/edit', component: RouteNotImplemented, exact: true, isPrivate: true },
 
