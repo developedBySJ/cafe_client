@@ -6,7 +6,7 @@ import { ProductCardSlider } from '../../lib'
 import { MENU_ITEMS } from '../../lib/api/query/menuItems'
 import { MenuItemsQuery } from '../../lib/api/query/menuItems/menuItems.type'
 import { NON_VEG_COLOR, VegNonVegIcon, VEG_COLOR } from '../../lib/assets/VegNonVegIcon'
-import { Reviews } from '../../lib/components/Reviews'
+import { ReviewCard } from '../../lib/components/ReviewCard'
 import { WARNING_MAIN } from '../../Theme/token'
 import { MenuItemCard, MenuItemSkeleton } from '../MenuItemsList'
 import { MenuItemImg } from './MenuItemImg'
@@ -168,8 +168,8 @@ export const MenuItemDetails = () => {
               </Typography>
             </div>
           </Box>
-          <Reviews />
-          <Reviews />
+          <ReviewCard />
+          <ReviewCard />
 
           <Button fullWidth>See All Reviews</Button>
         </Grid>

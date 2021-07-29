@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Avatar, Typography, Grid } from '@material-ui/core'
 
-export const Reviews = () => {
+export const ReviewCard = () => {
   return (
     <Box marginTop="1rem">
       <Grid container spacing={1}>
