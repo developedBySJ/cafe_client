@@ -1,8 +1,25 @@
 import React from 'react'
 import { Box, Button, Container, Grid, Typography } from '@material-ui/core'
 import { CartCard } from './components'
+import { PrivateRouteComponent } from '../../lib'
+import { useQuery } from 'react-query'
+import { CartQuery, CartResponse, GET_CART } from '../../lib/api/query/Cart'
+import { useOnErrorNotify } from '../../lib/hooks'
+import { Redirect } from 'react-router-dom'
 
-const Cart = () => {
+const Cart: PrivateRouteComponent = () => {
+  const notifyError = useOnErrorNotify()
+
+  const { data: response } = useQuery(['getCart', { limit: 50 } as CartQuery], () => GET_CART({}), {
+    onSuccess: ({ data }) => console.log(data),
+    onError: notifyError,
+  })
+
+  const data = response?.data
+  const discount = data?.meta?.discount || 0
+  const taxes = data?.meta?.taxes || 0
+  const total = data?.meta?.total || 0
+
   return (
     <Container maxWidth="lg" style={{ marginTop: '2rem' }}>
       <Grid container spacing={4}>
@@ -10,8 +27,9 @@ const Cart = () => {
           <Typography variant="h5" gutterBottom>
             Cart
           </Typography>
-          <CartCard />
-          <CartCard />
+          {data?.result.map((cartItem) => {
+            return <CartCard data={cartItem} key={cartItem.id} />
+          })}
         </Grid>
         <Grid item xs={12} sm={6} md={5} lg={4}>
           <Typography variant="h5" gutterBottom>
@@ -26,7 +44,7 @@ const Cart = () => {
               </Grid>
               <Grid item xs={4}>
                 <Typography variant="body1" style={{ fontWeight: 500 }} gutterBottom>
-                  Rs. 258
+                  Rs. {total - discount - taxes}
                 </Typography>
               </Grid>
             </Grid>
@@ -38,7 +56,7 @@ const Cart = () => {
               </Grid>
               <Grid item xs={4}>
                 <Typography variant="body1" style={{ fontWeight: 500 }} gutterBottom>
-                  Rs. 32
+                  Rs. {discount}
                 </Typography>
               </Grid>
             </Grid>
@@ -50,7 +68,7 @@ const Cart = () => {
               </Grid>
               <Grid item xs={4}>
                 <Typography variant="body1" style={{ fontWeight: 500 }} gutterBottom>
-                  Rs. 65
+                  Rs. {taxes}
                 </Typography>
               </Grid>
             </Grid>
@@ -71,7 +89,7 @@ const Cart = () => {
               </Grid>
               <Grid item xs={4}>
                 <Typography variant="h6" style={{ fontWeight: 500 }}>
-                  Rs. 328
+                  Rs. {total}
                 </Typography>
               </Grid>
             </Grid>
