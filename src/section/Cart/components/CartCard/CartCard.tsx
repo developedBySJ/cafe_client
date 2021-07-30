@@ -3,37 +3,7 @@ import { NON_VEG_COLOR, VegNonVegIcon, VEG_COLOR } from '../../../../lib/assets/
 import { AspectRatioBox } from '../../../../lib/components/AspectRatioBox'
 import { Link } from 'react-router-dom'
 import { QtyButton } from '../QtyButton'
-
-const mock = {
-  id: '0140bfeb-a8fc-4cde-ae2f-691a2f783283',
-  qty: 2,
-  createdAt: '2021-07-24T06:31:15.299Z',
-  menuItem: {
-    id: 'c574d7a3-9145-4d7b-9330-3548fe329e59',
-    title: 'Death-By-Chocolate Mousse Jar',
-    subTitle: 'World Cuisine',
-    images: ['https://d3gy1em549lxx2.cloudfront.net/c5a409ee-785a-4738-9d79-8345fc6a66ad.JPG'],
-    isAvailable: true,
-    isVeg: true,
-    price: 129,
-    discount: 0,
-    description:
-      "Old-fashioned baked American Devil's food cake layered with rich dark chocolate Marquise glazed with butter candy sauce and topped with pure Belgian dark chocolate shavings...truly a sinful chocolate jar. Prepared fresh in our in-house bakery daily with no added preservatives.",
-    prepTime: 6,
-    ingredients: [],
-    createdAt: '2021-07-24T06:01:14.438Z',
-    updatedAt: '2021-07-24T06:01:14.438Z',
-    menu: {
-      id: '111cb109-b073-4f3c-8c00-4df371437680',
-      name: 'FRESH DESSERTS',
-      isActive: true,
-      image:
-        'https://images.unsplash.com/photo-1582716401301-b2407dc7563d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1054&q=80',
-      createdAt: '2021-07-24T06:00:50.665Z',
-      updatedAt: '2021-07-24T06:00:50.665Z',
-    },
-  },
-}
+import { Cart } from '../../../../lib/api/query/Cart'
 
 const useStyle = makeStyles((theme) => ({
   wrapper: {
@@ -54,8 +24,12 @@ const useStyle = makeStyles((theme) => ({
   },
 }))
 
-export const CartCard = () => {
-  const { menuItem, qty } = mock
+interface CartCardProps {
+  data: Cart
+}
+
+export const CartCard: React.FC<CartCardProps> = ({ data }) => {
+  const { menuItem, qty } = data
   const { images, title, price, isVeg, prepTime, id } = menuItem
   const classes = useStyle({ isVeg })
 
