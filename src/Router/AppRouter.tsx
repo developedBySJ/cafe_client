@@ -29,7 +29,7 @@ export const AppRouter: React.FC<AppRouterProps> = ({ viewer, setViewer }) => {
           <Login viewer={viewer} setViewer={setViewer} />
         </Route>
         <Route path="/signup" exact>
-          <SignUp />
+          <SignUp setViewer={setViewer} />
         </Route>
         {ROUTES.map(({ isPrivate, component, ...props }, key) => {
           return isPrivate ? (

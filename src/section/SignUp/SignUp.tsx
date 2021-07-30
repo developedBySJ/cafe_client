@@ -7,13 +7,17 @@ import {
   Typography,
   useTheme,
   Paper,
+  Box,
 } from '@material-ui/core'
 import { useFormik } from 'formik'
+import React from 'react'
 import { useMutation } from 'react-query'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import * as yup from 'yup'
+import { Spinner } from '../../lib'
 import { SignUpPayload, SIGN_UP } from '../../lib/api/Mutation/signup'
 import { useOnErrorNotify, useOnSuccessNotify } from '../../lib/hooks'
+import { Viewer } from '../../lib/types/viewer'
 
 const useStyle = makeStyles((theme) => ({
   wrapper: {
@@ -78,20 +82,28 @@ const validationSchema = yup.object({
     .required('Password is required'),
 })
 
-export const SignUp = () => {
+interface SignUpProps {
+  setViewer: (viewer: Viewer) => void
+}
+
+export const SignUp: React.FC<SignUpProps> = ({ setViewer }) => {
   const { wrapper, margin, container, heading, marginTop, gridItem } = useStyle()
   const theme = useTheme()
+
+  const history = useHistory()
 
   const notifyError = useOnErrorNotify()
   const notifySuccess = useOnSuccessNotify()
 
-  const { isLoading, mutate } = useMutation(SIGN_UP)
+  const { isLoading, mutate, isSuccess } = useMutation(SIGN_UP)
 
   const onSubmit = (values: SignUpPayload) => {
     mutate(values, {
       onError: notifyError,
       onSuccess: ({ data }) => {
         notifySuccess(`Welcome ${data.firstName} `)
+        setViewer({ ...data, didRequest: true })
+        setTimeout(() => history.push('/'), 1000)
       },
     })
   }
@@ -109,6 +121,13 @@ export const SignUp = () => {
     onSubmit,
   })
 
+  if (isSuccess) {
+    return (
+      <Box height="80vh">
+        <Spinner size={52} label="Redirecting To Home" fullWidth />
+      </Box>
+    )
+  }
   return (
     <Container maxWidth="sm" className={container}>
       <Paper className={wrapper} elevation={0}>
