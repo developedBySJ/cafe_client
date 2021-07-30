@@ -78,15 +78,14 @@ export const Login: React.FC<LoginProps> = ({ viewer, setViewer }) => {
   const notifyError = useOnErrorNotify()
   const notifySuccess = useOnSuccessNotify()
 
-  const { data, isLoading, mutate } = useMutation(LOGIN)
-  const [showSpinner, setShowSpinner] = useState(false)
+  const { data, isLoading, mutate, isSuccess } = useMutation(LOGIN)
+
   const onSubmit = (values: LoginPayload) => {
     mutate(values, {
       onError: notifyError,
       onSuccess: ({ data }) => {
         notifySuccess(`Welcome ${data.firstName} `)
-        setViewer(data)
-        setShowSpinner(true)
+        setViewer({ ...data, didRequest: true })
         setTimeout(() => history.push('/'), 1000)
       },
     })
@@ -106,7 +105,7 @@ export const Login: React.FC<LoginProps> = ({ viewer, setViewer }) => {
   if (viewer?.didRequest && viewer?.id) {
     return <Redirect to="/" />
   }
-  if (showSpinner) {
+  if (isSuccess) {
     return (
       <Box height="80vh">
         <Spinner size={52} label="Redirecting To Home" fullWidth />
