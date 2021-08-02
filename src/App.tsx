@@ -13,6 +13,7 @@ import { AppRouter } from './Router'
 import SwiperCore, { Navigation, Thumbs, Pagination, Scrollbar, A11y } from 'swiper'
 
 import 'swiper/swiper-bundle.css'
+import { ScrollToTop } from './lib/components/ScrollTop'
 
 SwiperCore.use([Thumbs, Navigation, Pagination, Scrollbar, A11y])
 
@@ -77,6 +78,7 @@ export const App = () => {
   return (
     <div id="my-app-wrapper" className={wrapper}>
       <Navbar viewer={viewer} />
+      <ScrollToTop />
       <AppRouter viewer={viewer} setViewer={setViewer} />
       <Footer />
     </div>
