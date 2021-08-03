@@ -1,6 +1,6 @@
 import { Box, Button, Chip, Container, darken, Grid, lighten, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { Rating } from '@material-ui/lab'
+import { Alert, Rating } from '@material-ui/lab'
 import { Clock, Heart, Star } from 'react-feather'
 import { ProductCardSlider } from '../../lib'
 import { MENU_ITEMS } from '../../lib/api/query/menuItems'
@@ -14,6 +14,8 @@ import { useQuery } from 'react-query'
 import { useParams } from 'react-router-dom'
 import { GET_MENU_ITEM } from '../../lib/api/query/menuItemDetail'
 import { useEffect, useState } from 'react'
+import { MenuItemDetailsSkeleton } from './MenuItemDetailsSkeleton'
+import { useOnErrorNotify } from '../../lib/hooks'
 
 const useStyle = makeStyles((theme) => ({
   container: {
@@ -62,13 +64,15 @@ export const MenuItemDetails = () => {
   const { id } = useParams<{ id: string }>()
   const [isVegStyle, setIsVegStyle] = useState(false)
   const classes = useStyle({ isVeg: isVegStyle })
-  console.log({ id })
+
+  const notifyError = useOnErrorNotify()
 
   const { data, isError, isLoading, refetch } = useQuery(
     ['getMenuItemDetails', id],
     () => GET_MENU_ITEM(id),
     {
       onSuccess: ({ data }) => setIsVegStyle(data.isVeg),
+      onError: notifyError,
     },
   )
 
@@ -77,7 +81,7 @@ export const MenuItemDetails = () => {
     isError: isSuggestionError,
     isLoading: isSuggestionLoading,
   } = useQuery(['getMenuItems', {} as MenuItemsQuery], () => MENU_ITEMS({}), {
-    onSuccess: ({ data }) => console.log(data),
+    onError: notifyError,
   })
 
   useEffect(() => {
@@ -85,7 +89,19 @@ export const MenuItemDetails = () => {
   }, [id])
 
   if (isLoading) {
-    return <h1>Loading</h1>
+    return <MenuItemDetailsSkeleton />
+  }
+  if (isError) {
+    return (
+      <>
+        <Container>
+          <Alert variant="filled" color="error" severity="error">
+            Something Went Wrong
+          </Alert>
+        </Container>
+        <MenuItemDetailsSkeleton />
+      </>
+    )
   }
   if (!data) {
     return <h1>Error</h1>
