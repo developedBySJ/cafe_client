@@ -1,9 +1,12 @@
 import { Box, Container, Grid, makeStyles, Typography } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 import React from 'react'
 import { useQuery } from 'react-query'
 import { Link } from 'react-router-dom'
 import { GET_MENUS } from '../../lib/api/query/menus'
 import { AspectRatioBox } from '../../lib/components/AspectRatioBox'
+import { useOnErrorNotify } from '../../lib/hooks'
+import { MenusSkeleton } from './MenusSkeleton'
 
 const useStyles = makeStyles((theme) => ({
   cardWrap: {
@@ -28,8 +31,26 @@ const useStyles = makeStyles((theme) => ({
 
 export const Menus = () => {
   const classes = useStyles()
+  const onErrorNotify = useOnErrorNotify()
+  const { data, isLoading, isError } = useQuery(['id'], () => GET_MENUS({}), {
+    onError: onErrorNotify,
+  })
 
-  const { data } = useQuery(['id'], () => GET_MENUS({}))
+  if (isLoading) {
+    return <MenusSkeleton />
+  }
+  if (isError) {
+    return (
+      <>
+        <Container>
+          <Alert variant="filled" color="error" severity="error">
+            Something Went Wrong
+          </Alert>
+        </Container>
+        <MenusSkeleton />
+      </>
+    )
+  }
 
   if (!data) {
     return <h1>No menus</h1>
@@ -42,7 +63,7 @@ export const Menus = () => {
       </Typography>
       <Grid container spacing={2}>
         {data?.data?.result &&
-          data.data.result.map((menu) => {
+          data?.data?.result.map((menu) => {
             return (
               <Grid item xs={12} sm={2} md={4}>
                 <Link to={`/menus/${menu.id}`} className={classes.link}>
