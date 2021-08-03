@@ -1,7 +1,13 @@
 import { IMenu } from './menu.type'
+import { IReview } from './review.type'
 import { IUser } from './user.type'
 
-export interface IMenuItem {
+export interface MenuItemReview {
+  reviews: IReview[]
+  reviewCount: number
+  ratings: number
+}
+export interface IMenuItem extends MenuItemReview {
   id: string
   title: string
   subTitle: string
