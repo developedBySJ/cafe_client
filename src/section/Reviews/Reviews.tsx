@@ -45,13 +45,13 @@ export const Reviews = () => {
         </Box>
         <Grid container>
           <Grid item xs={12}>
-            <ReviewCard />
+            {/* <ReviewCard />÷ */}
           </Grid>
           <Grid item xs={12}>
-            <ReviewCard />
+            {/* <ReviewCard />÷ */}
           </Grid>
           <Grid item xs={12}>
-            <ReviewCard />
+            {/* <ReviewCard />÷ */}
           </Grid>
         </Grid>
       </Box>
