@@ -1,24 +1,29 @@
 import { Box, Container, Grid, Typography } from '@material-ui/core'
 import { useQuery } from 'react-query'
+import { useParams } from 'react-router-dom'
 import { MenuItemCard } from '..'
+import { GET_MENU } from '../../lib/api/query/menuDetail'
 import { MENU_ITEMS } from '../../lib/api/query/menuItems'
 import { MenuItemsQuery } from '../../lib/api/query/menuItems/menuItems.type'
-
-const mock = {
-  id: '111cb109-b073-4f3c-8c00-4df371437680',
-  name: 'FRESH DESSERTS',
-  isActive: true,
-  image:
-    'https://images.unsplash.com/photo-1582716401301-b2407dc7563d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1054&q=80',
-  createdAt: '2021-07-24T06:00:50.665Z',
-  updatedAt: '2021-07-24T06:00:50.665Z',
-}
+import { useOnErrorNotify } from '../../lib/hooks'
 
 export const MenuDetails = () => {
-  const { name, image, isActive, id } = mock
-  const { data } = useQuery(['users', {} as MenuItemsQuery], () => MENU_ITEMS({ menu: id }), {
-    onSuccess: ({ data }) => console.log(data),
+  const { id } = useParams<{ id: string }>()
+  const notifyError = useOnErrorNotify()
+
+  const { data: menu } = useQuery(['getMenu', id], () => GET_MENU(id), {
+    onError: notifyError,
   })
+  const { data } = useQuery(
+    ['getMenuItemsForMenu', {} as MenuItemsQuery],
+    () => MENU_ITEMS({ menu: id }),
+    {
+      onSuccess: ({ data }) => console.log(data),
+      enabled: !!menu,
+    },
+  )
+  if (!menu || !data) return null
+  const { name, image } = menu.data
   return (
     <Box marginTop="-3rem">
       <figure
