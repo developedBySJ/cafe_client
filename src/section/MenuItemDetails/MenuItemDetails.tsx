@@ -48,6 +48,14 @@ const useStyle = makeStyles((theme) => ({
   button: {
     marginBottom: '1rem',
   },
+  review: {
+    marginTop: '2rem',
+    marginBottom: '1rem',
+  },
+  reviewBtn: {
+    marginTop: '2rem',
+    marginBottom: '1rem',
+  },
 }))
 
 export const MenuItemDetails = () => {
@@ -56,15 +64,19 @@ export const MenuItemDetails = () => {
   const classes = useStyle({ isVeg: isVegStyle })
   console.log({ id })
 
-  const { data, isError, isLoading, refetch } = useQuery(['id'], () => GET_MENU_ITEM(id), {
-    onSuccess: ({ data }) => setIsVegStyle(data.isVeg),
-  })
+  const { data, isError, isLoading, refetch } = useQuery(
+    ['getMenuItemDetails', id],
+    () => GET_MENU_ITEM(id),
+    {
+      onSuccess: ({ data }) => setIsVegStyle(data.isVeg),
+    },
+  )
 
   const {
     data: suggestionData,
     isError: isSuggestionError,
     isLoading: isSuggestionLoading,
-  } = useQuery(['users', {} as MenuItemsQuery], () => MENU_ITEMS({}), {
+  } = useQuery(['getMenuItems', {} as MenuItemsQuery], () => MENU_ITEMS({}), {
     onSuccess: ({ data }) => console.log(data),
   })
 
@@ -72,11 +84,27 @@ export const MenuItemDetails = () => {
     refetch()
   }, [id])
 
+  if (isLoading) {
+    return <h1>Loading</h1>
+  }
   if (!data) {
     return <h1>Error</h1>
   }
 
-  const { images, title, subTitle, description, price, prepTime, discount } = data?.data
+  const {
+    images,
+    title,
+    subTitle,
+    description,
+    price,
+    prepTime,
+    discount,
+    reviewCount,
+    reviews,
+    ratings: fractionRating,
+  } = data.data
+  const ratings = fractionRating?.toFixed(1)
+  console.log({ data })
 
   return (
     <Container className={classes.container}>
@@ -94,7 +122,7 @@ export const MenuItemDetails = () => {
               icon={
                 <Star size="18px" style={{ marginLeft: '8px' }} fill={WARNING_MAIN} stroke={'0'} />
               }
-              label={`3.5`}
+              label={ratings}
               variant="default"
               className={classes.ratingTag}
             />
@@ -105,9 +133,12 @@ export const MenuItemDetails = () => {
               className={classes.typeTag}
             />
             <Chip
-              icon={<Clock size="16px" style={{ marginLeft: '8px' }} />}
+              icon={
+                <Clock size="16px" style={{ marginLeft: '8px', color: darken('#00aeff', 0.7) }} />
+              }
               label={`${prepTime} Min`}
               variant="default"
+              style={{ backgroundColor: lighten('#00aeff', 0.7), color: darken('#00aeff', 0.7) }}
             />
           </Box>
           <Typography variant="body2" className={classes.description}>
@@ -144,25 +175,54 @@ export const MenuItemDetails = () => {
             Favorite
           </Button>
           {/* REVIEW */}
-          <Typography variant="h5">Reviews</Typography>
-          <Box display="flex" alignItems="flex-start" justifyContent="space-between">
-            <div>
-              <Box display="flex" alignItems="center">
-                <Rating name="customized-empty" defaultValue={3.5} precision={0.5} readOnly />
-                <Typography variant="h6">33</Typography>
+          <Typography variant="h5" className={classes.review}>
+            Reviews
+          </Typography>
+          {reviewCount > 0 ? (
+            <Box marginBottom="2rem">
+              <Box display="flex" alignItems="flex-start" justifyContent="space-between">
+                <div>
+                  <Box display="flex" alignItems="center">
+                    <Rating
+                      name="customized-empty"
+                      defaultValue={0}
+                      value={Number(ratings)}
+                      precision={0.5}
+                      readOnly
+                    />
+                    <Typography variant="h6"> &nbsp;{reviewCount}</Typography>
+                  </Box>
+                  <Typography variant="body1">Rated {ratings} out of 5</Typography>
+                </div>
+                <div>
+                  <Typography
+                    style={{ fontWeight: 500, fontSize: 20, textDecoration: 'underline' }}
+                  >
+                    Write a review
+                  </Typography>
+                </div>
               </Box>
-              <Typography variant="body1">Rated 3.5 out of 5</Typography>
-            </div>
-            <div>
-              <Typography style={{ fontWeight: 500, fontSize: 20, textDecoration: 'underline' }}>
-                Write a review
-              </Typography>
-            </div>
-          </Box>
-          <ReviewCard />
-          <ReviewCard />
+              {reviews.map((data, i) => (
+                <ReviewCard key={i} data={data} />
+              ))}
 
-          <Button fullWidth>See All Reviews</Button>
+              {reviewCount > 3 && (
+                <Button fullWidth className={classes.reviewBtn}>
+                  See All Reviews
+                </Button>
+              )}
+            </Box>
+          ) : (
+            <>
+              <Box display="flex" alignItems="center" justifyContent="space-between">
+                <Rating name="customized-empty" defaultValue={0} precision={0.5} readOnly />
+                <Typography variant="h6">0 Reviews</Typography>
+              </Box>
+              <Button fullWidth className={classes.reviewBtn}>
+                Write First Review
+              </Button>
+            </>
+          )}
         </Grid>
       </Grid>
       <Box marginBottom={'2rem'}>
