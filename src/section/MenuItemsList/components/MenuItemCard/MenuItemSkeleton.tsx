@@ -12,7 +12,12 @@ export const MenuItemSkeleton = () => {
   return (
     <Card elevation={0}>
       <CardActionArea disableRipple disableTouchRipple>
-        <Skeleton variant="rect" width={'100%'} height={164} />
+        <Skeleton
+          variant="rect"
+          width={'100%'}
+          style={{ height: '25vw', maxHeight: 256, minHeight: 200 }}
+        />
+
         <CardContent>
           <Box display="flex" justifyContent="space-between">
             <Typography variant="body1" component="div">

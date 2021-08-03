@@ -1,4 +1,5 @@
 import { Box, Container, Grid, Typography } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 import { useQuery } from 'react-query'
 import { useParams } from 'react-router-dom'
 import { MenuItemCard } from '..'
@@ -6,24 +7,46 @@ import { GET_MENU } from '../../lib/api/query/menuDetail'
 import { MENU_ITEMS } from '../../lib/api/query/menuItems'
 import { MenuItemsQuery } from '../../lib/api/query/menuItems/menuItems.type'
 import { useOnErrorNotify } from '../../lib/hooks'
+import { MenuDetailSkeleton } from './MenuDetailSkeleton'
 
 export const MenuDetails = () => {
   const { id } = useParams<{ id: string }>()
   const notifyError = useOnErrorNotify()
 
-  const { data: menu } = useQuery(['getMenu', id], () => GET_MENU(id), {
+  const {
+    data: menu,
+    isLoading: isMenuLoading,
+    isError: isMenuError,
+  } = useQuery(['getMenu', id], () => GET_MENU(id), {
     onError: notifyError,
   })
-  const { data } = useQuery(
+  const { data, isLoading, isError } = useQuery(
     ['getMenuItemsForMenu', {} as MenuItemsQuery],
     () => MENU_ITEMS({ menu: id }),
     {
-      onSuccess: ({ data }) => console.log(data),
+      onError: notifyError,
       enabled: !!menu,
     },
   )
+
+  if (isMenuLoading || isLoading) {
+    return <MenuDetailSkeleton />
+  }
+
+  if (isMenuError || isError) {
+    return (
+      <>
+        <Container>
+          <Alert variant="filled" color="error" severity="error">
+            Something Went Wrong
+          </Alert>
+        </Container>
+        <MenuDetailSkeleton />
+      </>
+    )
+  }
   if (!menu || !data) return null
-  const { name, image } = menu.data
+  const { name, image } = menu?.data || { name: '', image: '' }
   return (
     <Box marginTop="-3rem">
       <figure
