@@ -3,7 +3,7 @@ import { Box, Button, Container, Grid, Typography } from '@material-ui/core'
 import { CartCard } from './components'
 import { PrivateRouteComponent } from '../../lib'
 import { useQuery } from 'react-query'
-import { CartQuery, CartResponse, GET_CART } from '../../lib/api/query/Cart'
+import { CartQuery, CartResponse, GET_CART } from '../../lib/api/query/cart'
 import { useOnErrorNotify } from '../../lib/hooks'
 import { Redirect } from 'react-router-dom'
 

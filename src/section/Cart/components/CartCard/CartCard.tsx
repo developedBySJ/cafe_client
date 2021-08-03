@@ -3,7 +3,7 @@ import { NON_VEG_COLOR, VegNonVegIcon, VEG_COLOR } from '../../../../lib/assets/
 import { AspectRatioBox } from '../../../../lib/components/AspectRatioBox'
 import { Link } from 'react-router-dom'
 import { QtyButton } from '../QtyButton'
-import { Cart } from '../../../../lib/api/query/Cart'
+import { Cart } from '../../../../lib/api/query/cart'
 
 const useStyle = makeStyles((theme) => ({
   wrapper: {
