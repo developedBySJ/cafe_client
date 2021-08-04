@@ -6,3 +6,11 @@ export interface IUserItems {
   qty?: number
   createdAt: Date
 }
+
+export interface ICart extends IUserItems {
+  qty: number
+}
+
+export interface IFavorite extends IUserItems {
+  qty: undefined
+}
