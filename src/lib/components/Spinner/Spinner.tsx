@@ -30,12 +30,17 @@ export const Spinner: React.FC<SpinnerProps> = ({
   duration = 650,
   fullWidth = false,
   label,
+  style,
   ...props
 }) => {
   const classes = useStyle()
   return (
     <Box className={fullWidth ? classes.fullWidth : classes.normal}>
-      <CircularProgress style={{ animationDuration: `${duration}ms` }} disableShrink {...props} />
+      <CircularProgress
+        style={{ animationDuration: `${duration}ms`, ...style }}
+        disableShrink
+        {...props}
+      />
       {label && (
         <Typography color="textSecondary" className={classes.label} variant="h6">
           {label}
