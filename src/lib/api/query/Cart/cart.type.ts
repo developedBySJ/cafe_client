@@ -1,12 +1,8 @@
 import { PageOptions } from '../../types/pageOptions.type'
 import { PaginationResponse } from '../../types/paginationResponse.type'
-import { IUserItems } from '../../types/userItems.type'
+import { ICart } from '../../types/userItems.type'
 
-export interface Cart extends IUserItems {
-  qty: number
-}
-
-export interface CartResponse extends PaginationResponse<Cart> {
+export interface CartResponse extends PaginationResponse<ICart> {
   meta: {
     discount: number
     total: number
