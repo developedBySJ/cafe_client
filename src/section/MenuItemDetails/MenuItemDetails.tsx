@@ -2,7 +2,7 @@ import { Box, Button, Chip, Container, darken, Grid, lighten, Typography } from 
 import { makeStyles } from '@material-ui/core/styles'
 import { Alert, Rating } from '@material-ui/lab'
 import { Clock, Heart, Star } from 'react-feather'
-import { ProductCardSlider } from '../../lib'
+import { ProductCardSlider, Spinner } from '../../lib'
 import { MENU_ITEMS } from '../../lib/api/query/menuItems'
 import { MenuItemsQuery } from '../../lib/api/query/menuItems/menuItems.type'
 import { NON_VEG_COLOR, VegNonVegIcon, VEG_COLOR } from '../../lib/assets/VegNonVegIcon'
@@ -10,12 +10,14 @@ import { ReviewCard } from '../../lib/components/ReviewCard'
 import { WARNING_MAIN } from '../../Theme/token'
 import { MenuItemCard, MenuItemSkeleton } from '../MenuItemsList'
 import { MenuItemImg } from './components'
-import { useQuery } from 'react-query'
+import { useMutation, useQuery } from 'react-query'
 import { useParams } from 'react-router-dom'
 import { GET_MENU_ITEM } from '../../lib/api/query/menuItemDetail'
 import { useEffect, useState } from 'react'
 import { MenuItemDetailsSkeleton } from './MenuItemDetailsSkeleton'
-import { useOnErrorNotify } from '../../lib/hooks'
+import { useOnErrorNotify, useOnSuccessNotify } from '../../lib/hooks'
+import { ADD_CART_ITEM } from '../../lib/api/Mutation/addToCart'
+import { SuccessDialog } from './components/SuccessDialog'
 
 const useStyle = makeStyles((theme) => ({
   container: {
@@ -63,6 +65,7 @@ const useStyle = makeStyles((theme) => ({
 export const MenuItemDetails = () => {
   const { id } = useParams<{ id: string }>()
   const [isVegStyle, setIsVegStyle] = useState(false)
+  const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false)
   const classes = useStyle({ isVeg: isVegStyle })
 
   const notifyError = useOnErrorNotify()
@@ -77,6 +80,15 @@ export const MenuItemDetails = () => {
   )
 
   const {
+    mutate: addToCart,
+    data: addToCartData,
+    isLoading: isAddToCartLoading,
+  } = useMutation(ADD_CART_ITEM, {
+    onError: notifyError,
+    onSuccess: () => setIsSuccessDialogOpen(true),
+  })
+
+  const {
     data: suggestionData,
     isError: isSuggestionError,
     isLoading: isSuggestionLoading,
@@ -87,6 +99,18 @@ export const MenuItemDetails = () => {
   useEffect(() => {
     refetch()
   }, [id])
+
+  useEffect(() => {
+    let timeOutId: NodeJS.Timeout
+    if (isSuccessDialogOpen) {
+      timeOutId = setTimeout(() => {
+        setIsSuccessDialogOpen(false)
+      }, 3000)
+    }
+    return () => {
+      clearTimeout(timeOutId)
+    }
+  }, [isSuccessDialogOpen])
 
   if (isLoading) {
     return <MenuItemDetailsSkeleton />
@@ -122,8 +146,19 @@ export const MenuItemDetails = () => {
   const ratings = fractionRating?.toFixed(1)
   console.log({ data })
 
+  const handleAddToCart = () => {
+    addToCart({ menuItem: id, qty: 1 })
+  }
+
   return (
     <Container className={classes.container}>
+      {addToCartData && (
+        <SuccessDialog
+          isOpen={isSuccessDialogOpen}
+          setIsOpen={setIsSuccessDialogOpen}
+          data={addToCartData?.data}
+        />
+      )}
       <Grid container spacing={6}>
         <Grid item xs={12} md={8}>
           <MenuItemImg images={images} />
@@ -178,8 +213,14 @@ export const MenuItemDetails = () => {
             color="primary"
             size="large"
             className={classes.button}
+            disabled={isAddToCartLoading}
+            onClick={handleAddToCart}
           >
-            Add To Cart
+            {isAddToCartLoading ? (
+              <Spinner style={{ color: 'white' }} size="20px" />
+            ) : (
+              'Add To Cart'
+            )}
           </Button>
 
           <Button
