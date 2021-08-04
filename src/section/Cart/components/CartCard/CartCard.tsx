@@ -3,7 +3,7 @@ import { NON_VEG_COLOR, VegNonVegIcon, VEG_COLOR } from '../../../../lib/assets/
 import { AspectRatioBox } from '../../../../lib/components/AspectRatioBox'
 import { Link } from 'react-router-dom'
 import { QtyButton } from '../QtyButton'
-import { Cart } from '../../../../lib/api/query/cart'
+import { ICart } from '../../../../lib/api/types/userItems.type'
 
 const useStyle = makeStyles((theme) => ({
   wrapper: {
@@ -25,7 +25,7 @@ const useStyle = makeStyles((theme) => ({
 }))
 
 interface CartCardProps {
-  data: Cart
+  data: ICart
 }
 
 export const CartCard: React.FC<CartCardProps> = ({ data }) => {
@@ -80,7 +80,7 @@ export const CartCard: React.FC<CartCardProps> = ({ data }) => {
           1 @ Rs. {price}
         </Typography>
 
-        <Box display="flex" alignItems="center">
+        <Box display="flex" alignItems="center" marginTop="0.5rem">
           <Typography
             variant="body1"
             color="textSecondary"
@@ -88,7 +88,7 @@ export const CartCard: React.FC<CartCardProps> = ({ data }) => {
           >
             Remove
           </Typography>
-          <QtyButton />
+          <QtyButton qty={qty} />
         </Box>
       </Grid>
       <Grid item xs={2}>

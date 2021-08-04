@@ -2,7 +2,7 @@ import { Box, Button, Chip, darken, Grid, lighten, makeStyles, Typography } from
 import { NON_VEG_COLOR, VegNonVegIcon, VEG_COLOR } from '../../../../lib/assets/VegNonVegIcon'
 import { AspectRatioBox } from '../../../../lib/components/AspectRatioBox'
 import { Link } from 'react-router-dom'
-import { Favorites } from '../../../../lib/api/query/favorites'
+import { IFavorite } from '../../../../lib/api/types/userItems.type'
 
 const useStyle = makeStyles((theme) => ({
   wrapper: {
@@ -24,7 +24,7 @@ const useStyle = makeStyles((theme) => ({
 }))
 
 interface FavoriteCardProps {
-  data: Favorites
+  data: IFavorite
 }
 
 export const FavoriteCard: React.FC<FavoriteCardProps> = ({ data }) => {
