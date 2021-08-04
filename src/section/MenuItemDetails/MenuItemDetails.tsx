@@ -9,7 +9,7 @@ import { NON_VEG_COLOR, VegNonVegIcon, VEG_COLOR } from '../../lib/assets/VegNon
 import { ReviewCard } from '../../lib/components/ReviewCard'
 import { WARNING_MAIN } from '../../Theme/token'
 import { MenuItemCard, MenuItemSkeleton } from '../MenuItemsList'
-import { MenuItemImg } from './MenuItemImg'
+import { MenuItemImg } from './components'
 import { useQuery } from 'react-query'
 import { useParams } from 'react-router-dom'
 import { GET_MENU_ITEM } from '../../lib/api/query/menuItemDetail'

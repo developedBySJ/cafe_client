@@ -1,7 +1,7 @@
 import { Box, Grid, useMediaQuery, useTheme } from '@material-ui/core'
 import React from 'react'
-import { Slider } from '../../../lib/components'
-import { AspectRatioBox } from '../../../lib/components/AspectRatioBox'
+import { Slider } from '../../../../lib/components'
+import { AspectRatioBox } from '../../../../lib/components/AspectRatioBox'
 
 export const MenuItemImg: React.FC<{ images: string[] }> = ({ images }) => {
   const theme = useTheme()
