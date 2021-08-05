@@ -17,7 +17,8 @@ import { useEffect, useState } from 'react'
 import { MenuItemDetailsSkeleton } from './MenuItemDetailsSkeleton'
 import { useOnErrorNotify, useOnSuccessNotify } from '../../lib/hooks'
 import { ADD_CART_ITEM } from '../../lib/api/Mutation/addToCart'
-import { SuccessDialog } from './components/SuccessDialog'
+import { SuccessDialog, SuccessDialogType } from './components/SuccessDialog'
+import { ADD_FAV_ITEM } from '../../lib/api/Mutation/addToFavorite'
 
 const useStyle = makeStyles((theme) => ({
   container: {
@@ -65,7 +66,10 @@ const useStyle = makeStyles((theme) => ({
 export const MenuItemDetails = () => {
   const { id } = useParams<{ id: string }>()
   const [isVegStyle, setIsVegStyle] = useState(false)
-  const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false)
+  const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState<[boolean, SuccessDialogType]>([
+    false,
+    undefined,
+  ])
   const classes = useStyle({ isVeg: isVegStyle })
 
   const notifyError = useOnErrorNotify()
@@ -85,7 +89,16 @@ export const MenuItemDetails = () => {
     isLoading: isAddToCartLoading,
   } = useMutation(ADD_CART_ITEM, {
     onError: notifyError,
-    onSuccess: () => setIsSuccessDialogOpen(true),
+    onSuccess: () => setIsSuccessDialogOpen([true, 'cart']),
+  })
+
+  const {
+    mutate: addToFav,
+    data: addToFavData,
+    isLoading: isAddToFavLoading,
+  } = useMutation(ADD_FAV_ITEM, {
+    onError: notifyError,
+    onSuccess: () => setIsSuccessDialogOpen([true, 'fav']),
   })
 
   const {
@@ -102,15 +115,15 @@ export const MenuItemDetails = () => {
 
   useEffect(() => {
     let timeOutId: NodeJS.Timeout
-    if (isSuccessDialogOpen) {
+    if (isSuccessDialogOpen[0]) {
       timeOutId = setTimeout(() => {
-        setIsSuccessDialogOpen(false)
+        setIsSuccessDialogOpen([false, undefined])
       }, 3000)
     }
     return () => {
       clearTimeout(timeOutId)
     }
-  }, [isSuccessDialogOpen])
+  }, [...isSuccessDialogOpen])
 
   if (isLoading) {
     return <MenuItemDetailsSkeleton />
@@ -149,14 +162,26 @@ export const MenuItemDetails = () => {
   const handleAddToCart = () => {
     addToCart({ menuItem: id, qty: 1 })
   }
+  const handleAddToFav = () => {
+    addToFav({ menuItem: id })
+  }
 
   return (
     <Container className={classes.container}>
       {addToCartData && (
         <SuccessDialog
-          isOpen={isSuccessDialogOpen}
+          isOpen={isSuccessDialogOpen[0]}
           setIsOpen={setIsSuccessDialogOpen}
           data={addToCartData?.data}
+          type={isSuccessDialogOpen[1]}
+        />
+      )}
+      {addToFavData && (
+        <SuccessDialog
+          isOpen={isSuccessDialogOpen[0]}
+          setIsOpen={setIsSuccessDialogOpen}
+          data={addToFavData?.data}
+          type={isSuccessDialogOpen[1]}
         />
       )}
       <Grid container spacing={6}>
@@ -227,9 +252,11 @@ export const MenuItemDetails = () => {
             fullWidth
             variant="contained"
             size="large"
-            endIcon={<Heart strokeWidth={1.5} size="20px  " />}
+            endIcon={!isAddToFavLoading && <Heart strokeWidth={1.5} size="20px  " />}
+            disabled={isAddToFavLoading}
+            onClick={handleAddToFav}
           >
-            Favorite
+            {isAddToFavLoading ? <Spinner size="20px" /> : 'Favorite'}
           </Button>
           {/* REVIEW */}
           <Typography variant="h5" className={classes.review}>
