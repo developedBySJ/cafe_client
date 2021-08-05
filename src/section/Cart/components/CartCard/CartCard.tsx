@@ -4,6 +4,8 @@ import { AspectRatioBox } from '../../../../lib/components/AspectRatioBox'
 import { Link } from 'react-router-dom'
 import { QtyButton } from '../QtyButton'
 import { ICart } from '../../../../lib/api/types/userItems.type'
+import { useMutation, useQueryClient } from 'react-query'
+import { REMOVE_CART_ITEM } from '../../../../lib/api/Mutation/updateCart'
 
 const useStyle = makeStyles((theme) => ({
   wrapper: {
@@ -29,8 +31,12 @@ interface CartCardProps {
 }
 
 export const CartCard: React.FC<CartCardProps> = ({ data }) => {
-  const { menuItem, qty } = data
+  const { menuItem, qty, id: cartId } = data
   const { images, title, price, isVeg, prepTime, id } = menuItem
+  const queryClient = useQueryClient()
+  const { mutate, isLoading } = useMutation(REMOVE_CART_ITEM, {
+    onSuccess: () => queryClient.invalidateQueries('getCart'),
+  })
   const classes = useStyle({ isVeg })
 
   const menuItemUrl = `dishes/${id}`
@@ -85,10 +91,11 @@ export const CartCard: React.FC<CartCardProps> = ({ data }) => {
             variant="body1"
             color="textSecondary"
             style={{ fontWeight: 500, marginRight: '1rem', cursor: 'pointer' }}
+            onClick={() => mutate(cartId)}
           >
             Remove
           </Typography>
-          <QtyButton qty={qty} />
+          <QtyButton qty={qty} id={cartId} />
         </Box>
       </Grid>
       <Grid item xs={2}>
