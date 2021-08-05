@@ -3,6 +3,8 @@ import { NON_VEG_COLOR, VegNonVegIcon, VEG_COLOR } from '../../../../lib/assets/
 import { AspectRatioBox } from '../../../../lib/components/AspectRatioBox'
 import { Link } from 'react-router-dom'
 import { IFavorite } from '../../../../lib/api/types/userItems.type'
+import { useMutation, useQueryClient } from 'react-query'
+import { REMOVE_FAV_ITEM } from '../../../../lib/api/Mutation/updateFavorites'
 
 const useStyle = makeStyles((theme) => ({
   wrapper: {
@@ -28,12 +30,18 @@ interface FavoriteCardProps {
 }
 
 export const FavoriteCard: React.FC<FavoriteCardProps> = ({ data }) => {
-  const { menuItem, qty } = data
+  const { menuItem, id: favId } = data
   const { images, title, price, isVeg, prepTime, id } = menuItem
   const classes = useStyle({ isVeg })
-
+  const queryClient = useQueryClient()
+  const { mutate, isLoading } = useMutation(REMOVE_FAV_ITEM, {
+    onSuccess: () => queryClient.invalidateQueries('getFavorites'),
+  })
   const menuItemUrl = `dishes/${id}`
 
+  const handleRemoveBtnClick = () => {
+    mutate(favId)
+  }
   return (
     <Grid container spacing={2} style={{ borderBottom: '1px solid #ddd', padding: '1rem 0' }}>
       <Grid item xs={4} md={3}>
@@ -71,7 +79,7 @@ export const FavoriteCard: React.FC<FavoriteCardProps> = ({ data }) => {
         </Box>
 
         <Box display="flex" alignItems="center" marginTop="1rem">
-          <Button size="small" variant="contained">
+          <Button size="small" style={{ paddingLeft: 0 }} onClick={handleRemoveBtnClick}>
             Remove
           </Button>
         </Box>
