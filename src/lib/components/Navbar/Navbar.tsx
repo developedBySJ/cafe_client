@@ -4,9 +4,9 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
 import InputBase from '@material-ui/core/InputBase'
 import IconButton from '@material-ui/core/IconButton'
-import { makeStyles, useTheme, Box, Container } from '@material-ui/core'
-import { Search, ShoppingBag, User } from 'react-feather'
-import { useHistory } from 'react-router-dom'
+import { makeStyles, useTheme, Box, Container, Typography } from '@material-ui/core'
+import { Heart, Search, ShoppingBag, User } from 'react-feather'
+import { Link, useHistory } from 'react-router-dom'
 import { BrandIcon } from '../../assets'
 import { Viewer } from '../../types/viewer'
 import Avatar from '@material-ui/core/Avatar'
@@ -20,10 +20,19 @@ const useStyle = makeStyles((theme) => ({
     margin: 0,
   },
   margin: {
+    margin: '0 0.1rem',
+  },
+  loginButton: {
     margin: '0 0.5rem',
   },
   searchIcon: {
     margin: '0 0.5rem',
+  },
+  navLink: {
+    fontWeight: 500,
+    textDecoration: 'none',
+    color: 'inherit',
+    margin: '0 1rem',
   },
 }))
 
@@ -32,7 +41,7 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ viewer }) => {
-  const { appBar, margin, searchIcon } = useStyle()
+  const classes = useStyle()
   const theme = useTheme()
   const history = useHistory()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -45,7 +54,7 @@ export const Navbar: React.FC<NavbarProps> = ({ viewer }) => {
     setAnchorEl(null)
   }
   return (
-    <AppBar className={appBar} id="my-navbar" elevation={0}>
+    <AppBar className={classes.appBar} id="my-navbar" elevation={0}>
       <Container>
         <Toolbar style={{ padding: 0 }}>
           <IconButton
@@ -57,31 +66,58 @@ export const Navbar: React.FC<NavbarProps> = ({ viewer }) => {
             <BrandIcon color="primary" />
           </IconButton>
           <Box display="flex" alignItems="center" marginLeft={'auto'}>
-            <InputBase
+            {/* <InputBase
               className={margin}
               startAdornment={<Search className={searchIcon} color={theme.palette.grey[900]} />}
-            />
+            /> */}
+            <Typography color="textPrimary">
+              <Link to="/" className={classes.navLink}>
+                Home
+              </Link>
+            </Typography>
+            <Typography color="textPrimary">
+              <Link to="/menus" className={classes.navLink}>
+                Explore
+              </Link>
+            </Typography>
 
             {viewer.id ? (
               <>
                 <IconButton
                   edge="start"
-                  color="primary"
+                  color="default"
+                  aria-label="menu"
+                  onClick={() => history.push('/favorites')}
+                  className={classes.margin}
+                >
+                  <Heart />
+                </IconButton>
+                <IconButton
+                  edge="start"
+                  color="default"
                   aria-label="menu"
                   onClick={() => history.push('/cart')}
-                  className={margin}
+                  className={classes.margin}
                 >
                   <ShoppingBag />
                 </IconButton>
                 {viewer.avatar ? (
-                  <Avatar style={{ width: 32, height: 32 }} src={viewer.avatar} />
+                  <IconButton
+                    edge="start"
+                    color="default"
+                    aria-label="menu"
+                    onClick={handleClick}
+                    className={classes.margin}
+                  >
+                    <Avatar style={{ width: 32, height: 32 }} src={viewer.avatar} />
+                  </IconButton>
                 ) : (
                   <IconButton
                     edge="start"
-                    color="primary"
+                    color="default"
                     aria-label="menu"
                     onClick={handleClick}
-                    className={margin}
+                    className={classes.margin}
                   >
                     <User />
                   </IconButton>
@@ -109,7 +145,7 @@ export const Navbar: React.FC<NavbarProps> = ({ viewer }) => {
                   color="primary"
                   variant="contained"
                   size="small"
-                  className={margin}
+                  className={classes.loginButton}
                   onClick={() => history.push('/login')}
                 >
                   Login
@@ -118,7 +154,7 @@ export const Navbar: React.FC<NavbarProps> = ({ viewer }) => {
                   color="primary"
                   variant="outlined"
                   size="small"
-                  className={margin}
+                  className={classes.margin}
                   onClick={() => history.push('/signup')}
                 >
                   Sign up
