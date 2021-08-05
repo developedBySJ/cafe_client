@@ -1,8 +1,8 @@
 import axios, { AxiosResponse } from 'axios'
-import { CartResponse, AddToCartCartPayload } from './addToCart.type'
+import { CartResponse, AddToCartPayload } from './addToCart.type'
 
-export const BASE_BASE_URL = `/api/v1/cart`
+export const BASE_CART_URL = `/api/v1/cart`
 
 export const ADD_CART_ITEM = async (
-  payload: AddToCartCartPayload,
-): Promise<AxiosResponse<CartResponse>> => await axios.post(BASE_BASE_URL, payload)
+  payload: AddToCartPayload,
+): Promise<AxiosResponse<CartResponse>> => await axios.post(BASE_CART_URL, payload)

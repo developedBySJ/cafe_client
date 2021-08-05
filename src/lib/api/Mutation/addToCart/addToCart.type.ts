@@ -2,7 +2,7 @@ import { ICart } from '../../types/userItems.type'
 
 export type CartResponse = ICart
 
-export interface AddToCartCartPayload {
+export interface AddToCartPayload {
   menuItem: string
   qty: number
 }
