@@ -1,8 +1,9 @@
-import { ICart, IUserItems } from '../../types/userItems.type'
+import { ICart } from '../../types/userItems.type'
 
 export type CartResponse = ICart
 
 export interface UpdateCartPayload {
+  id: string
   qty: number
 }
 
