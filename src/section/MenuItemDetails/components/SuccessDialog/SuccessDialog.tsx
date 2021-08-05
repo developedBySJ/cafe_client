@@ -1,22 +1,19 @@
 import {
   Box,
   Button,
-  Chip,
   darken,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  Grid,
   lighten,
   makeStyles,
   Typography,
 } from '@material-ui/core'
 import React from 'react'
 import { Check } from 'react-feather'
-import { Link, useHistory } from 'react-router-dom'
-import { IMenuItem } from '../../../../lib/api/types/menuItem.type'
-import { ICart } from '../../../../lib/api/types/userItems.type'
+import { useHistory } from 'react-router-dom'
+import { IUserItems } from '../../../../lib/api/types/userItems.type'
 import { NON_VEG_COLOR, VegNonVegIcon, VEG_COLOR } from '../../../../lib/assets/VegNonVegIcon'
 import { AspectRatioBox } from '../../../../lib/components/AspectRatioBox'
 
@@ -27,21 +24,27 @@ const useStyle = makeStyles((theme) => ({
   },
 }))
 
+export type SuccessDialogType = 'cart' | 'fav' | undefined
 interface SuccessDialogProps {
-  data: ICart
+  data: IUserItems
   isOpen: boolean
-  setIsOpen: (isVeg: boolean) => void
+  setIsOpen: (arg: [boolean, SuccessDialogType]) => void
+  type: SuccessDialogType
 }
 
-export const SuccessDialog: React.FC<SuccessDialogProps> = ({ data, isOpen, setIsOpen }) => {
+export const SuccessDialog: React.FC<SuccessDialogProps> = ({ data, isOpen, setIsOpen, type }) => {
   const { menuItem, qty } = data
   const { title, subTitle, price, images, isVeg, discount } = menuItem
   const history = useHistory()
+
+  const url = type === 'cart' ? '/cart' : '/favorites'
+  const typeText = type === 'cart' ? 'Cart' : 'Favorites'
+
   return (
     <Dialog open={isOpen} fullWidth maxWidth="xs">
       <DialogTitle>
         <Box display="flex" alignItems="center">
-          <Check style={{ marginRight: '0.5rem' }} /> Added To Cart
+          <Check style={{ marginRight: '0.5rem' }} /> Added To {typeText}
         </Box>
       </DialogTitle>
       <DialogContent>
@@ -69,7 +72,7 @@ export const SuccessDialog: React.FC<SuccessDialogProps> = ({ data, isOpen, setI
       </DialogContent>
       <DialogActions>
         <Button
-          onClick={() => setIsOpen(false)}
+          onClick={() => setIsOpen([false, undefined])}
           fullWidth
           style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}
         >
@@ -81,9 +84,9 @@ export const SuccessDialog: React.FC<SuccessDialogProps> = ({ data, isOpen, setI
           variant="contained"
           fullWidth
           style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}
-          onClick={() => history.push(`/cart`)}
+          onClick={() => history.push(url)}
         >
-          View Cart
+          View {typeText}
         </Button>
       </DialogActions>
     </Dialog>
