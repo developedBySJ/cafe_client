@@ -1,35 +1,52 @@
-import React from 'react'
 import { Box, Button, Container, Grid, Typography } from '@material-ui/core'
 import { CartCard } from './components'
-import { PrivateRouteComponent } from '../../lib'
+import { PrivateRouteComponent, Spinner } from '../../lib'
 import { useQuery } from 'react-query'
-import { CartQuery, CartResponse, GET_CART } from '../../lib/api/query/cart'
+import { CartQuery, GET_CART } from '../../lib/api/query/cart'
 import { useOnErrorNotify } from '../../lib/hooks'
-import { Redirect } from 'react-router-dom'
 
 const Cart: PrivateRouteComponent = () => {
   const notifyError = useOnErrorNotify()
 
-  const { data: response } = useQuery(['getCart', { limit: 50 } as CartQuery], () => GET_CART({}), {
+  const {
+    data: getCartData,
+    isLoading,
+    isFetching,
+  } = useQuery(['getCart', { limit: 50 } as CartQuery], () => GET_CART({}), {
     onSuccess: ({ data }) => console.log(data),
     onError: notifyError,
   })
 
-  const data = response?.data
+  const data = getCartData?.data
   const discount = data?.meta?.discount || 0
   const taxes = data?.meta?.taxes || 0
   const total = data?.meta?.total || 0
 
   return (
-    <Container maxWidth="lg" style={{ marginTop: '2rem' }}>
+    <Container
+      maxWidth="lg"
+      style={{ marginTop: '2rem', ...(isFetching && { pointerEvents: 'none' }) }}
+    >
       <Grid container spacing={4}>
         <Grid item xs={12} sm={6} md={7} lg={8}>
           <Typography variant="h5" gutterBottom>
             Cart
           </Typography>
-          {data?.result.map((cartItem) => {
-            return <CartCard data={cartItem} key={cartItem.id} />
-          })}
+          {isLoading ? (
+            <Box height="80vh">
+              <Spinner fullWidth />
+            </Box>
+          ) : data?.result.length ? (
+            data?.result.map((cartItem) => {
+              return <CartCard data={cartItem} key={cartItem.id} />
+            })
+          ) : (
+            <Box padding="4rem 0">
+              <Typography variant="h6" align="center" color="textSecondary">
+                Dishes added to your Cart will be saved here.
+              </Typography>
+            </Box>
+          )}
         </Grid>
         <Grid item xs={12} sm={6} md={5} lg={4}>
           <Typography variant="h5" gutterBottom>
@@ -44,7 +61,7 @@ const Cart: PrivateRouteComponent = () => {
               </Grid>
               <Grid item xs={4}>
                 <Typography variant="body1" style={{ fontWeight: 500 }} gutterBottom>
-                  Rs. {total - discount - taxes}
+                  Rs. {(total - discount - taxes).toFixed(2)}
                 </Typography>
               </Grid>
             </Grid>
