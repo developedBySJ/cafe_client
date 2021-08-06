@@ -53,6 +53,7 @@ const useSnackBarStyles = makeStyles(() => ({
 
 const initialState: Viewer = {
   didRequest: false,
+  total: undefined,
 }
 
 export const App = () => {
