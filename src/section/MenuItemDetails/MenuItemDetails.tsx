@@ -241,11 +241,7 @@ export const MenuItemDetails = () => {
             disabled={isAddToCartLoading}
             onClick={handleAddToCart}
           >
-            {isAddToCartLoading ? (
-              <Spinner style={{ color: 'white' }} size="20px" />
-            ) : (
-              'Add To Cart'
-            )}
+            {isAddToCartLoading ? <Spinner size="20px" /> : 'Add To Cart'}
           </Button>
 
           <Button
