@@ -4,16 +4,17 @@ import { PrivateRouteComponent, Spinner } from '../../lib'
 import { useQuery } from 'react-query'
 import { CartQuery, GET_CART } from '../../lib/api/query/cart'
 import { useOnErrorNotify } from '../../lib/hooks'
+import { useHistory } from 'react-router-dom'
 
-const Cart: PrivateRouteComponent = () => {
+const Cart: PrivateRouteComponent = ({ viewer, setViewer }) => {
   const notifyError = useOnErrorNotify()
-
+  const history = useHistory()
   const {
     data: getCartData,
     isLoading,
     isFetching,
   } = useQuery(['getCart', { limit: 50 } as CartQuery], () => GET_CART({}), {
-    onSuccess: ({ data }) => console.log(data),
+    onSuccess: ({ data }) => setViewer({ ...viewer, total: data.meta.total }),
     onError: notifyError,
   })
 
@@ -111,7 +112,13 @@ const Cart: PrivateRouteComponent = () => {
               </Grid>
             </Grid>
 
-            <Button fullWidth variant="contained" color="primary" size="large">
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              size="large"
+              onClick={() => history.push('/checkout')}
+            >
               Checkout
             </Button>
           </Box>
