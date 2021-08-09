@@ -9,20 +9,63 @@ import {
   Select,
   Typography,
 } from '@material-ui/core'
-import { Rating } from '@material-ui/lab'
-import React from 'react'
-import { ReviewCard } from '../../lib'
+import { Alert, Rating } from '@material-ui/lab'
+import { useQuery } from 'react-query'
+import { useHistory, useParams } from 'react-router-dom'
+import { ReviewCard, Spinner } from '../../lib'
+import { GET_MENU_ITEM } from '../../lib/api/query/menuItemDetail'
+import { GET_REVIEWS } from '../../lib/api/query/reviews'
+import { useOnErrorNotify } from '../../lib/hooks'
 
 export const Reviews = () => {
+  const { menuId } = useParams<{ menuId: string }>()
+  const notifyError = useOnErrorNotify()
+  const history = useHistory()
+  const { data, isError, isLoading, refetch } = useQuery(
+    ['getMenuItemDetails', menuId],
+    () => GET_MENU_ITEM(menuId),
+    { onError: notifyError },
+  )
+  const {
+    data: reviewsData,
+    isError: isReviewsError,
+    isLoading: isReviewLoading,
+  } = useQuery(['getReviews', menuId], () => GET_REVIEWS({ menuItemId: menuId }), {
+    onError: notifyError,
+  })
+
+  if (isLoading) {
+    return (
+      <Box height="8vh">
+        <Spinner fullWidth />
+      </Box>
+    )
+  }
+  if (isError || !data) {
+    return (
+      <Container>
+        <Alert variant="filled" color="error" severity="error">
+          Something Went Wrong
+        </Alert>
+        <Box height="8vh">
+          <Spinner fullWidth />
+        </Box>
+      </Container>
+    )
+  }
+  const { title, ratings, reviewCount } = data.data
   return (
     <Container maxWidth="md" style={{ marginTop: '2rem' }}>
       <Box>
-        <Typography variant="h4" align="left">
-          Dulce de Leche Cheesecake Brownie Reviews{' '}
+        <Typography variant="h4" align="center">
+          {title}
         </Typography>
         <Box margin="2rem 0" textAlign="center">
-          <Rating value={3} readOnly />
-          <Typography variant="h5">5 Reviews</Typography>
+          <Rating value={ratings} readOnly />
+          <Typography variant="h6" color="textSecondary">
+            {ratings.toFixed(1)}
+          </Typography>
+          <Typography variant="h5">{reviewCount} Reviews</Typography>
         </Box>
         <Box margin="2rem 0">
           <Grid container spacing={1} alignItems="center" justifyContent="space-between">
@@ -37,22 +80,32 @@ export const Reviews = () => {
               </FormControl>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
-              <Button size="large" fullWidth variant="outlined" color="primary">
+              <Button
+                size="large"
+                fullWidth
+                variant="outlined"
+                color="primary"
+                onClick={() => history.push(`reviews/new`)}
+              >
                 Write Review
               </Button>
             </Grid>
           </Grid>
         </Box>
         <Grid container>
-          <Grid item xs={12}>
-            {/* <ReviewCard />÷ */}
-          </Grid>
-          <Grid item xs={12}>
-            {/* <ReviewCard />÷ */}
-          </Grid>
-          <Grid item xs={12}>
-            {/* <ReviewCard />÷ */}
-          </Grid>
+          {reviewsData?.data.result.length ? (
+            reviewsData.data.result.map((review) => (
+              <Grid item xs={12} key={review.id}>
+                <ReviewCard data={review} />
+              </Grid>
+            ))
+          ) : (
+            <Box padding="3rem" width="100%">
+              <Typography variant="h6" align="center" color="textSecondary">
+                No Reviews
+              </Typography>
+            </Box>
+          )}
         </Grid>
       </Box>
     </Container>
