@@ -11,7 +11,7 @@ import { WARNING_MAIN } from '../../Theme/token'
 import { MenuItemCard, MenuItemSkeleton } from '../MenuItemsList'
 import { MenuItemImg } from './components'
 import { useMutation, useQuery } from 'react-query'
-import { useParams } from 'react-router-dom'
+import { Link, useHistory, useParams } from 'react-router-dom'
 import { GET_MENU_ITEM } from '../../lib/api/query/menuItemDetail'
 import { useEffect, useState } from 'react'
 import { MenuItemDetailsSkeleton } from './MenuItemDetailsSkeleton'
@@ -58,9 +58,9 @@ const useStyle = makeStyles((theme) => ({
     marginBottom: '1rem',
   },
   reviewBtn: {
-    marginTop: '2rem',
     marginBottom: '1rem',
   },
+  link: { fontWeight: 500, fontSize: 20, textDecoration: 'underline', color: 'inherit' },
 }))
 
 export const MenuItemDetails = () => {
@@ -71,7 +71,7 @@ export const MenuItemDetails = () => {
     undefined,
   ])
   const classes = useStyle({ isVeg: isVegStyle })
-
+  const history = useHistory()
   const notifyError = useOnErrorNotify()
 
   const { data, isError, isLoading, refetch } = useQuery(
@@ -128,7 +128,7 @@ export const MenuItemDetails = () => {
   if (isLoading) {
     return <MenuItemDetailsSkeleton />
   }
-  if (isError) {
+  if (isError || !data) {
     return (
       <>
         <Container>
@@ -139,9 +139,6 @@ export const MenuItemDetails = () => {
         <MenuItemDetailsSkeleton />
       </>
     )
-  }
-  if (!data) {
-    return <h1>Error</h1>
   }
 
   const {
@@ -275,11 +272,9 @@ export const MenuItemDetails = () => {
                   <Typography variant="body1">Rated {ratings} out of 5</Typography>
                 </div>
                 <div>
-                  <Typography
-                    style={{ fontWeight: 500, fontSize: 20, textDecoration: 'underline' }}
-                  >
+                  <Link to={`${id}/reviews/new`} className={classes.link}>
                     Write a review
-                  </Typography>
+                  </Link>
                 </div>
               </Box>
               {reviews.map((data, i) => (
@@ -295,10 +290,20 @@ export const MenuItemDetails = () => {
           ) : (
             <>
               <Box display="flex" alignItems="center" justifyContent="space-between">
-                <Rating name="customized-empty" defaultValue={0} precision={0.5} readOnly />
+                <Rating defaultValue={0} precision={0.5} readOnly value={0} />
                 <Typography variant="h6">0 Reviews</Typography>
               </Box>
-              <Button fullWidth className={classes.reviewBtn}>
+              <Box padding="3rem 0">
+                <Typography variant="h6" align="center" color="textSecondary">
+                  Not Reviewed Yet
+                </Typography>
+              </Box>
+              <Button
+                fullWidth
+                className={classes.reviewBtn}
+                variant="contained"
+                onClick={() => history.push(`${id}/reviews/new`)}
+              >
                 Write First Review
               </Button>
             </>
