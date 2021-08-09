@@ -65,7 +65,7 @@ export const Menus = () => {
         {data?.data?.result &&
           data?.data?.result.map((menu) => {
             return (
-              <Grid item xs={12} sm={2} md={4}>
+              <Grid item xs={12} sm={6} md={4}>
                 <Link to={`/menus/${menu.id}`} className={classes.link}>
                   <AspectRatioBox borderRadius={16}>
                     <Box height="512px" position="relative">

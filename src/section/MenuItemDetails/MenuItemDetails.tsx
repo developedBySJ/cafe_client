@@ -181,7 +181,7 @@ export const MenuItemDetails = () => {
           type={isSuccessDialogOpen[1]}
         />
       )}
-      <Grid container spacing={6}>
+      <Grid container spacing={4}>
         <Grid item xs={12} md={8}>
           <MenuItemImg images={images} />
         </Grid>
@@ -277,10 +277,11 @@ export const MenuItemDetails = () => {
                   </Link>
                 </div>
               </Box>
-              {reviews.map((data, i) => (
-                <ReviewCard key={i} data={data} />
-              ))}
-
+              <Box>
+                {reviews.map((data, i) => (
+                  <ReviewCard key={i} data={data} />
+                ))}
+              </Box>
               {reviewCount > 3 && (
                 <Button fullWidth className={classes.reviewBtn}>
                   See All Reviews
