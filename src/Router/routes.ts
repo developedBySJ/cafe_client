@@ -45,7 +45,7 @@ export const ROUTES: Routes[] = [
 
   /* REVIEWS */
   { path: '/dishes/:menuId/reviews', component: Reviews, exact: true },
-  { path: '/dishes/:menuId/reviews/new', component: NewReview, exact: true },
+  { path: '/dishes/:menuId/reviews/new', component: NewReview, exact: true, isPrivate: true },
   { path: '/reviews', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/reviews/:id/edit', component: RouteNotImplemented, exact: true, isPrivate: true },
 
