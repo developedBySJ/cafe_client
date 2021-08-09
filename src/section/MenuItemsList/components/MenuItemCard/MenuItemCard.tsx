@@ -9,6 +9,9 @@ import Typography from '@material-ui/core/Typography'
 import { Box, makeStyles } from '@material-ui/core'
 import { IMenuItems } from '../../../../lib/api/types/menuItems.type'
 import { Link } from 'react-router-dom'
+import { useMutation } from 'react-query'
+import { ADD_CART_ITEM } from '../../../../lib/api/Mutation/addToCart'
+import { useOnErrorNotify, useOnSuccessNotify } from '../../../../lib/hooks'
 
 const useStyle = makeStyles((theme) => ({
   image: { height: '25vw', maxHeight: 256, minHeight: 200 },
@@ -30,7 +33,19 @@ const useStyle = makeStyles((theme) => ({
 export const MenuItemCard: React.FC<{ menuItem: IMenuItems }> = ({ menuItem }) => {
   const { images, title, subTitle, id, prepTime, isVeg, isAvailable, price } = menuItem
   const classes = useStyle()
-
+  const notifyError = useOnErrorNotify()
+  const notifySuccess = useOnSuccessNotify()
+  const {
+    mutate: addToCart,
+    data: addToCartData,
+    isLoading: isAddToCartLoading,
+  } = useMutation(ADD_CART_ITEM, {
+    onError: notifyError,
+    onSuccess: () => notifySuccess('Dish Added To Your Cart'),
+  })
+  const handleAddToCart = () => {
+    addToCart({ menuItem: id, qty: 1 })
+  }
   return (
     <Card elevation={0}>
       <CardActionArea disableRipple>
@@ -63,8 +78,9 @@ export const MenuItemCard: React.FC<{ menuItem: IMenuItems }> = ({ menuItem }) =
           variant="contained"
           color="primary"
           fullWidth
-          disabled={!isAvailable}
+          disabled={!isAvailable || isAddToCartLoading}
           className={classes.button}
+          onClick={handleAddToCart}
         >
           Add
         </Button>
