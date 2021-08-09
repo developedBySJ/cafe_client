@@ -1,7 +1,6 @@
 import React from 'react'
-import { Box, Avatar, Typography, Grid, Chip, darken, lighten } from '@material-ui/core'
+import { Box, Avatar, Typography, Chip, darken, lighten } from '@material-ui/core'
 import { IReview } from '../../api/types/review.type'
-import { Rating } from '@material-ui/lab'
 import { Star } from 'react-feather'
 import { WARNING_MAIN } from '../../../Theme/token'
 import { makeStyles } from '@material-ui/core'
@@ -20,8 +19,8 @@ interface ReviewCardProps {
 }
 
 export const ReviewCard: React.FC<ReviewCardProps> = ({ data }) => {
-  const { createdBy, comment, createdAt, ratings, id, title, image } = data
-  const { firstName, lastName, avatar, email } = createdBy
+  const { createdBy, comment, createdAt, ratings, title } = data
+  const { firstName, lastName, avatar } = createdBy
 
   const classes = useStyle()
 
@@ -32,7 +31,14 @@ export const ReviewCard: React.FC<ReviewCardProps> = ({ data }) => {
           <Avatar sizes="48px" style={{ marginTop: 4 }} src={avatar} />
         </Box>
         <div>
-          <Box display="flex" alignItems="center">
+          <Box
+            display="flex"
+            alignItems="center"
+            overflow="hidden"
+            maxWidth="300px"
+            width="50vw"
+            minWidth="200px"
+          >
             <Chip
               icon={
                 <Star size="18px" style={{ marginLeft: '8px' }} fill={WARNING_MAIN} stroke={'0'} />
@@ -42,9 +48,19 @@ export const ReviewCard: React.FC<ReviewCardProps> = ({ data }) => {
               variant="default"
               className={classes.ratingTag}
             />
-            <Typography variant="h6">{title}</Typography>
+
+            <Typography
+              variant="h6"
+              style={{
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {title}
+            </Typography>
           </Box>
-          <Typography variant="body1" style={{ textAlign: 'justify' }}>
+          <Typography variant="body1" align="justify" gutterBottom>
             {comment}
           </Typography>
           <Box display="flex">
