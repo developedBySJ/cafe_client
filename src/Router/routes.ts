@@ -3,7 +3,9 @@ import { PrivateRouteComponentType } from '../lib/components/PrivateRoute'
 import { RouteNotImplemented } from '../lib/components/RouteNotImplemented'
 import { ForgotPassword, MenuItemDetails, ResetPassword, MenuItemsList, Home } from '../section'
 import Cart from '../section/Cart/Cart'
+import { Checkout } from '../section/Checkout'
 import { Favorite } from '../section/Favorite'
+import { Invoice } from '../section/Invoice'
 import { MenuDetails } from '../section/MenuDetails'
 import { Menus } from '../section/Menus'
 import { NotFound } from '../section/NotFound'
@@ -27,6 +29,7 @@ export const ROUTES: Routes[] = [
   { path: '/favorites', component: Favorite, exact: true, isPrivate: true },
   { path: '/forgot-password', component: ForgotPassword, exact: true },
   { path: '/reset-password/:token', exact: true, component: ResetPassword },
+  { path: '/checkout', exact: true, component: Checkout, isPrivate: true },
   /* DISHES */
   { path: '/dishes', component: MenuItemsList, exact: true },
   { path: '/dishes/new', component: RouteNotImplemented, exact: true, isPrivate: true },
@@ -55,6 +58,7 @@ export const ROUTES: Routes[] = [
   { path: '/orders/all', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/orders/pending', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/orders/:id', component: RouteNotImplemented, exact: true, isPrivate: true },
+  { path: '/orders/:id/invoice', component: Invoice, exact: true, isPrivate: true },
   { path: '/orders/:id/edit', component: RouteNotImplemented, exact: true, isPrivate: true },
 
   /* CUSTOMERS */
