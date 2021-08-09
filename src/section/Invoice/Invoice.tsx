@@ -52,7 +52,7 @@ export const Invoice: PrivateRouteComponent = ({ viewer }) => {
       <Container maxWidth="md">
         <Box className={classes.invoiceWrapper}>
           <Grid container justifyContent="space-between" spacing={4} className={classes.margin}>
-            <Grid item xs={10} sm={8} md={6}>
+            <Grid item xs={12} sm={8} md={6}>
               {
                 <Typography variant="h5">
                   Thanks for choosing{' '}
@@ -63,7 +63,7 @@ export const Invoice: PrivateRouteComponent = ({ viewer }) => {
                 </Typography>
               }
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={12} sm={2}>
               <IconButton>
                 <Printer />
               </IconButton>
@@ -96,7 +96,7 @@ export const Invoice: PrivateRouteComponent = ({ viewer }) => {
               </Typography>
             </Grid>
           </Grid>
-          <Grid container className={classes.margin}>
+          <Grid container className={classes.margin} style={{ padding: '1rem' }}>
             <Grid xs={12}>
               <GenericTable labels={['Name', 'Qty', 'Price', 'Total']} values={tableData || []} />
             </Grid>
