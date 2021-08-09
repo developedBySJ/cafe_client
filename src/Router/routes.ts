@@ -8,6 +8,7 @@ import { Favorite } from '../section/Favorite'
 import { Invoice } from '../section/Invoice'
 import { MenuDetails } from '../section/MenuDetails'
 import { Menus } from '../section/Menus'
+import { NewReview } from '../section/NewReview'
 import { NotFound } from '../section/NotFound'
 import { Reviews } from '../section/Reviews'
 
@@ -44,6 +45,7 @@ export const ROUTES: Routes[] = [
 
   /* REVIEWS */
   { path: '/dishes/:menuId/reviews', component: Reviews, exact: true },
+  { path: '/dishes/:menuId/reviews/new', component: NewReview, exact: true },
   { path: '/reviews', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/reviews/:id/edit', component: RouteNotImplemented, exact: true, isPrivate: true },
 
