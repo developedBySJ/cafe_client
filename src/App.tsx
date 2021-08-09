@@ -76,6 +76,10 @@ export const App = () => {
     setEnabled(false)
   }, [])
 
+  useEffect(() => {
+    setViewer((prev) => ({ ...prev, total: undefined }))
+  }, [viewer.id])
+
   return (
     <div id="my-app-wrapper" className={wrapper}>
       <Navbar viewer={viewer} />
