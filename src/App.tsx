@@ -90,7 +90,13 @@ export const App = () => {
   )
 }
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+})
 
 const AppWrapper = () => {
   const classes = useSnackBarStyles()
