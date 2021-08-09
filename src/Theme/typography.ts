@@ -3,6 +3,7 @@ import { TypographyOptions } from '@material-ui/core/styles/createTypography'
 export const typography: TypographyOptions = {
   fontFamily: "'Chillax', sans-serif",
   fontSize: 16,
+  fontWeightRegular: 450,
   h1: {
     fontWeight: 900,
   },
