@@ -1,11 +1,14 @@
 import { useSnackbar } from 'notistack'
+import { useHistory } from 'react-router-dom'
 import { ServerError } from '../types'
 
 const useOnErrorNotify = () => {
   const { enqueueSnackbar } = useSnackbar()
-
+  const history = useHistory()
   const notify = (err: unknown) => {
     const errors = (err as ServerError)?.response?.data?.message
+    const statusCode = (err as ServerError)?.response?.status
+
     if (!errors) {
       enqueueSnackbar('Something Went Wrong !', {
         variant: 'error',
@@ -32,6 +35,9 @@ const useOnErrorNotify = () => {
           },
         })
       })
+    }
+    if (statusCode === 401) {
+      history.push('/login')
     }
   }
   return notify
