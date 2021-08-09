@@ -12,15 +12,18 @@ import {
   Typography,
 } from '@material-ui/core'
 import { Alert, Rating } from '@material-ui/lab'
+import { useFormik } from 'formik'
 import { useState } from 'react'
 import { Star, Clock } from 'react-feather'
-import { useQuery } from 'react-query'
-import { useParams } from 'react-router-dom'
-import { Spinner } from '../../lib'
+import { useMutation, useQuery } from 'react-query'
+import { useHistory, useParams } from 'react-router-dom'
+import { PrivateRouteComponent, Spinner } from '../../lib'
+import { CREATE_REVIEW } from '../../lib/api/Mutation/createReview'
 import { GET_MENU_ITEM } from '../../lib/api/query/menuItemDetail'
+import { GET_REVIEWS } from '../../lib/api/query/reviews'
 import { VEG_COLOR, NON_VEG_COLOR, VegNonVegIcon } from '../../lib/assets/VegNonVegIcon'
 import { AspectRatioBox } from '../../lib/components/AspectRatioBox'
-import { useOnErrorNotify } from '../../lib/hooks'
+import { useOnErrorNotify, useOnSuccessNotify } from '../../lib/hooks'
 import { WARNING_MAIN } from '../../Theme/token'
 
 const useStyle = makeStyles((theme) => ({
@@ -44,7 +47,7 @@ const useStyle = makeStyles((theme) => ({
     margin: '1rem 0',
   },
   img: {
-    objectFit: 'contain',
+    objectFit: 'cover',
     objectPosition: 'center',
   },
   inputBase: {
@@ -62,17 +65,61 @@ const useStyle = makeStyles((theme) => ({
   },
 }))
 
-export const NewReview = () => {
+export const NewReview: PrivateRouteComponent = ({ viewer }) => {
   const { menuId } = useParams<{ menuId: string }>()
   const notifyError = useOnErrorNotify()
+  const notifySuccess = useOnSuccessNotify()
   const [isVegStyle, setIsVegStyle] = useState(false)
   const classes = useStyle({ isVeg: isVegStyle })
-
-  const { data, isError, isLoading, refetch } = useQuery(
+  const [fetchReviews, setFetchReviews] = useState(false)
+  const history = useHistory()
+  const { data, isError, isLoading } = useQuery(
     ['getMenuItemDetails', menuId],
     () => GET_MENU_ITEM(menuId),
-    { onSuccess: ({ data }) => setIsVegStyle(data.isVeg), onError: notifyError },
+    {
+      onSuccess: ({ data }) => {
+        setIsVegStyle(data.isVeg)
+        setFetchReviews(true)
+      },
+      onError: notifyError,
+    },
   )
+
+  const { data: reviewData } = useQuery(
+    ['getReviewDetail', menuId, data?.data.id],
+    () => GET_REVIEWS({ menuItemId: menuId, user: viewer.id }),
+    {
+      onError: notifyError,
+      enabled: fetchReviews,
+      onSuccess: ({ data }) => {
+        if (data.totalCount > 0) {
+          notifySuccess('You Already Reviewed This Dish!')
+        }
+      },
+    },
+  )
+
+  const { mutate } = useMutation(CREATE_REVIEW, {
+    onError: notifyError,
+    onSuccess: () => {
+      notifySuccess('Review Created Successfully!')
+      history.push(`/dishes/${menuId}`)
+    },
+  })
+
+  const formik = useFormik({
+    initialValues: {
+      ratings: ((reviewData?.data.totalCount || 0) > 0 && reviewData?.data.result[0].ratings) || 5,
+      comment: ((reviewData?.data.totalCount || 0) > 0 && reviewData?.data.result[0].comment) || '',
+      title: ((reviewData?.data.totalCount || 0) > 0 && reviewData?.data.result[0].title) || '',
+    },
+    validateOnBlur: true,
+    validateOnChange: true,
+    onSubmit: (data) => {
+      mutate({ ...data, menuItem: menuId })
+    },
+    enableReinitialize: true,
+  })
   if (isLoading) {
     return (
       <Box height="8vh">
@@ -92,8 +139,8 @@ export const NewReview = () => {
       </Container>
     )
   }
-
   const { title, images, ratings, prepTime, price, subTitle } = data.data
+
   return (
     <Container>
       <Box padding="2rem 0">
@@ -101,12 +148,12 @@ export const NewReview = () => {
           Write Review
         </Typography>
         <Grid container spacing={4}>
-          <Grid item xs={4} sm={3} md={2}>
+          <Grid item xs={6} sm={4} md={3} lg={2}>
             <AspectRatioBox>
               <img src={images[0]} alt={title} className={classes.img} />
             </AspectRatioBox>
           </Grid>
-          <Grid item xs={8} sm={9} md={10}>
+          <Grid item xs={12} sm={8} md={9} lg={10}>
             <Typography variant="body1">{subTitle}</Typography>
             <Typography variant="h5" gutterBottom>
               {title}
@@ -146,50 +193,55 @@ export const NewReview = () => {
           </Grid>
         </Grid>
         <Box padding="2rem 0">
-          <InputLabel className={classes.inputLabel} required>
-            Rating
-          </InputLabel>
-          <Rating
-            name="customized-empty"
-            defaultValue={5}
-            precision={0.5}
-            className={classes.ratings}
-          />
-          <InputLabel className={classes.inputLabel} required>
-            Review Title
-          </InputLabel>
-          <InputBase
-            id="address"
-            multiline
-            rows={1}
-            fullWidth
-            type="text"
-            className={classes.inputBase}
-            // onBlur={formik.handleBlur}
-            // value={formik.values.address}
-            // onChange={formik.handleChange}
-            // error={formik.touched.address && !!formik.errors.address}
-            required
-          />
-          <InputLabel className={classes.inputLabel} required>
-            Write Review
-          </InputLabel>
-          <InputBase
-            id="address"
-            multiline
-            rows={3}
-            fullWidth
-            type="text"
-            className={classes.inputBase}
-            // onBlur={formik.handleBlur}
-            // value={formik.values.address}
-            // onChange={formik.handleChange}
-            // error={formik.touched.address && !!formik.errors.address}
-            required
-          />
-          <Button size="large" variant="contained" color="primary">
-            Submit
-          </Button>
+          <form onSubmit={formik.handleSubmit}>
+            <InputLabel className={classes.inputLabel} required>
+              Rating
+            </InputLabel>
+            <Rating
+              name="ratings"
+              defaultValue={5}
+              precision={0.5}
+              className={classes.ratings}
+              onBlur={formik.handleBlur}
+              value={formik.values.ratings}
+              onChange={formik.handleChange}
+            />
+            <InputLabel className={classes.inputLabel} required>
+              Review Title
+            </InputLabel>
+            <InputBase
+              id="title"
+              multiline
+              rows={1}
+              fullWidth
+              type="text"
+              className={classes.inputBase}
+              onBlur={formik.handleBlur}
+              value={formik.values.title}
+              onChange={formik.handleChange}
+              error={formik.touched.title && !!formik.errors.title}
+              required
+            />
+            <InputLabel className={classes.inputLabel} required>
+              Write Review
+            </InputLabel>
+            <InputBase
+              id="comment"
+              multiline
+              rows={3}
+              fullWidth
+              type="text"
+              className={classes.inputBase}
+              onBlur={formik.handleBlur}
+              value={formik.values.comment}
+              onChange={formik.handleChange}
+              error={formik.touched.comment && !!formik.errors.comment}
+              required
+            />
+            <Button size="large" variant="contained" color="primary" type="submit">
+              Submit
+            </Button>
+          </form>
         </Box>
       </Box>
     </Container>
