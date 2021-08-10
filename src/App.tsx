@@ -30,6 +30,7 @@ const useStyle = makeStyles((theme) => ({
 }))
 const useSnackBarStyles = makeStyles(() => ({
   root: {
+    margin: '0.25rem 0',
     '& *': {
       boxShadow: 'none !important',
     },
