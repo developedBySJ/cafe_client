@@ -9,7 +9,7 @@ export interface IOrder {
   payment: string
   table: string
   total: number
-  status: string
+  status: number
   notes: string
   orderItems: ICart[]
   deliveredAt: Date
