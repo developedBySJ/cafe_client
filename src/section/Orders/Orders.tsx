@@ -1,7 +1,7 @@
 import { Container, Grid, Typography, makeStyles, Box, Chip } from '@material-ui/core'
 import { useQuery } from 'react-query'
 import { GET_USER_ORDER } from '../../lib/api/query/orders'
-import { Spinner } from '../../lib'
+import { PrivateRouteComponent, Spinner } from '../../lib'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import { AspectRatioBox } from '../../lib/components/AspectRatioBox'
@@ -45,7 +45,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }))
 
-export const Orders = () => {
+export const Orders: PrivateRouteComponent = () => {
   const { data, isLoading } = useQuery(['getUserOrder'], () => GET_USER_ORDER({}))
   const classes = useStyle()
   if (isLoading || !data) {

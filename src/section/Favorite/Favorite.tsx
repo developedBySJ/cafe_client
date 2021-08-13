@@ -5,9 +5,9 @@ import { FavoriteCard } from './components'
 import { useQuery } from 'react-query'
 import { FavoritesQuery, GET_FAVORITES } from '../../lib/api/query/favorites'
 import { useOnErrorNotify } from '../../lib/hooks'
-import { Spinner } from '../../lib'
+import { PrivateRouteComponent, Spinner } from '../../lib'
 
-export const Favorite = () => {
+export const Favorite: PrivateRouteComponent = () => {
   const notifyError = useOnErrorNotify()
   const { data, isLoading } = useQuery(
     ['getFavorites', { limit: 50 } as FavoritesQuery],
@@ -29,7 +29,7 @@ export const Favorite = () => {
   }
   return (
     <>
-      <Container style={{ marginTop: '1rem' }}>
+      <Container style={{ marginTop: '2rem' }}>
         <Typography variant="h4" gutterBottom>
           Favorite
         </Typography>
