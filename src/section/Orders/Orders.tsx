@@ -1,17 +1,18 @@
-import { Container, Grid, Typography, makeStyles, Box } from '@material-ui/core'
+import { Container, Grid, Typography, makeStyles, Box, Chip } from '@material-ui/core'
 import { useQuery } from 'react-query'
 import { GET_USER_ORDER } from '../../lib/api/query/orders'
 import { Spinner } from '../../lib'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import { AspectRatioBox } from '../../lib/components/AspectRatioBox'
+import { OrderStatus } from '../../lib/api/types/order.type'
 
 const useStyle = makeStyles((theme) => ({
   orderHead: {
     backgroundColor: theme.palette.grey[900],
     padding: '1rem 2rem',
     borderRadius: '16px 16px 0 0',
-    color: theme.palette.primary.contrastText,
+    color: theme.palette.common.white,
   },
   orderHeading: {
     letterSpacing: '1px',
@@ -29,6 +30,18 @@ const useStyle = makeStyles((theme) => ({
     padding: '1rem',
     border: `1px solid ${theme.palette.grey[200]}`,
     borderRadius: 16,
+  },
+  imageWrapper: {
+    overflow: 'auto',
+  },
+  images: {
+    width: '6rem',
+    height: '6rem',
+    borderRadius: 16,
+    objectFit: 'cover',
+    objectPosition: 'center',
+    marginRight: '0.5rem',
+    border: `4px solid ${theme.palette.background.default}`,
   },
 }))
 
@@ -55,62 +68,67 @@ export const Orders = () => {
       <Grid container spacing={3}>
         {orders.result.map((order, index) => {
           return (
-            <Grid container key={order.id}>
-              <Grid item xs={12} className={classes.orderHead}>
-                <Grid container spacing={2}>
-                  <Grid item xs={2}>
-                    <Typography variant="body2" className={classes.orderHeading}>
-                      Order Placed{' '}
-                    </Typography>
-                    <Typography variant="body1">
-                      {moment(order.createdAt).format('MMMM Do YYYY')}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Typography variant="body2" className={classes.orderHeading}>
-                      Total
-                    </Typography>
-
-                    <Typography variant="body1">Rs.{order.total}</Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <Box textAlign="right">
+            <Grid item xs={12}>
+              <Grid container key={order.id}>
+                <Grid item xs={12} className={classes.orderHead}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={7} md={3}>
                       <Typography variant="body2" className={classes.orderHeading}>
-                        Order Id
+                        Order Placed{' '}
                       </Typography>
-                      <Link to={`/orders/${order.id}/invoice`}>
-                        <Typography variant="body1" className={classes.link}>
-                          #{order.id}
+                      <Typography variant="body1">
+                        {moment(order.createdAt).format('MMMM Do YYYY')}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={5} md={2}>
+                      <Typography variant="body2" className={classes.orderHeading}>
+                        Total
+                      </Typography>
+
+                      <Typography variant="body1">Rs.{order.total}</Typography>
+                    </Grid>
+                    <Grid item xs={12} md={7}>
+                      <Box>
+                        <Typography variant="body2" className={classes.orderHeading}>
+                          Order Id
                         </Typography>
-                      </Link>
-                    </Box>
+                        <Link to={`/orders/${order.id}/invoice`}>
+                          <Typography variant="body1" className={classes.link}>
+                            #{order.id}
+                          </Typography>
+                        </Link>
+                      </Box>
+                    </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-              <Grid xs={12} className={classes.detailWrapper}>
-                <Typography variant="body1">
-                  Payment Status : {order.payment ? 'Paid' : 'Not Paid'}
-                </Typography>
-                <Typography variant="body1">{order.orderItems.length} Items</Typography>
-                {
-                  <Typography variant="h6">
-                    {!order.deliveredAt
-                      ? `Delivered On ${moment(new Date()).format('DD MMM YYYY hh:mm:ss')}`
-                      : 'Order Will Deliver Soon'}
+                <Grid xs={12} className={classes.detailWrapper}>
+                  <Typography variant="body1" gutterBottom>
+                    Payment Status : &nbsp;
+                    <Chip label={order.payment ? 'Paid' : 'Not Paid'} />
                   </Typography>
-                }
-                <Grid container>
-                  {order.orderItems.slice(0, 3).map((i) => (
-                    <Grid item xs={2} key={i.id}>
-                      <AspectRatioBox>
+                  <Typography variant="body1">
+                    Order Status : &nbsp;
+                    <Chip label={OrderStatus[order.status]} />
+                  </Typography>
+                  <Typography variant="body1">{order.orderItems.length} Items</Typography>
+                  {
+                    <Typography variant="h6" gutterBottom>
+                      {order.deliveredAt
+                        ? `Delivered On ${moment(order.deliveredAt).format('DD MMM YYYY hh:mm:ss')}`
+                        : 'Order Will Deliver Soon'}
+                    </Typography>
+                  }
+                  <Box display="flex" marginTop="1rem" className={classes.imageWrapper}>
+                    {order.orderItems.map((orderItem, i) => (
+                      <Box key={order.id} marginLeft={i !== 0 && '-2rem'}>
                         <img
-                          src={i.menuItem.images[0]}
-                          alt={i.menuItem.title}
-                          style={{ width: 100, backgroundColor: 'whitesmoke', height: 100 }}
+                          src={orderItem.menuItem.images[0]}
+                          alt={orderItem.menuItem.title}
+                          className={classes.images}
                         />
-                      </AspectRatioBox>
-                    </Grid>
-                  ))}
+                      </Box>
+                    ))}
+                  </Box>
                 </Grid>
               </Grid>
             </Grid>
