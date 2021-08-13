@@ -10,6 +10,7 @@ import { MenuDetails } from '../section/MenuDetails'
 import { Menus } from '../section/Menus'
 import { NewReview } from '../section/NewReview'
 import { NotFound } from '../section/NotFound'
+import { Orders } from '../section/Orders'
 import { Reviews } from '../section/Reviews'
 
 interface RoutesProps extends RouteProps {
@@ -55,7 +56,7 @@ export const ROUTES: Routes[] = [
   { path: '/inventories/:id/edit', component: RouteNotImplemented, exact: true, isPrivate: true },
 
   /* ORDERS */
-  { path: '/orders', component: RouteNotImplemented, exact: true, isPrivate: true },
+  { path: '/orders', component: Orders, exact: true, isPrivate: true },
   /* /orders/all ROUTE IS  ONLY FOR ADMIN */
   { path: '/orders/all', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/orders/pending', component: RouteNotImplemented, exact: true, isPrivate: true },
