@@ -1,11 +1,34 @@
-import { Container, Grid, Typography, makeStyles } from '@material-ui/core'
+import { Container, Grid, Typography, makeStyles, Box } from '@material-ui/core'
 import { useQuery } from 'react-query'
 import { GET_USER_ORDER } from '../../lib/api/query/orders'
 import { Spinner } from '../../lib'
+import { Link } from 'react-router-dom'
+import moment from 'moment'
+import { AspectRatioBox } from '../../lib/components/AspectRatioBox'
 
 const useStyle = makeStyles((theme) => ({
   orderHead: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.grey[900],
+    padding: '1rem 2rem',
+    borderRadius: '16px 16px 0 0',
+    color: theme.palette.primary.contrastText,
+  },
+  orderHeading: {
+    letterSpacing: '1px',
+    opacity: 0.8,
+  },
+  orderHeadingText: {
+    fontSize: '1.2rem',
+    fontWeight: 'bold',
+  },
+  link: {
+    color: theme.palette.primary.contrastText,
+    textDecoration: 'underline',
+  },
+  detailWrapper: {
+    padding: '1rem',
+    border: `1px solid ${theme.palette.grey[200]}`,
+    borderRadius: 16,
   },
 }))
 
@@ -31,15 +54,64 @@ export const Orders = () => {
       </Typography>
       <Grid container spacing={3}>
         {orders.result.map((order, index) => {
-          const orderItemString = order.orderItems
-            .map((orderItem, index) => `${orderItem.menuItem.title} X ${orderItem.qty}`)
-            .join(' | ')
-
           return (
-            <Grid container>
-              <Grid item xs={12} style={{}}>
-                <Typography variant="body1">Order Id</Typography>
-                <Typography>#{order.id}</Typography>
+            <Grid container key={order.id}>
+              <Grid item xs={12} className={classes.orderHead}>
+                <Grid container spacing={2}>
+                  <Grid item xs={2}>
+                    <Typography variant="body2" className={classes.orderHeading}>
+                      Order Placed{' '}
+                    </Typography>
+                    <Typography variant="body1">
+                      {moment(order.createdAt).format('MMMM Do YYYY')}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={2}>
+                    <Typography variant="body2" className={classes.orderHeading}>
+                      Total
+                    </Typography>
+
+                    <Typography variant="body1">Rs.{order.total}</Typography>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <Box textAlign="right">
+                      <Typography variant="body2" className={classes.orderHeading}>
+                        Order Id
+                      </Typography>
+                      <Link to={`/orders/${order.id}/invoice`}>
+                        <Typography variant="body1" className={classes.link}>
+                          #{order.id}
+                        </Typography>
+                      </Link>
+                    </Box>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid xs={12} className={classes.detailWrapper}>
+                <Typography variant="body1">
+                  Payment Status : {order.payment ? 'Paid' : 'Not Paid'}
+                </Typography>
+                <Typography variant="body1">{order.orderItems.length} Items</Typography>
+                {
+                  <Typography variant="h6">
+                    {!order.deliveredAt
+                      ? `Delivered On ${moment(new Date()).format('DD MMM YYYY hh:mm:ss')}`
+                      : 'Order Will Deliver Soon'}
+                  </Typography>
+                }
+                <Grid container>
+                  {order.orderItems.slice(0, 3).map((i) => (
+                    <Grid item xs={2} key={i.id}>
+                      <AspectRatioBox>
+                        <img
+                          src={i.menuItem.images[0]}
+                          alt={i.menuItem.title}
+                          style={{ width: 100, backgroundColor: 'whitesmoke', height: 100 }}
+                        />
+                      </AspectRatioBox>
+                    </Grid>
+                  ))}
+                </Grid>
               </Grid>
             </Grid>
           )
