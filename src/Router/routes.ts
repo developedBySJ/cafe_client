@@ -1,5 +1,6 @@
 import { RouteProps } from 'react-router-dom'
 import { PrivateRouteComponentType } from '../lib/components/PrivateRoute'
+
 import { RouteNotImplemented } from '../lib/components/RouteNotImplemented'
 import { ForgotPassword, MenuItemDetails, ResetPassword, MenuItemsList, Home } from '../section'
 import Cart from '../section/Cart/Cart'
@@ -11,6 +12,7 @@ import { Menus } from '../section/Menus'
 import { NewReview } from '../section/NewReview'
 import { NotFound } from '../section/NotFound'
 import { Orders } from '../section/Orders'
+import { Profile } from '../section/Profile'
 import { Reviews } from '../section/Reviews'
 
 interface RoutesProps extends RouteProps {
@@ -27,8 +29,9 @@ export const ROUTES: Routes[] = [
   /* AUTH */
   { path: '/404', component: NotFound, exact: true },
   { path: '/admin', component: RouteNotImplemented, exact: true, isPrivate: true },
+  { path: '/me', component: Profile, exact: true, isPrivate: true },
+  { path: '/favorites', component: Profile, exact: true, isPrivate: true },
   { path: '/cart', component: Cart, exact: true, isPrivate: true },
-  { path: '/favorites', component: Favorite, exact: true, isPrivate: true },
   { path: '/forgot-password', component: ForgotPassword, exact: true },
   { path: '/reset-password/:token', exact: true, component: ResetPassword },
   { path: '/checkout', exact: true, component: Checkout, isPrivate: true },
@@ -56,7 +59,7 @@ export const ROUTES: Routes[] = [
   { path: '/inventories/:id/edit', component: RouteNotImplemented, exact: true, isPrivate: true },
 
   /* ORDERS */
-  { path: '/orders', component: Orders, exact: true, isPrivate: true },
+  { path: '/orders', component: Profile, exact: true, isPrivate: true },
   /* /orders/all ROUTE IS  ONLY FOR ADMIN */
   { path: '/orders/all', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/orders/pending', component: RouteNotImplemented, exact: true, isPrivate: true },
