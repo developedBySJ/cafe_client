@@ -68,8 +68,8 @@ export const Orders: PrivateRouteComponent = () => {
       <Grid container spacing={3}>
         {orders.result.map((order, index) => {
           return (
-            <Grid item xs={12}>
-              <Grid container key={order.id}>
+            <Grid item xs={12} key={order.id}>
+              <Grid container>
                 <Grid item xs={12} className={classes.orderHead}>
                   <Grid container spacing={2}>
                     <Grid item xs={7} md={3}>
@@ -101,14 +101,14 @@ export const Orders: PrivateRouteComponent = () => {
                     </Grid>
                   </Grid>
                 </Grid>
-                <Grid xs={12} className={classes.detailWrapper}>
+                <Grid item xs={12} className={classes.detailWrapper}>
                   <Typography variant="body1" gutterBottom>
                     Payment Status : &nbsp;
-                    <Chip label={order.payment ? 'Paid' : 'Not Paid'} />
+                    <Chip label={order.payment ? 'Paid' : 'Not Paid'} component="span" />
                   </Typography>
                   <Typography variant="body1">
                     Order Status : &nbsp;
-                    <Chip label={OrderStatus[order.status]} />
+                    <Chip label={OrderStatus[order.status]} component="span" />
                   </Typography>
                   <Typography variant="body1">{order.orderItems.length} Items</Typography>
                   {
