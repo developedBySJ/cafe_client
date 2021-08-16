@@ -29,8 +29,10 @@ export const AccountDetails: PrivateRouteComponent = ({ viewer: { total, ...init
     onSubmit: (values) => {},
   })
   return (
-    <>
-      <Typography variant="h4">Account Details </Typography>
+    <Container style={{ marginTop: '2rem' }}>
+      <Typography variant="h4" gutterBottom>
+        Account Details{' '}
+      </Typography>
       <Container maxWidth="sm" style={{ marginTop: '2rem' }}>
         <Box margin="2rem 0">
           <Avatar className={classes.avatar} src={formik.values.avatar} />
@@ -107,6 +109,6 @@ export const AccountDetails: PrivateRouteComponent = ({ viewer: { total, ...init
           Update
         </Button>
       </Container>
-    </>
+    </Container>
   )
 }

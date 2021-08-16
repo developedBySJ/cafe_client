@@ -9,14 +9,16 @@ import { Favorite } from '../Favorite'
 import { AccountDetails } from './components'
 
 const useStyles = makeStyles((theme) => ({
-  margin: {
-    marginBottom: '1rem',
+  container: {
+    marginTop: '2rem',
   },
-  avatar: {
-    width: '128px',
-    height: '128px',
-    margin: '0 auto',
+  listWrapper: {
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+      overflow: 'auto',
+    },
   },
+  link: { textDecoration: 'none', color: 'inherit' },
 }))
 
 const sideBarConfig = [
@@ -39,14 +41,14 @@ const sideBarConfig = [
 
 export const Profile: PrivateRouteComponent = ({ children, ...props }) => {
   const { pathname } = useLocation()
-
+  const classes = useStyles()
   return (
-    <Container style={{ marginTop: '2rem' }}>
+    <Container className={classes.container}>
       <Grid container spacing={2}>
-        <Grid item xs={3}>
-          <List>
+        <Grid item xs={12} md={4} lg={3}>
+          <List className={classes.listWrapper}>
             {sideBarConfig.map(({ name, icon: Icon, path }, index) => (
-              <Link to={path} key={index} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <Link to={path} key={index} className={classes.link}>
                 <ListItem button selected={path === pathname}>
                   <ListItemIcon>
                     <Icon />
@@ -57,7 +59,7 @@ export const Profile: PrivateRouteComponent = ({ children, ...props }) => {
             ))}
           </List>
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={12} md={8} lg={9}>
           {pathname === '/me' && <AccountDetails {...props} />}
           {pathname === '/orders' && <Orders {...props} />}
           {pathname === '/favorites' && <Favorite {...props} />}
