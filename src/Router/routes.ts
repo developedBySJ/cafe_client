@@ -7,6 +7,7 @@ import Cart from '../section/Cart/Cart'
 import { Checkout } from '../section/Checkout'
 import { Favorite } from '../section/Favorite'
 import { Invoice } from '../section/Invoice'
+import { Logout } from '../section/Logout'
 import { MenuDetails } from '../section/MenuDetails'
 import { Menus } from '../section/Menus'
 import { NewReview } from '../section/NewReview'
@@ -35,6 +36,7 @@ export const ROUTES: Routes[] = [
   { path: '/forgot-password', component: ForgotPassword, exact: true },
   { path: '/reset-password/:token', exact: true, component: ResetPassword },
   { path: '/checkout', exact: true, component: Checkout, isPrivate: true },
+  { path: '/logout', exact: true, component: Logout, isPrivate: true },
   /* DISHES */
   { path: '/dishes', component: MenuItemsList, exact: true },
   { path: '/dishes/new', component: RouteNotImplemented, exact: true, isPrivate: true },
