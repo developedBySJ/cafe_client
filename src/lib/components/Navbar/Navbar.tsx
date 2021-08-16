@@ -50,8 +50,9 @@ export const Navbar: React.FC<NavbarProps> = ({ viewer }) => {
     setAnchorEl(event.currentTarget)
   }
 
-  const handleClose = () => {
+  const handleClose = (route?: string) => {
     setAnchorEl(null)
+    route && history.push(route)
   }
   return (
     <AppBar className={classes.appBar} id="my-navbar" elevation={0}>
@@ -128,15 +129,14 @@ export const Navbar: React.FC<NavbarProps> = ({ viewer }) => {
                   keepMounted
                   anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                   open={Boolean(anchorEl)}
-                  onClose={handleClose}
+                  onClose={() => handleClose()}
                   transformOrigin={{
                     vertical: 'bottom',
                     horizontal: 'right',
                   }}
                 >
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={handleClose}>My account</MenuItem>
-                  <MenuItem onClick={handleClose}>Logout</MenuItem>
+                  <MenuItem onClick={() => handleClose('/me')}>Profile</MenuItem>
+                  <MenuItem onClick={() => handleClose('/logout')}>Logout</MenuItem>
                 </Menu>
               </>
             ) : (

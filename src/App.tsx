@@ -64,7 +64,7 @@ export const App = () => {
 
   useQuery('whoAmI', WHO_AM_I, {
     refetchOnMount: false,
-    enabled,
+    enabled: enabled || !viewer.didRequest,
     onSuccess: ({ data }) => setViewer({ ...data, didRequest: true }),
   })
   useQuery('refreshToken', REFRESH_TOKEN, {
