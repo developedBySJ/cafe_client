@@ -1,3 +1,4 @@
+import { useScrollTrigger } from '@material-ui/core'
 import {
   Box,
   Button,
@@ -14,12 +15,15 @@ import {
   DialogContent,
   DialogActions,
 } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 import { useState } from 'react'
 import { ChevronDown, Filter } from 'react-feather'
-import { useQuery } from 'react-query'
+import InfiniteScroll from 'react-infinite-scroll-component'
+import { useInfiniteQuery, useQuery, InfiniteData, isError } from 'react-query'
 import { MENU_ITEMS } from '../../lib/api/query/menuItems'
 import { MenuItemSortBy, MenuItemsQuery } from '../../lib/api/query/menuItems/menuItems.type'
-import { ResponsiveDialog } from '../../lib/components/'
+import { ResponsiveDialog, Spinner } from '../../lib/components/'
+import { useScrollEnd } from '../../lib/hooks/useScrollEnd'
 import { Sort } from '../../lib/types'
 import { MenuItemCard } from './components'
 import { MenuFilter } from './components/MenuFilter'
@@ -59,10 +63,23 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const MenuItemsList = () => {
-  const { data } = useQuery(['users', {} as MenuItemsQuery], () => MENU_ITEMS({}), {
-    onSuccess: ({ data }) => console.log(data),
-  })
+  const [curPage, setCurPage] = useState(1)
 
+  const { data, refetch, isLoading, isError, isFetching, isFetchingNextPage, fetchNextPage } =
+    useInfiniteQuery(
+      ['menuItems', {} as MenuItemsQuery],
+      (params) => {
+        console.log(params)
+
+        return MENU_ITEMS(params.pageParam)
+      },
+      {
+        keepPreviousData: true,
+        getNextPageParam: (nextPage) => nextPage.data.pages.next,
+        getPreviousPageParam: (prevPage) => prevPage.data.pages.next,
+      },
+    )
+  useScrollEnd(fetchNextPage)
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [value, setValue] = useState('female')
 
@@ -71,6 +88,24 @@ const MenuItemsList = () => {
   }
   const classes = useStyles()
 
+  if (isLoading) {
+    return null
+  }
+
+  if (isError) {
+    return (
+      <>
+        <Container>
+          <Alert variant="filled" color="error" severity="error">
+            Something Went Wrong
+          </Alert>
+        </Container>
+      </>
+    )
+  }
+  if (!data) return null
+
+  console.log({ curPage, data })
   return (
     <>
       <ResponsiveDialog
@@ -140,7 +175,7 @@ const MenuItemsList = () => {
         <Typography variant="h4" style={{ padding: '3rem 0' }}>
           Search Result for "Food"
           <Typography variant="h6" component="span">
-            ({data?.data.totalCount}) Items Found
+            {/* ({data?.totalCount}) Items Found */}
           </Typography>
         </Typography>
 
@@ -174,13 +209,22 @@ const MenuItemsList = () => {
                 </Grid>
               </Grid>
             </Box>
+
             <Grid container spacing={2}>
-              {data?.data.result.map((menuItem) => (
+              {data.pages.map((page) =>
+                page.data.result.map((menuItem) => (
+                  <Grid item xs={12} sm={6} lg={4} key={menuItem.id}>
+                    <MenuItemCard menuItem={menuItem} />
+                  </Grid>
+                )),
+              )}
+            </Grid>
+            <div>{isFetching && !isFetchingNextPage ? <Spinner /> : null}</div>
+            {/* {data?.data.result.map((menuItem) => (
                 <Grid item xs={12} sm={6} lg={4} key={menuItem.id}>
                   <MenuItemCard menuItem={menuItem} />
                 </Grid>
-              ))}
-            </Grid>
+              ))} */}
           </Grid>
         </Grid>
       </Container>

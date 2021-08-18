@@ -77,9 +77,11 @@ const useStyle = makeStyles((theme) => ({
 
 const offers = [offer1, offer2, offer3, offer4].map((src, i) => {
   return (
-    <AspectRatioBox key={i} ratio={5 / 4}>
-      <img src={src} alt="" style={{ objectFit: 'cover', objectPosition: 'center' }} />
-    </AspectRatioBox>
+    <Link to="/menus">
+      <AspectRatioBox key={i} ratio={5 / 4}>
+        <img src={src} alt="" style={{ objectFit: 'cover', objectPosition: 'center' }} />
+      </AspectRatioBox>
+    </Link>
   )
 })
 
