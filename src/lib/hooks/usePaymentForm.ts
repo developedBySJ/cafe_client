@@ -3,10 +3,21 @@ import { FormEvent } from 'react'
 import { useMutation, useQuery } from 'react-query'
 import { CREATE_CHARGE } from '../api/Mutation/createCharge'
 
-export function usePaymentForm(amount: number, orderId: string) {
+interface Options<T> {
+  onSuccess?: (data: T) => void
+  onError?: (error: any) => void
+}
+export function usePaymentForm(
+  amount: number,
+  orderId: string,
+  { onError, onSuccess }: Options<unknown> = {},
+) {
   const stripe = useStripe()
   const elements = useElements()
-  const pay = useMutation('createCharge', CREATE_CHARGE)
+  const pay = useMutation('createCharge', CREATE_CHARGE, {
+    onSuccess,
+    onError,
+  })
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
 

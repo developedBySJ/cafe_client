@@ -1,6 +1,5 @@
-import { Grid, Button, Container, makeStyles, Typography, useTheme } from '@material-ui/core'
-import { CardElement, Elements } from '@stripe/react-stripe-js'
-import { loadStripe } from '@stripe/stripe-js'
+import { Button, Container, makeStyles, Typography, useTheme } from '@material-ui/core'
+import { CardElement } from '@stripe/react-stripe-js'
 import React from 'react'
 import { Lock } from 'react-feather'
 import { useHistory } from 'react-router-dom'
@@ -31,10 +30,11 @@ const useStyles = makeStyles((theme) => ({
 interface PaymentProps {
   amount: number
   orderId: string
+  onSuccess?: () => void
 }
 
-export const Payment: React.FC<PaymentProps> = ({ amount, orderId }) => {
-  const { handleSubmit, data } = usePaymentForm(amount, orderId)
+export const Payment: React.FC<PaymentProps> = ({ amount, orderId, onSuccess }) => {
+  const { handleSubmit, data } = usePaymentForm(amount, orderId, { onSuccess })
   const classes = useStyles()
   const theme = useTheme()
   const history = useHistory()
@@ -45,7 +45,7 @@ export const Payment: React.FC<PaymentProps> = ({ amount, orderId }) => {
         Payment
       </Typography>
       <form onSubmit={handleSubmit}>
-        {/* <CardElement
+        <CardElement
           className={classes.stripeCard}
           options={{
             hidePostalCode: true,
@@ -56,9 +56,8 @@ export const Payment: React.FC<PaymentProps> = ({ amount, orderId }) => {
               },
             },
           }}
-        /> */}
-        <CardNumberElement />
-        <CardExpiryElement />
+        />
+
         <Button
           variant="contained"
           color="primary"
