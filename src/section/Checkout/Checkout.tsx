@@ -21,7 +21,7 @@ export const Checkout: PrivateRouteComponent = ({ viewer }) => {
   const [activeStep, setActiveStep] = React.useState(1)
   const createOrder = useMutation(CREATE_ORDER, { onError: notifyError })
   const orderId = createOrder.data?.data.id
-  console.log({ data: createOrder.data })
+
   if (activeStep === 0 || !viewer.total) {
     return <Redirect to="/cart" />
   }

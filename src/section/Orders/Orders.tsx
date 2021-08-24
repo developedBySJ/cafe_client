@@ -66,74 +66,93 @@ export const Orders: PrivateRouteComponent = () => {
         Past Orders
       </Typography>
       <Grid container spacing={3}>
-        {orders.result.map((order, index) => {
-          return (
-            <Grid item xs={12} key={order.id}>
-              <Grid container>
-                <Grid item xs={12} className={classes.orderHead}>
-                  <Grid container spacing={2}>
-                    <Grid item xs={7} md={3}>
-                      <Typography variant="body2" className={classes.orderHeading}>
-                        Order Placed{' '}
-                      </Typography>
-                      <Typography variant="body1">
-                        {moment(order.createdAt).format('MMMM Do YYYY')}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={5} md={2}>
-                      <Typography variant="body2" className={classes.orderHeading}>
-                        Total
-                      </Typography>
-
-                      <Typography variant="body1">Rs.{order.total}</Typography>
-                    </Grid>
-                    <Grid item xs={12} md={7}>
-                      <Box>
+        {orders.result.length ? (
+          orders.result.map((order, index) => {
+            return (
+              <Grid item xs={12} key={order.id}>
+                <Grid container>
+                  <Grid item xs={12} className={classes.orderHead}>
+                    <Grid container spacing={2}>
+                      <Grid item xs={7} md={3}>
                         <Typography variant="body2" className={classes.orderHeading}>
-                          Order Id
+                          Order Placed{' '}
                         </Typography>
-                        <Link to={`/orders/${order.id}/invoice`}>
-                          <Typography variant="body1" className={classes.link}>
-                            #{order.id}
+                        <Typography variant="body1">
+                          {moment(order.createdAt).format('MMMM Do YYYY')}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={5} md={2}>
+                        <Typography variant="body2" className={classes.orderHeading}>
+                          Total
+                        </Typography>
+
+                        <Typography variant="body1">Rs.{order.total}</Typography>
+                      </Grid>
+                      <Grid item xs={12} md={7}>
+                        <Box>
+                          <Typography variant="body2" className={classes.orderHeading}>
+                            Order Id
                           </Typography>
-                        </Link>
-                      </Box>
+                          <Link to={`/orders/${order.id}/invoice`}>
+                            <Typography variant="body1" className={classes.link}>
+                              #{order.id}
+                            </Typography>
+                          </Link>
+                        </Box>
+                      </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-                <Grid item xs={12} className={classes.detailWrapper}>
-                  <Typography variant="body1" gutterBottom>
-                    Payment Status : &nbsp;
-                    <Chip label={order.payment ? 'Paid' : 'Not Paid'} component="span" />
-                  </Typography>
-                  <Typography variant="body1">
-                    Order Status : &nbsp;
-                    <Chip label={OrderStatus[order.status]} component="span" />
-                  </Typography>
-                  <Typography variant="body1">{order.orderItems.length} Items</Typography>
-                  {
-                    <Typography variant="h6" gutterBottom>
-                      {order.deliveredAt
-                        ? `Delivered On ${moment(order.deliveredAt).format('DD MMM YYYY hh:mm:ss')}`
-                        : 'Order Will Deliver Soon'}
+                  <Grid item xs={12} className={classes.detailWrapper}>
+                    <Typography variant="body1" gutterBottom>
+                      Payment Status : &nbsp;
+                      <Chip label={order.payment ? 'Paid' : 'Not Paid'} component="span" />
                     </Typography>
-                  }
-                  <Box display="flex" marginTop="1rem" className={classes.imageWrapper}>
-                    {order.orderItems.map((orderItem, i) => (
-                      <Box key={order.id} marginLeft={i !== 0 && '-2rem'}>
-                        <img
-                          src={orderItem.menuItem.images[0]}
-                          alt={orderItem.menuItem.title}
-                          className={classes.images}
-                        />
-                      </Box>
-                    ))}
-                  </Box>
+                    <Typography variant="body1">
+                      Order Status : &nbsp;
+                      <Chip label={OrderStatus[order.status]} component="span" />
+                    </Typography>
+                    <Typography variant="body1">{order.orderItems.length} Items</Typography>
+                    {
+                      <Typography variant="h6" gutterBottom>
+                        {order.deliveredAt
+                          ? `Delivered On ${moment(order.deliveredAt).format(
+                              'DD MMM YYYY hh:mm:ss',
+                            )}`
+                          : 'Order Will Deliver Soon'}
+                      </Typography>
+                    }
+                    <Box display="flex" marginTop="1rem" className={classes.imageWrapper}>
+                      {order.orderItems.map((orderItem, i) => (
+                        <Box key={order.id} marginLeft={i !== 0 && '-2rem'}>
+                          <img
+                            src={orderItem.menuItem.images[0]}
+                            alt={orderItem.menuItem.title}
+                            className={classes.images}
+                          />
+                        </Box>
+                      ))}
+                    </Box>
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-          )
-        })}
+            )
+          })
+        ) : (
+          <Grid
+            item
+            xs={12}
+            style={{
+              height: '40vh',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Typography variant="h6" align="center" color="textSecondary">
+              You don't have any orders yet
+            </Typography>
+          </Grid>
+        )}
       </Grid>
     </Container>
   )
