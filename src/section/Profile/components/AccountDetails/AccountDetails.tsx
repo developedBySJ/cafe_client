@@ -28,12 +28,13 @@ export const AccountDetails: PrivateRouteComponent = ({ viewer: { total, ...init
     initialValues,
     onSubmit: (values) => {},
   })
+
   return (
     <Container style={{ marginTop: '2rem' }}>
       <Typography variant="h4" gutterBottom>
         Account Details{' '}
       </Typography>
-      <Container maxWidth="sm" style={{ marginTop: '2rem' }}>
+      <Container maxWidth="sm" style={{ marginTop: '2rem', padding: 0 }}>
         <Box margin="2rem 0">
           <Avatar className={classes.avatar} src={formik.values.avatar} />
         </Box>
@@ -83,7 +84,7 @@ export const AccountDetails: PrivateRouteComponent = ({ viewer: { total, ...init
           type="date"
           className={classes.margin}
           onBlur={formik.handleBlur}
-          value={formik.values.dateOfBirth}
+          value={formik.values.dateOfBirth && new Date(formik.values.dateOfBirth)}
           onChange={formik.handleChange}
           error={formik.touched.dateOfBirth && !!formik.errors.dateOfBirth}
           helperText={formik.touched.dateOfBirth && formik.errors.dateOfBirth}

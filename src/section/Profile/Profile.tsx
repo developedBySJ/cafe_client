@@ -11,6 +11,7 @@ import { AccountDetails } from './components'
 const useStyles = makeStyles((theme) => ({
   container: {
     marginTop: '2rem',
+    padding: 0,
   },
   listWrapper: {
     [theme.breakpoints.down('sm')]: {

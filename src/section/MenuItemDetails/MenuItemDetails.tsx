@@ -235,7 +235,7 @@ export const MenuItemDetails = () => {
             color="primary"
             size="large"
             className={classes.button}
-            disabled={isAddToCartLoading}
+            disabled={isAddToCartLoading || !data.data.isAvailable}
             onClick={handleAddToCart}
           >
             {isAddToCartLoading ? <Spinner size="20px" /> : 'Add To Cart'}
