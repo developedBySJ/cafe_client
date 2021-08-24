@@ -1,26 +1,31 @@
-import { Button, Container, Step, StepLabel, Stepper } from '@material-ui/core'
+import { Container, Step, StepLabel, Stepper } from '@material-ui/core'
 import React from 'react'
 import { Redirect } from 'react-router-dom'
 import { PrivateRouteComponent } from '../../lib'
 import { Address } from './components'
 import { Payment } from './components/Payment'
-import { CardElement, Elements } from '@stripe/react-stripe-js'
+import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
+import { useMutation } from 'react-query'
+import { CREATE_ORDER } from '../../lib/api/Mutation/createOrder'
+import { useOnErrorNotify, useOnSuccessNotify } from '../../lib/hooks'
+import { OrderStatus } from '../../lib/api/types/order.type'
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || '')
 
 const steps = ['Summery', 'Address', 'Payment']
 
 export const Checkout: PrivateRouteComponent = ({ viewer }) => {
+  const notifyError = useOnErrorNotify()
+  const notifySuccess = useOnSuccessNotify()
   const [activeStep, setActiveStep] = React.useState(1)
-  if (activeStep === 0) {
+  const createOrder = useMutation(CREATE_ORDER, { onError: notifyError })
+  const orderId = createOrder.data?.data.id
+  console.log({ data: createOrder.data })
+  if (activeStep === 0 || !viewer.total) {
     return <Redirect to="/cart" />
   }
-  if (!viewer.total) {
-    return <Redirect to="/cart" />
-  }
-  const orderId = 'cf88bfb6-23a5-4c73-a619-fa5d62d1e32f'
-  console.log({ activeStep })
+
   return (
     <Container>
       <Elements stripe={stripePromise}>
@@ -34,11 +39,29 @@ export const Checkout: PrivateRouteComponent = ({ viewer }) => {
         {activeStep === 1 && (
           <Address
             initialValues={{ address: viewer.address || '', notes: '' }}
-            onSubmit={() => setActiveStep((prev) => prev + 1)}
+            onSubmit={({ address, notes }) => {
+              createOrder.mutate({
+                address,
+                total: viewer.total as number,
+                status: OrderStatus.Placed,
+              })
+              setActiveStep(2)
+            }}
           />
         )}
-        {activeStep === 2 && <Payment amount={viewer.total} orderId={orderId} />}
-        {activeStep === 3 && <Redirect to={`/orders/${orderId}/invoice?thankYou=true`} />}
+        {activeStep === 2 && orderId && (
+          <Payment
+            amount={viewer.total}
+            orderId={orderId}
+            onSuccess={() => {
+              setActiveStep(3)
+              notifySuccess('Order placed successfully')
+            }}
+          />
+        )}
+        {activeStep === 3 && orderId && (
+          <Redirect to={`/orders/${orderId}/invoice?thankYou=true`} />
+        )}
 
         {/* <Button onClick={() => setActiveStep((prev) => prev - 1)}>Prev</Button>
       <Button onClick={() => setActiveStep((prev) => prev + 1)}>Next</Button> */}

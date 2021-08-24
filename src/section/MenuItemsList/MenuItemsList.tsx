@@ -18,7 +18,6 @@ import {
 import { Alert } from '@material-ui/lab'
 import { useState } from 'react'
 import { ChevronDown, Filter } from 'react-feather'
-import InfiniteScroll from 'react-infinite-scroll-component'
 import { useInfiniteQuery, useQuery, InfiniteData, isError } from 'react-query'
 import { MENU_ITEMS } from '../../lib/api/query/menuItems'
 import { MenuItemSortBy, MenuItemsQuery } from '../../lib/api/query/menuItems/menuItems.type'
