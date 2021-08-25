@@ -1,8 +1,4 @@
-import React from 'react'
-import { Box, Container, Grid, makeStyles, Typography } from '@material-ui/core'
-import { useQuery } from 'react-query'
-import { Link } from 'react-router-dom'
-import { GET_MENUS } from '../../lib/api/query/menus'
+import { Container, Grid, makeStyles, Typography } from '@material-ui/core'
 import { AspectRatioBox } from '../../lib/components/AspectRatioBox'
 import { Skeleton } from '@material-ui/lab'
 
@@ -37,7 +33,7 @@ export const MenusSkeleton = () => {
       </Typography>
       <Grid container spacing={2}>
         {Array.from({ length: 5 }).map((_, i) => (
-          <Grid item xs={12} sm={2} md={4} key={i}>
+          <Grid item xs={12} sm={6} md={4} key={i}>
             <AspectRatioBox>
               <Skeleton variant="rect" width="100%" />
             </AspectRatioBox>
