@@ -1,4 +1,3 @@
-import { useScrollTrigger } from '@material-ui/core'
 import {
   Box,
   Button,
@@ -16,13 +15,13 @@ import {
   DialogActions,
 } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { ChevronDown, Filter } from 'react-feather'
-import { useInfiniteQuery, useQuery, InfiniteData, isError } from 'react-query'
+import { useInfiniteQuery } from 'react-query'
 import { MENU_ITEMS } from '../../lib/api/query/menuItems'
 import { MenuItemSortBy, MenuItemsQuery } from '../../lib/api/query/menuItems/menuItems.type'
 import { ResponsiveDialog, Spinner } from '../../lib/components/'
-import { useScrollEnd } from '../../lib/hooks/useScrollEnd'
+import { useIntersectionObserver } from '../../lib/hooks/useIntersectionObserver'
 import { Sort } from '../../lib/types'
 import { MenuItemCard } from './components'
 import { MenuFilter } from './components/MenuFilter'
@@ -62,23 +61,28 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const MenuItemsList = () => {
-  const [curPage, setCurPage] = useState(1)
-
-  const { data, refetch, isLoading, isError, isFetching, isFetchingNextPage, fetchNextPage } =
+  const { data, hasNextPage, isLoading, isError, isFetching, isFetchingNextPage, fetchNextPage } =
     useInfiniteQuery(
       ['menuItems', {} as MenuItemsQuery],
       (params) => {
-        console.log(params)
-
-        return MENU_ITEMS(params.pageParam)
+        return MENU_ITEMS(params.pageParam || '?limit=24')
       },
       {
         keepPreviousData: true,
-        getNextPageParam: (nextPage) => nextPage.data.pages.next,
-        getPreviousPageParam: (prevPage) => prevPage.data.pages.next,
+        getNextPageParam: (nextPage) => {
+          return nextPage?.data?.pages?.next
+        },
       },
     )
-  useScrollEnd(fetchNextPage)
+  const scrollEnd = useRef<HTMLDivElement | null>(null)
+
+  useIntersectionObserver({
+    onIntersect: fetchNextPage,
+    target: scrollEnd,
+    enabled: hasNextPage,
+    update: data,
+  })
+
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [value, setValue] = useState('female')
 
@@ -104,7 +108,6 @@ const MenuItemsList = () => {
   }
   if (!data) return null
 
-  console.log({ curPage, data })
   return (
     <>
       <ResponsiveDialog
@@ -218,12 +221,10 @@ const MenuItemsList = () => {
                 )),
               )}
             </Grid>
-            <div>{isFetching && !isFetchingNextPage ? <Spinner /> : null}</div>
-            {/* {data?.data.result.map((menuItem) => (
-                <Grid item xs={12} sm={6} lg={4} key={menuItem.id}>
-                  <MenuItemCard menuItem={menuItem} />
-                </Grid>
-              ))} */}
+            <Box margin="2rem 0">
+              <div ref={scrollEnd}></div>
+              {isFetching && hasNextPage && isFetchingNextPage ? <Spinner /> : null}
+            </Box>
           </Grid>
         </Grid>
       </Container>
