@@ -1,6 +1,5 @@
 import { Box, Container, Grid, makeStyles, Typography } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
-import React from 'react'
 import { useQuery } from 'react-query'
 import { Link } from 'react-router-dom'
 import { GET_MENUS } from '../../lib/api/query/menus'
@@ -32,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 export const Menus = () => {
   const classes = useStyles()
   const onErrorNotify = useOnErrorNotify()
-  const { data, isLoading, isError } = useQuery(['id'], () => GET_MENUS({}), {
+  const { data, isLoading, isError } = useQuery(['getMenus'], () => GET_MENUS({ limit: 50 }), {
     onError: onErrorNotify,
   })
 
