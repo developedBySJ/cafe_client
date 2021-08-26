@@ -4,7 +4,6 @@ import { Alert, Rating } from '@material-ui/lab'
 import { Clock, Heart, Star } from 'react-feather'
 import { ProductCardSlider, Spinner } from '../../lib'
 import { MENU_ITEMS } from '../../lib/api/query/menuItems'
-import { MenuItemsQuery } from '../../lib/api/query/menuItems/menuItems.type'
 import { NON_VEG_COLOR, VegNonVegIcon, VEG_COLOR } from '../../lib/assets/VegNonVegIcon'
 import { ReviewCard } from '../../lib/components/ReviewCard'
 import { WARNING_MAIN } from '../../Theme/token'
@@ -15,10 +14,11 @@ import { Link, useHistory, useParams } from 'react-router-dom'
 import { GET_MENU_ITEM } from '../../lib/api/query/menuItemDetail'
 import { useEffect, useState } from 'react'
 import { MenuItemDetailsSkeleton } from './MenuItemDetailsSkeleton'
-import { useOnErrorNotify, useOnSuccessNotify } from '../../lib/hooks'
+import { useOnErrorNotify } from '../../lib/hooks'
 import { ADD_CART_ITEM } from '../../lib/api/Mutation/addToCart'
 import { SuccessDialog, SuccessDialogType } from './components/SuccessDialog'
 import { ADD_FAV_ITEM } from '../../lib/api/Mutation/addToFavorite'
+import { IMenuItem } from '../../lib/api/types/menuItem.type'
 
 const useStyle = makeStyles((theme) => ({
   container: {
@@ -105,9 +105,27 @@ export const MenuItemDetails = () => {
     data: suggestionData,
     isError: isSuggestionError,
     isLoading: isSuggestionLoading,
-  } = useQuery(['getMenuItems', {} as MenuItemsQuery], () => MENU_ITEMS({}), {
-    onError: notifyError,
-  })
+  } = useQuery(
+    ['getMenuItemsSuggestions', data?.data as IMenuItem],
+    (x) => {
+      let suggestions = ''
+      const menuItem = x.queryKey[1] as IMenuItem
+
+      const limit = (Math.round(Math.random() * 100) % 8) + 3
+
+      if (menuItem.ingredients.length > 0) {
+        suggestions = `ingredients=${menuItem.ingredients.join(',')}`
+      } else {
+        suggestions = `menu=${menuItem.menu.id}`
+      }
+
+      return MENU_ITEMS(`?limit=${limit}&${suggestions}`)
+    },
+    {
+      onError: notifyError,
+      enabled: !!data?.data.id,
+    },
+  )
 
   useEffect(() => {
     refetch()
@@ -314,7 +332,7 @@ export const MenuItemDetails = () => {
       <Box marginBottom={'2rem'}>
         <ProductCardSlider
           cards={
-            suggestionData?.data.result.map((menuItem) => <MenuItemCard menuItem={menuItem} />) ||
+            suggestionData?.data?.result.map((menuItem) => <MenuItemCard menuItem={menuItem} />) ||
             []
           }
           error={isSuggestionError}
