@@ -89,8 +89,8 @@ export const Home = () => {
   const theme = useTheme()
   const classes = useStyle()
   const { data, isError, isLoading } = useQuery(
-    ['users', {} as MenuItemsQuery],
-    () => MENU_ITEMS({}),
+    ['getNewMenuItems', {} as MenuItemsQuery],
+    () => MENU_ITEMS('?sortBy=createdAt&sort=DESC'),
     {
       onSuccess: ({ data }) => console.log(data),
     },

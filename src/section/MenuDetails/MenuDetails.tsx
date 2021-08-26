@@ -26,7 +26,7 @@ export const MenuDetails = () => {
 
   const { data, hasNextPage, isLoading, isError, isFetching, isFetchingNextPage, fetchNextPage } =
     useInfiniteQuery(
-      ['getMenuItems', {} as MenuItemsQuery],
+      ['getMenuItemsByMenu', {} as MenuItemsQuery],
       (params) => {
         return MENU_ITEMS(params.pageParam || `?limit=10&menu=${menu?.data.id}`)
       },
@@ -110,7 +110,7 @@ export const MenuDetails = () => {
           Explore
         </Typography>
         <Grid container spacing={2}>
-          {data.pages.map((page) =>
+          {data?.pages?.map((page) =>
             page.data.result.map((menuItem) => (
               <Grid item xs={12} sm={6} md={4} lg={3} key={menuItem.id}>
                 <MenuItemCard menuItem={menuItem} />
