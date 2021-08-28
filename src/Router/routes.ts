@@ -5,16 +5,16 @@ import { RouteNotImplemented } from '../lib/components/RouteNotImplemented'
 import { ForgotPassword, MenuItemDetails, ResetPassword, MenuItemsList, Home } from '../section'
 import Cart from '../section/Cart/Cart'
 import { Checkout } from '../section/Checkout'
-import { Favorite } from '../section/Favorite'
 import { Invoice } from '../section/Invoice'
 import { Logout } from '../section/Logout'
 import { MenuDetails } from '../section/MenuDetails'
 import { Menus } from '../section/Menus'
 import { NewReview } from '../section/NewReview'
 import { NotFound } from '../section/NotFound'
-import { Orders } from '../section/Orders'
+import { Admin } from '../section/Admin'
 import { Profile } from '../section/Profile'
 import { Reviews } from '../section/Reviews'
+import { AdminRoutes } from '../section/Admin/config/routes'
 
 interface RoutesProps extends RouteProps {
   isPrivate?: false
@@ -24,12 +24,13 @@ interface PrivateRoutesProps extends RouteProps {
   component: PrivateRouteComponentType
 }
 
-type Routes = RoutesProps | PrivateRoutesProps
+export type Routes = RoutesProps | PrivateRoutesProps
 
 export const ROUTES: Routes[] = [
   /* AUTH */
   { path: '/404', component: NotFound, exact: true },
-  { path: '/admin', component: RouteNotImplemented, exact: true, isPrivate: true },
+  { path: '/dashboard', component: Admin, exact: true, isPrivate: true },
+  { path: '/admin/*', component: Admin, isPrivate: true },
   { path: '/me', component: Profile, exact: true, isPrivate: true },
   { path: '/favorites', component: Profile, exact: true, isPrivate: true },
   { path: '/cart', component: Cart, exact: true, isPrivate: true },
@@ -74,6 +75,8 @@ export const ROUTES: Routes[] = [
   { path: '/users/new', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/users/:id/edit', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/users/:id/delete', component: RouteNotImplemented, exact: true, isPrivate: true },
+
+  /* ADMIN */
 
   /* HOME */
   { path: '/', component: Home, exact: true },
