@@ -6,10 +6,9 @@ import { useHandleQueryChange } from '../../../../lib/hooks'
 import { columns } from './config'
 
 export const Menus = () => {
-  const [query, setQuery] = useState('?limit=25')
+  const { query, handlePageChange, handleSortChange } = useHandleQueryChange()
   const { data, isLoading } = useQuery(['getAllMenus', query], (q) => GET_MENUS(q.queryKey[1]))
 
-  const { handlePageChange, handleSortChange } = useHandleQueryChange(query, setQuery)
   return (
     <ResourceTable
       columns={columns}

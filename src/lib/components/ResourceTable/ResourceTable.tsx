@@ -19,11 +19,13 @@ interface ResourceTableProps {
 }
 
 const getColumns = (columns: ResourceTableColumn[]): GridColDef[] => {
-  return columns.map((column) => {
+  return columns.map((column, i) => {
     const { field, type, width, header } = column
     const columnDef: GridColDef = {
       headerName: header,
       field,
+      align: i === 0 ? 'left' : 'right',
+      headerAlign: i === 0 ? 'left' : 'right',
       filterable: !!column.filterable,
       sortable: !!column.sortable,
       ...(!width && { flex: 1 }),
