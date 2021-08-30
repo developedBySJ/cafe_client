@@ -1,19 +1,21 @@
 import { GridSortModel } from "@mui/x-data-grid"
-import { useCallback } from "react"
+import { useState } from "react"
 
-export const useHandleQueryChange = (query: string, setQuery: (val: string) => void) => {
+export const useHandleQueryChange = (initialQuery: string = '?limit=25') => {
 
-  const handlePageChange = useCallback((page: number) => {
-    const newQuery = new URLSearchParams(query)
+  const [query, setQuery] = useState(initialQuery)
+
+  const newQuery = new URLSearchParams(query)
+
+  const handlePageChange = (page: number) => {
     newQuery.set('page', String(page))
     setQuery('?' + newQuery.toString())
-  }, [query])
+    console.log(newQuery.toString())
+  }
 
-  const handleSortChange = useCallback((model: GridSortModel) => {
-    console.log(model)
+  const handleSortChange = (model: GridSortModel) => {
     const { field, sort } = model[0] || {}
 
-    const newQuery = new URLSearchParams(query)
     if (field) {
       newQuery.set('sortBy', field)
     } else {
@@ -27,11 +29,15 @@ export const useHandleQueryChange = (query: string, setQuery: (val: string) => v
     }
 
     setQuery('?' + newQuery.toString())
-  }, [query])
+    console.log(newQuery.toString())
+  }
 
   return {
+
     handlePageChange,
-    handleSortChange
+    handleSortChange,
+    query,
+    setQuery
   }
 }
 
