@@ -1,9 +1,7 @@
 import axios, { AxiosResponse } from 'axios'
-import { ReviewQuery, ReviewResponse } from './reviews.type'
+import { ReviewResponse } from './reviews.type'
 
 export const REVIEWS_URL = '/api/v1/reviews'
 
-export const GET_REVIEWS = async (params: ReviewQuery): Promise<AxiosResponse<ReviewResponse>> =>
-  await axios.get(REVIEWS_URL, {
-    params,
-  })
+export const GET_REVIEWS = async (params: string): Promise<AxiosResponse<ReviewResponse>> =>
+  await axios.get(`${REVIEWS_URL}${params || ""}`)

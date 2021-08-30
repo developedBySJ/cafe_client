@@ -30,7 +30,7 @@ export const Reviews = () => {
     data: reviewsData,
     isError: isReviewsError,
     isLoading: isReviewLoading,
-  } = useQuery(['getReviews', menuId], () => GET_REVIEWS({ menuItemId: menuId }), {
+  } = useQuery(['getReviews', menuId], () => GET_REVIEWS(`?menuItemId=${menuId}`), {
     onError: notifyError,
   })
 

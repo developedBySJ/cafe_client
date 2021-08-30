@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom'
 import { MenuItemCard } from '..'
 import { Spinner } from '../../lib'
 import { GET_MENU } from '../../lib/api/query/menuDetail'
-import { MENU_ITEMS } from '../../lib/api/query/menuItems'
+import { GET_MENU_ITEMS } from '../../lib/api/query/menuItems'
 import { MenuItemsQuery } from '../../lib/api/query/menuItems/menuItems.type'
 import { useOnErrorNotify } from '../../lib/hooks'
 import { useIntersectionObserver } from '../../lib/hooks/useIntersectionObserver'
@@ -28,7 +28,7 @@ export const MenuDetails = () => {
     useInfiniteQuery(
       ['getMenuItemsByMenu', {} as MenuItemsQuery],
       (params) => {
-        return MENU_ITEMS(params.pageParam || `?limit=10&menu=${menu?.data.id}`)
+        return GET_MENU_ITEMS(params.pageParam || `?limit=10&menu=${menu?.data.id}`)
       },
       {
         keepPreviousData: true,

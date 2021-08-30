@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Alert, Rating } from '@material-ui/lab'
 import { Clock, Heart, Star } from 'react-feather'
 import { ProductCardSlider, Spinner } from '../../lib'
-import { MENU_ITEMS } from '../../lib/api/query/menuItems'
+import { GET_MENU_ITEMS } from '../../lib/api/query/menuItems'
 import { NON_VEG_COLOR, VegNonVegIcon, VEG_COLOR } from '../../lib/assets/VegNonVegIcon'
 import { ReviewCard } from '../../lib/components/ReviewCard'
 import { WARNING_MAIN } from '../../Theme/token'
@@ -119,7 +119,7 @@ export const MenuItemDetails = () => {
         suggestions = `menu=${menuItem.menu.id}`
       }
 
-      return MENU_ITEMS(`?limit=${limit}&${suggestions}`)
+      return GET_MENU_ITEMS(`?limit=${limit}&${suggestions}`)
     },
     {
       onError: notifyError,

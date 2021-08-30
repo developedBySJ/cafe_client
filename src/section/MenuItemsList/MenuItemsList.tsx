@@ -18,7 +18,7 @@ import { Alert } from '@material-ui/lab'
 import { useRef, useState } from 'react'
 import { ChevronDown, Filter } from 'react-feather'
 import { useInfiniteQuery } from 'react-query'
-import { MENU_ITEMS } from '../../lib/api/query/menuItems'
+import { GET_MENU_ITEMS } from '../../lib/api/query/menuItems'
 import { MenuItemSortBy, MenuItemsQuery } from '../../lib/api/query/menuItems/menuItems.type'
 import { ResponsiveDialog, Spinner } from '../../lib/components/'
 import { useIntersectionObserver } from '../../lib/hooks/useIntersectionObserver'
@@ -65,7 +65,7 @@ const MenuItemsList = () => {
     useInfiniteQuery(
       ['menuItems', {} as MenuItemsQuery],
       (params) => {
-        return MENU_ITEMS(params.pageParam || '?limit=24')
+        return GET_MENU_ITEMS(params.pageParam || '?limit=24')
       },
       {
         keepPreviousData: true,

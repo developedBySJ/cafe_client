@@ -141,7 +141,7 @@ export const Navbar: React.FC<NavbarProps> = ({ viewer }) => {
                       edge="start"
                       color="default"
                       aria-label="menu"
-                      onClick={() => history.push('/profile')}
+                      onClick={() => history.push('/me')}
                       className={classes.margin}
                     >
                       <Avatar style={{ width: 32, height: 32 }} src={viewer.avatar} />
@@ -151,7 +151,7 @@ export const Navbar: React.FC<NavbarProps> = ({ viewer }) => {
                       edge="start"
                       color="default"
                       aria-label="menu"
-                      onClick={() => history.push('/profile')}
+                      onClick={() => history.push('/me')}
                       className={classes.margin}
                     >
                       <User />

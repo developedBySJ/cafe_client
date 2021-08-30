@@ -105,7 +105,7 @@ export const NewReview: PrivateRouteComponent = ({ viewer }) => {
 
   const { data: reviewData } = useQuery(
     ['getReviewDetail', menuId, menuItemDetails?.data.id],
-    () => GET_REVIEWS({ menuItemId: menuId, user: viewer.id }),
+    () => GET_REVIEWS(`?menuItemId=${menuId}&user=${viewer.id}`),
     {
       onError: notifyError,
       enabled: fetchReviews,

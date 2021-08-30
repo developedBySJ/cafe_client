@@ -4,8 +4,6 @@ import { MenuQuery, MenusResponse } from './menus.type'
 export const MENUS_URL = '/api/v1/menus'
 
 export const GET_MENUS = async (
-  params: MenuQuery | undefined,
+  params: string | undefined,
 ): Promise<AxiosResponse<MenusResponse>> =>
-  await axios.get(MENUS_URL, {
-    params,
-  })
+  await axios.get(`${MENUS_URL}${params || ""}`)

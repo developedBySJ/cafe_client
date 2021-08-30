@@ -3,7 +3,7 @@ import { MenuItemsResponse } from './menuItems.type'
 
 export const MENU_ITEMS_URL = '/api/v1/menu-items'
 
-export const MENU_ITEMS = async (
+export const GET_MENU_ITEMS = async (
   params: string | undefined,
 ): Promise<AxiosResponse<MenuItemsResponse>> =>
   await axios.get((`${MENU_ITEMS_URL}${params || ""}`))

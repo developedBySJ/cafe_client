@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 export const Menus = () => {
   const classes = useStyles()
   const onErrorNotify = useOnErrorNotify()
-  const { data, isLoading, isError } = useQuery(['getMenus'], () => GET_MENUS({ limit: 50 }), {
+  const { data, isLoading, isError } = useQuery(['getMenus'], () => GET_MENUS('?limit=50'), {
     onError: onErrorNotify,
   })
 

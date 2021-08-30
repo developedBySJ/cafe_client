@@ -18,7 +18,7 @@ import { AspectRatioBox } from '../../lib/components/AspectRatioBox'
 import { ProductCardSlider } from '../../lib'
 import { Link } from 'react-router-dom'
 import { useQuery } from 'react-query'
-import { MENU_ITEMS } from '../../lib/api/query/menuItems'
+import { GET_MENU_ITEMS } from '../../lib/api/query/menuItems'
 import { MenuItemsQuery } from '../../lib/api/query/menuItems/menuItems.type'
 import { MenuItemCard, MenuItemSkeleton } from '..'
 
@@ -90,7 +90,7 @@ export const Home = () => {
   const classes = useStyle()
   const { data, isError, isLoading } = useQuery(
     ['getNewMenuItems', {} as MenuItemsQuery],
-    () => MENU_ITEMS('?sortBy=createdAt&sort=DESC'),
+    () => GET_MENU_ITEMS('?sortBy=createdAt&sort=DESC'),
     {
       onSuccess: ({ data }) => console.log(data),
     },
