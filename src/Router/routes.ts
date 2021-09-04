@@ -42,24 +42,21 @@ export const ROUTES: Routes[] = [
   { path: '/dishes', component: MenuItemsList, exact: true },
   { path: '/dishes/new', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/dishes/:id', component: MenuItemDetails, exact: true },
-  { path: '/dishes/:id/edit', component: RouteNotImplemented, exact: true, isPrivate: true },
+
 
   /* MENUS */
   { path: '/menus', component: Menus, exact: true },
   { path: '/menus/new', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/menus/:id', component: MenuDetails, exact: true },
-  { path: '/menus/:id/edit', component: RouteNotImplemented, exact: true, isPrivate: true },
 
   /* REVIEWS */
   { path: '/dishes/:menuId/reviews', component: Reviews, exact: true },
   { path: '/dishes/:menuId/reviews/new', component: NewReview, exact: true, isPrivate: true },
   { path: '/reviews', component: RouteNotImplemented, exact: true, isPrivate: true },
-  { path: '/reviews/:id/edit', component: RouteNotImplemented, exact: true, isPrivate: true },
 
   /* INVENTORIES */
   { path: '/inventories', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/inventories/new', component: RouteNotImplemented, exact: true, isPrivate: true },
-  { path: '/inventories/:id/edit', component: RouteNotImplemented, exact: true, isPrivate: true },
 
   /* ORDERS */
   { path: '/orders', component: Profile, exact: true, isPrivate: true },
@@ -68,12 +65,10 @@ export const ROUTES: Routes[] = [
   { path: '/orders/pending', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/orders/:id', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/orders/:id/invoice', component: Invoice, exact: true, isPrivate: true },
-  { path: '/orders/:id/edit', component: RouteNotImplemented, exact: true, isPrivate: true },
 
   /* CUSTOMERS */
   { path: '/users', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/users/new', component: RouteNotImplemented, exact: true, isPrivate: true },
-  { path: '/users/:id/edit', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/users/:id/delete', component: RouteNotImplemented, exact: true, isPrivate: true },
 
   /* ADMIN */

@@ -4,9 +4,10 @@ import { UserRole } from "../../../../lib/types";
 export const columns: ResourceTableColumn[] = [
   {
     type: 'link',
-    prefix: '/users',
+    prefix: '/admin/users',
     header: 'id',
     field: 'id',
+    suffix: 'edit',
   },
   {
     type: 'string',

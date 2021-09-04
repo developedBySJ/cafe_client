@@ -11,7 +11,7 @@ export const MuiFilledInput: Partial<StyleRules<FilledInputClassKey, {}>> = {
     },
     '&$disabled': {
       backgroundColor: GREY_300,
-      opacity: 0.5,
+      opacity: 0.8,
     },
     '&$InputLabel': {
       color: 'red',

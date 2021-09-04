@@ -1,9 +1,9 @@
-import { Box, Button, Typography } from '@material-ui/core'
+import { Box, Button, IconButton, Typography } from '@material-ui/core'
 import { DataGrid, GridColDef, GridFilterModel, GridRowData, GridSortModel } from '@mui/x-data-grid'
 import moment from 'moment'
 import React from 'react'
-import { Plus } from 'react-feather'
-import { Link } from 'react-router-dom'
+import { Plus, RefreshCw } from 'react-feather'
+import { Link, useHistory } from 'react-router-dom'
 import _ from 'lodash'
 import { ResourceTableColumn } from './type'
 
@@ -12,9 +12,11 @@ interface ResourceTableProps {
   columns: ResourceTableColumn[]
   label: string
   isLoading?: boolean
+  createLink?: string
   onPageChange?: (page: number) => void
   onSortChange?: (sort: GridSortModel) => void
   onFilterChange?: (filter: GridFilterModel) => void
+  refetch?: () => void
   totalCount?: number
 }
 
@@ -42,6 +44,12 @@ const getColumns = (columns: ResourceTableColumn[]): GridColDef[] => {
               {value}
             </Link>
           )
+        }
+        if (type === 'array') {
+          // @ts-ignore
+          const { mapFunction } = column
+          const value = _.get(params.row, params.field) as any[]
+          return <>{value ? value.map(mapFunction) : '---'}</>
         }
       },
       valueFormatter: (params) => {
@@ -89,20 +97,32 @@ export const ResourceTable: React.FC<ResourceTableProps> = ({
   onPageChange,
   onSortChange,
   totalCount,
-
+  createLink,
   onFilterChange,
+  refetch,
 }) => {
   const dataColumns = getColumns(columns)
-
+  const history = useHistory()
   return (
     <Box>
       <Box
         sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: '1rem' }}
       >
         <Typography variant="h5">{label}</Typography>
-        <Button size="small" startIcon={<Plus />}>
-          Create
-        </Button>
+        <Box>
+          <IconButton onClick={() => refetch && refetch()}>
+            <RefreshCw />
+          </IconButton>
+          {createLink && (
+            <Button
+              size="small"
+              startIcon={<Plus />}
+              onClick={() => history.push(createLink || '/')}
+            >
+              Create
+            </Button>
+          )}
+        </Box>
       </Box>
 
       <div style={{ width: '100%' }}>

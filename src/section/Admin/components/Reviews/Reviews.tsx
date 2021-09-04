@@ -7,7 +7,9 @@ import { columns } from './config'
 
 export const Reviews = () => {
   const { query, handlePageChange, handleSortChange } = useHandleQueryChange()
-  const { data, isLoading } = useQuery(['getAllReviews', query], (q) => GET_REVIEWS(q.queryKey[1]))
+  const { data, isLoading, refetch } = useQuery(['getAllReviews', query], (q) =>
+    GET_REVIEWS(q.queryKey[1]),
+  )
 
   return (
     <ResourceTable
@@ -18,6 +20,7 @@ export const Reviews = () => {
       totalCount={data?.data.totalCount}
       isLoading={isLoading}
       label="Reviews"
+      refetch={refetch}
     />
   )
 }

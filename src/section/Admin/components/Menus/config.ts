@@ -3,9 +3,10 @@ import { ResourceTableColumn } from "../../../../lib/components/ResourceTable/ty
 export const columns: ResourceTableColumn[] = [
   {
     type: 'link',
-    prefix: '/menus',
+    prefix: '/admin/menus',
     header: 'id',
     field: 'id',
+    suffix: 'edit',
   },
   {
     type: 'string',

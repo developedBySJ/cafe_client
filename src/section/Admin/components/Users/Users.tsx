@@ -7,7 +7,9 @@ import { columns } from './config'
 
 export const Users = () => {
   const { query, handlePageChange, handleSortChange } = useHandleQueryChange()
-  const { data, isLoading } = useQuery(['getAllUsers', query], (q) => GET_USERS(q.queryKey[1]))
+  const { data, isLoading, refetch } = useQuery(['getAllUsers', query], (q) =>
+    GET_USERS(q.queryKey[1]),
+  )
 
   return (
     <ResourceTable
@@ -18,6 +20,8 @@ export const Users = () => {
       totalCount={data?.data.totalCount}
       isLoading={isLoading}
       label="Users"
+      createLink="/admin/users/create"
+      refetch={refetch}
     />
   )
 }

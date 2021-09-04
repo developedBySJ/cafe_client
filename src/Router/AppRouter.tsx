@@ -45,7 +45,7 @@ export const AppRouter: React.FC<AppRouterProps> = ({ viewer, setViewer }) => {
             <Route key={key} component={component} {...props} sensitive={false} />
           )
         })}
-        <Redirect to="/404" />
+        {/* <Redirect to="/404" /> */}
       </Switch>
     </Container>
   )
