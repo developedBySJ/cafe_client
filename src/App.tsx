@@ -11,9 +11,11 @@ import { REFRESH_TOKEN } from './lib/api/query/refreshToken'
 import { Viewer } from './lib/types/viewer'
 import { AppRouter } from './Router'
 import SwiperCore, { Navigation, Thumbs, Pagination, Scrollbar, A11y } from 'swiper'
+import MomentUtils from '@date-io/moment'
 
 import 'swiper/swiper-bundle.css'
 import { ScrollToTop } from './lib/components/ScrollTop'
+import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 
 SwiperCore.use([Thumbs, Navigation, Pagination, Scrollbar, A11y])
 
@@ -107,7 +109,9 @@ const AppWrapper = () => {
         <CssBaseline />
         <BrowserRouter>
           <SnackbarProvider autoHideDuration={3000} preventDuplicate classes={classes}>
-            <App />
+            <MuiPickersUtilsProvider utils={MomentUtils}>
+              <App />
+            </MuiPickersUtilsProvider>
           </SnackbarProvider>
         </BrowserRouter>
       </ThemeProvider>
