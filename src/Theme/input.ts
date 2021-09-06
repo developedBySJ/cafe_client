@@ -1,10 +1,10 @@
-import { FilledInputClassKey, InputBaseClassKey, lighten, StyleRules } from '@material-ui/core'
-import { palette } from './palette'
+import { FilledInputClassKey, lighten, StyleRules } from '@material-ui/core'
 import { ERROR_LIGHT, ERROR_MAIN, GREY_300, PRIMARY_MAIN, SECONDARY_MAIN } from './token'
 
 export const MuiFilledInput: Partial<StyleRules<FilledInputClassKey, {}>> = {
   root: {
     backgroundColor: '#EFF0F6',
+    paddingLeft: '0.5rem',
     border: '2px solid transparent',
     '&:hover': {
       backgroundColor: '#EFF0F6',
