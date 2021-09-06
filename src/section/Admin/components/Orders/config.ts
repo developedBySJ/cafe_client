@@ -7,6 +7,7 @@ export const columns: ResourceTableColumn[] = [
     field: 'id',
     header: 'ID',
     prefix: '/orders',
+    suffix: 'invoice'
   },
   {
     type: 'link',
