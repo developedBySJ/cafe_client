@@ -14,7 +14,7 @@ import { NotFound } from '../section/NotFound'
 import { Admin } from '../section/Admin'
 import { Profile } from '../section/Profile'
 import { Reviews } from '../section/Reviews'
-import { AdminRoutes } from '../section/Admin/config/routes'
+import { Search } from '../section/Search'
 
 interface RoutesProps extends RouteProps {
   isPrivate?: false
@@ -32,6 +32,7 @@ export const ROUTES: Routes[] = [
   { path: '/dashboard', component: Admin, exact: true, isPrivate: true },
   { path: '/admin/*', component: Admin, isPrivate: true },
   { path: '/me', component: Profile, exact: true, isPrivate: true },
+  { path: '/Search', component: Search, exact: true },
   { path: '/favorites', component: Profile, exact: true, isPrivate: true },
   { path: '/cart', component: Cart, exact: true, isPrivate: true },
   { path: '/forgot-password', component: ForgotPassword, exact: true },
