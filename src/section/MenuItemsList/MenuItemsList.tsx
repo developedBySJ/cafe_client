@@ -15,16 +15,17 @@ import {
   DialogActions,
 } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ChevronDown, Filter } from 'react-feather'
 import { useInfiniteQuery } from 'react-query'
+import { useHistory, useLocation } from 'react-router'
 import { GET_MENU_ITEMS } from '../../lib/api/query/menuItems'
-import { MenuItemSortBy, MenuItemsQuery } from '../../lib/api/query/menuItems/menuItems.type'
+import { MenuItemSortBy } from '../../lib/api/query/menuItems/menuItems.type'
 import { ResponsiveDialog, Spinner } from '../../lib/components/'
 import { useIntersectionObserver } from '../../lib/hooks/useIntersectionObserver'
 import { Sort } from '../../lib/types'
 import { MenuItemCard } from './components'
-import { MenuFilter } from './components/MenuFilter'
+import { MenuFilter, MenuFilterState } from './components/MenuFilter'
 
 const MenuItemSortList = [
   { label: 'Price', value: MenuItemSortBy.Price },
@@ -60,12 +61,38 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+export const initialFilter = {
+  priceGte: 'priceGte=1',
+  prepTime: '',
+  isVeg: '',
+  isAvailable: '',
+  discount: '',
+}
+
 const MenuItemsList = () => {
+  const history = useRef(useHistory())
+  const location = useLocation()
+  const query = new URLSearchParams(location.search)
+  const searchKey = query.get('search')
+  const parseQuery = Object.entries(Object.fromEntries(query))
+    .map(([key, value]) => ({ [key]: `${key}=${value}` }))
+    .reduce((a, c) => ({ ...a, ...c }), {}) as MenuFilterState
+
+  const [filter, setFilter] = useState<MenuFilterState>(parseQuery)
+
   const { data, hasNextPage, isLoading, isError, isFetching, isFetchingNextPage, fetchNextPage } =
     useInfiniteQuery(
-      ['menuItems', {} as MenuItemsQuery],
+      ['menuItems', location.search],
       (params) => {
-        return GET_MENU_ITEMS(params.pageParam || '?limit=24')
+        const page = new URLSearchParams(params.pageParam)
+        const filter = new URLSearchParams(location.search)
+        const q = new URLSearchParams({
+          ...Object.fromEntries(page),
+          ...Object.fromEntries(filter),
+        })
+        console.log(q.toString())
+
+        return GET_MENU_ITEMS('?' + q.toString())
       },
       {
         keepPreviousData: true,
@@ -74,6 +101,15 @@ const MenuItemsList = () => {
         },
       },
     )
+
+  useEffect(() => {
+    const q = Object.values(filter)
+      .map((f) => f || undefined)
+      .filter((i) => !!i)
+      .join('&')
+    history.current.push(`?${q}`)
+  }, [filter])
+
   const scrollEnd = useRef<HTMLDivElement | null>(null)
 
   useIntersectionObserver({
@@ -84,11 +120,7 @@ const MenuItemsList = () => {
   })
 
   const [isSortOpen, setIsSortOpen] = useState(false)
-  const [value, setValue] = useState('female')
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue((event.target as HTMLInputElement).value)
-  }
   const classes = useStyles()
 
   if (isLoading) {
@@ -106,6 +138,7 @@ const MenuItemsList = () => {
       </>
     )
   }
+
   if (!data) return null
 
   return (
@@ -122,7 +155,13 @@ const MenuItemsList = () => {
           <Box>
             <FormControl component="fieldset">
               <FormLabel component="legend">Sort</FormLabel>
-              <RadioGroup name="sort" value={value} onChange={handleChange} row color="primary">
+              <RadioGroup
+                name="sort"
+                value={query.get('sort')}
+                onChange={(e) => setFilter((prev) => ({ ...prev, sort: `sort=${e.target.value}` }))}
+                row
+                color="primary"
+              >
                 <FormControlLabel
                   value={Sort.ASC}
                   control={<Radio color="primary" />}
@@ -139,7 +178,17 @@ const MenuItemsList = () => {
           <Box margin="1rem 0">
             <FormControl component="fieldset">
               <FormLabel component="legend">Sort By</FormLabel>
-              <RadioGroup name="sortBy" value={value} onChange={handleChange} color="primary">
+              <RadioGroup
+                name="sortBy"
+                value={query.get('sortBy')}
+                onChange={(e) =>
+                  setFilter((prev) => ({
+                    ...prev,
+                    sortBy: `sortBy=${e.target.value as MenuItemSortBy}`,
+                  }))
+                }
+                color="primary"
+              >
                 {MenuItemSortList.map(({ value, label }, index) => (
                   <FormControlLabel
                     key={value}
@@ -164,7 +213,7 @@ const MenuItemsList = () => {
       <ResponsiveDialog open={false} fullWidth maxWidth="sm">
         <DialogTitle>Filter By</DialogTitle>
         <DialogContent>
-          <MenuFilter />
+          <MenuFilter filter={filter} setFilter={setFilter} />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setIsSortOpen(false)}>Cancel</Button>
@@ -174,16 +223,15 @@ const MenuItemsList = () => {
         </DialogActions>
       </ResponsiveDialog>
       <Container>
-        <Typography variant="h4" style={{ padding: '3rem 0' }}>
-          Search Result for "Food"
-          <Typography variant="h6" component="span">
-            {/* ({data?.totalCount}) Items Found */}
+        {searchKey && (
+          <Typography variant="h4" style={{ padding: '3rem 0' }}>
+            Search Result for "{searchKey}"
           </Typography>
-        </Typography>
+        )}
 
         <Grid container spacing={2}>
           <Grid item md={4} lg={3} className={classes.sticky}>
-            <MenuFilter />
+            <MenuFilter filter={filter} setFilter={setFilter} />
           </Grid>
           <Grid item xs={12} md={8} lg={9}>
             <Box textAlign="right" marginBottom="1.5rem">
