@@ -16,7 +16,7 @@ import offer4 from '../../lib/assets/home/offer4.jpg'
 import { Search } from 'react-feather'
 import { AspectRatioBox } from '../../lib/components/AspectRatioBox'
 import { ProductCardSlider } from '../../lib'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { useQuery } from 'react-query'
 import { GET_MENU_ITEMS } from '../../lib/api/query/menuItems'
 import { MenuItemsQuery } from '../../lib/api/query/menuItems/menuItems.type'
@@ -88,6 +88,7 @@ const offers = [offer1, offer2, offer3, offer4].map((src, i) => {
 export const Home = () => {
   const theme = useTheme()
   const classes = useStyle()
+  const history = useHistory()
   const { data, isError, isLoading } = useQuery(
     ['getNewMenuItems', {} as MenuItemsQuery],
     () => GET_MENU_ITEMS('?sortBy=createdAt&sort=DESC'),
@@ -119,6 +120,7 @@ export const Home = () => {
                   <Grid item xs={9}>
                     <InputBase
                       placeholder="Search Here..."
+                      onChange={(e) => history.push(`/search?search=${e.target.value}`)}
                       className={classes.input}
                       startAdornment={
                         <Search className={classes.searchIcon} color={theme.palette.grey[900]} />

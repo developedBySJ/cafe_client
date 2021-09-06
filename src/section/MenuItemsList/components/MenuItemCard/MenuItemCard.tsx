@@ -50,7 +50,7 @@ export const MenuItemCard: React.FC<{ menuItem: IMenuItems }> = ({ menuItem }) =
     <Card elevation={0}>
       <CardActionArea disableRipple>
         <Link to={`/dishes/${id}`} className={classes.link}>
-          <CardMedia image={images[0]} className={classes.image} title="Contemplative Reptile" />
+          <CardMedia image={images[0]} className={classes.image} title={title} />
           <CardContent>
             <Box display="flex" justifyContent="space-between">
               <Typography variant="body1" component="h2" className={classes.title}>
