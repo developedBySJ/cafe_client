@@ -18,6 +18,7 @@ import { resourceMap } from './config'
 import { Redirect, Route, Switch, useHistory } from 'react-router'
 import { Link } from 'react-router-dom'
 import { AdminRoutes } from './config/routes'
+import { PrivateRoute, PrivateRouteComponent, PrivateRouteComponentType } from '../../lib'
 
 const drawerWidth = 240
 
@@ -83,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export const Admin = () => {
+export const Admin: PrivateRouteComponent = (parentProps) => {
   const classes = useStyles()
   const theme = useTheme()
   const [open, setOpen] = React.useState(false)
@@ -157,7 +158,15 @@ export const Admin = () => {
       <main className={classes.content}>
         <Switch>
           {AdminRoutes.map(({ isPrivate, component, ...props }, key) => {
-            return <Route key={key} component={component} {...props} sensitive={false} />
+            return (
+              <PrivateRoute
+                key={key}
+                component={component as PrivateRouteComponentType}
+                {...parentProps}
+                {...props}
+                sensitive={false}
+              />
+            )
           })}
         </Switch>
       </main>

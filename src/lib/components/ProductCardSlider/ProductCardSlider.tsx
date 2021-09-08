@@ -34,6 +34,7 @@ const ProductCardSlider = ({
           left: '2%',
           transform: 'translate(0%,-50%)',
           backgroundColor: lighten(PRIMARY_MAIN, 0.9),
+          zIndex: 2,
         }}
       >
         <ChevronLeft size="24px" />
@@ -47,6 +48,7 @@ const ProductCardSlider = ({
           right: '2%',
           transform: 'translate(0%,-50%)',
           backgroundColor: lighten(PRIMARY_MAIN, 0.9),
+          zIndex: 2,
         }}
       >
         <ChevronRight size="24px" />
@@ -59,57 +61,59 @@ const ProductCardSlider = ({
       <Typography variant="h4" gutterBottom>
         {title}
       </Typography>
-      {cards.length || isLoading ? (
-        <>
-          <Swiper
-            swipeHandler="#swiper-card-slider"
-            id={`swiper-card-slider`}
-            style={{
-              width: '100%',
-              zIndex: 0,
-            }}
-            scrollbar={{ snapOnRelease: true, hide: true }}
-            navigation={{ nextEl: `#${id}-slider-next`, prevEl: `#${id}-slider-prev` }}
-            breakpoints={{
-              320: {
-                slidesPerView: sliderPerView[0],
-                spaceBetween: 6,
-              },
+      <div>
+        {cards.length || isLoading ? (
+          <>
+            <Navigation />
+            <Swiper
+              swipeHandler={`#${id}-swiper-card-slider`}
+              id={`${id}-swiper-card-slider`}
+              style={{
+                width: '100%',
+                zIndex: 0,
+              }}
+              scrollbar={{ snapOnRelease: true, hide: true }}
+              navigation={{ nextEl: `#${id}-slider-next`, prevEl: `#${id}-slider-prev` }}
+              breakpoints={{
+                320: {
+                  slidesPerView: sliderPerView[0],
+                  spaceBetween: 6,
+                },
 
-              600: {
-                slidesPerView: sliderPerView[1],
-                spaceBetween: 14,
-              },
+                600: {
+                  slidesPerView: sliderPerView[1],
+                  spaceBetween: 14,
+                },
 
-              900: {
-                slidesPerView: sliderPerView[2],
-                spaceBetween: 16,
-              },
+                900: {
+                  slidesPerView: sliderPerView[2],
+                  spaceBetween: 16,
+                },
+              }}
+            >
+              {isLoading || error
+                ? Array.from({ length: 4 }).map((m, index) => {
+                    return <SwiperSlide key={`loading-${index}`}>{skeltonCard}</SwiperSlide>
+                  })
+                : cards.length &&
+                  cards.map((card, index) => {
+                    return <SwiperSlide key={`card-${index}`}>{card}</SwiperSlide>
+                  })}
+            </Swiper>
+          </>
+        ) : (
+          <Box
+            sx={{
+              height: '300px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
-            {isLoading || error
-              ? Array.from({ length: 4 }).map((m, index) => {
-                  return <SwiperSlide key={`loading-${index}`}>{skeltonCard}</SwiperSlide>
-                })
-              : cards.length &&
-                cards.map((card, index) => {
-                  return <SwiperSlide key={`card-${index}`}>{card}</SwiperSlide>
-                })}
-          </Swiper>
-          <Navigation show={!!cards.length} />
-        </>
-      ) : (
-        <Box
-          sx={{
-            height: '300px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Typography variant="h6">No Items</Typography>
-        </Box>
-      )}
+            <Typography variant="h6">No Items</Typography>
+          </Box>
+        )}
+      </div>
     </div>
   )
 }

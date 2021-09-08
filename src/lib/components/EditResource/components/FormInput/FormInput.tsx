@@ -54,7 +54,7 @@ export const EmailInput: React.FC<BaseInputProps> = ({ formik, ...props }) => {
     <TextField
       variant="filled"
       fullWidth
-      type="number"
+      type="email"
       onBlur={formik.handleBlur}
       value={formik.values[props.id]}
       onChange={formik.handleChange}
@@ -159,12 +159,12 @@ export const ImageInput: React.FunctionComponent<BaseInputProps> = ({ formik, ..
           {props.label}
         </Typography>
         <Box sx={{ display: 'flex', margin: '1.5rem 0', width: '100%' }}>
-          {!preview.length && (
+          {!preview?.length && (
             <Typography variant="body1" gutterBottom>
               No Image
             </Typography>
           )}
-          {preview.map((image, index) => (
+          {preview?.map((image, index) => (
             <img
               onClick={() =>
                 setSelectedFiles((prev) => prev?.filter((_, i) => i !== index) || null)

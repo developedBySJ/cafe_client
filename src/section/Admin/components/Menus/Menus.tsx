@@ -18,6 +18,7 @@ export const Menus = () => {
       totalCount={data?.data.totalCount}
       isLoading={isLoading}
       label="Menus"
+      createLink="/admin/menus/create"
     />
   )
 }

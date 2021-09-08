@@ -5,13 +5,16 @@ export const columns: ResourceTableColumn[] = [
     type: 'link',
     field: 'id',
     header: 'ID',
-    prefix: '/dishes',
+    prefix: '/admin/menu-items',
+    suffix: 'edit'
   },
   {
-    type: 'string',
+    type: 'link',
     field: 'title',
     header: 'Title',
     width: 200,
+    prefix: '/dishes',
+    linkField: 'id'
   },
   {
     type: 'string',

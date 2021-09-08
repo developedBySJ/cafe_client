@@ -118,6 +118,7 @@ const Cart: PrivateRouteComponent = ({ viewer, setViewer }) => {
               color="primary"
               size="large"
               onClick={() => history.push('/checkout')}
+              disabled={isFetching || !data?.totalCount}
             >
               Checkout
             </Button>

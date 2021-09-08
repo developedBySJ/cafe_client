@@ -15,6 +15,7 @@ import { Admin } from '../section/Admin'
 import { Profile } from '../section/Profile'
 import { Reviews } from '../section/Reviews'
 import { Search } from '../section/Search'
+import { PaymentPage } from '../section/Payment'
 
 interface RoutesProps extends RouteProps {
   isPrivate?: false
@@ -39,6 +40,7 @@ export const ROUTES: Routes[] = [
   { path: '/reset-password/:token', exact: true, component: ResetPassword },
   { path: '/checkout', exact: true, component: Checkout, isPrivate: true },
   { path: '/logout', exact: true, component: Logout, isPrivate: true },
+  { path: '/payments', exact: true, component: PaymentPage, isPrivate: true },
   /* DISHES */
   { path: '/dishes', component: MenuItemsList, exact: true },
   { path: '/dishes/new', component: RouteNotImplemented, exact: true, isPrivate: true },

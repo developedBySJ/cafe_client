@@ -1,4 +1,4 @@
-import { Box, Button, useTheme } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import React from 'react'
 import { useQuery } from 'react-query'
 import { useParams } from 'react-router'
@@ -9,8 +9,6 @@ import { ResourceFactory } from '../../../../lib/components/EditResource'
 export const InventoryEdit = () => {
   const { id } = useParams<{ id: string }>()
   const { data, isLoading } = useQuery(['getInventoryDetails'], () => GET_INVENTORY_DETAILS(id))
-
-  const theme = useTheme()
 
   if (isLoading) {
     return (
@@ -37,16 +35,7 @@ export const InventoryEdit = () => {
           { id: 'unit', label: 'Default Unit', type: 'text' },
         ]}
         initialValues={data?.data || {}}
-      >
-        <Box sx={{ ml: '0.5rem', display: 'flex' }}>
-          <Button variant="contained" style={{ marginRight: '0.5rem' }} size="small">
-            Update Stock
-          </Button>
-          <Button variant="contained" color="primary" size="small">
-            Delete
-          </Button>
-        </Box>
-      </ResourceFactory>
+      />
     </div>
   )
 }

@@ -106,8 +106,8 @@ export const Navbar: React.FC<NavbarProps> = ({ viewer }) => {
             </Box>
             <Box className={classes.hiddenSm} display="flex" alignItems="center">
               <Typography color="textPrimary">
-                <Link to="/" className={classes.navLink}>
-                  Home
+                <Link to="/search" className={classes.navLink}>
+                  Search
                 </Link>
               </Typography>
               <Typography color="textPrimary">

@@ -11,7 +11,7 @@ import {
 import { Box, Container, Grid, Typography } from '@material-ui/core'
 import { useState } from 'react'
 import { Printer } from 'react-feather'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { useParams } from 'react-router-dom'
 import { PrivateRouteComponent } from '../../lib'
 import { UPDATE_ORDER } from '../../lib/api/Mutation/updateOrder'
@@ -44,10 +44,13 @@ export const Invoice: PrivateRouteComponent = ({ viewer }) => {
   const classes = useStyle()
   const notifySuccess = useOnSuccessNotify()
   const notifyError = useOnErrorNotify()
-
-  const { data } = useQuery(['getOrderDetails', orderId], () => GET_ORDER_DETAIL(orderId))
-  const { mutate } = useMutation(UPDATE_ORDER, {
-    onSuccess: () => notifySuccess('Order status updated successfully'),
+  const queryClient = useQueryClient()
+  const { data, refetch } = useQuery(['getOrderDetails', orderId], () => GET_ORDER_DETAIL(orderId))
+  const { mutate, isLoading } = useMutation(UPDATE_ORDER, {
+    onSuccess: () => {
+      notifySuccess('Order status updated successfully')
+      queryClient.invalidateQueries('getUserOrder')
+    },
     onError: notifyError,
   })
 
@@ -75,7 +78,7 @@ export const Invoice: PrivateRouteComponent = ({ viewer }) => {
       <Container maxWidth="md">
         {/* ACTIONS */}
         <Box sx={{ display: 'flex', alignItems: 'center', mt: '2rem' }}>
-          {status < OrderStatus.Delivered ? (
+          {(orderDetails?.status || 0) < OrderStatus.Delivered ? (
             <>
               {([UserRole.Admin, UserRole.Manager] as any[]).includes(viewer?.role) && (
                 <>
@@ -83,7 +86,7 @@ export const Invoice: PrivateRouteComponent = ({ viewer }) => {
                     <FormControl
                       fullWidth
                       variant="filled"
-                      disabled={status >= OrderStatus.Delivered}
+                      disabled={(orderDetails?.status || 0) > OrderStatus.Delivered}
                     >
                       <InputLabel>Order Status</InputLabel>
                       <Select
@@ -108,7 +111,7 @@ export const Invoice: PrivateRouteComponent = ({ viewer }) => {
                     size="large"
                     variant="contained"
                     color="primary"
-                    disabled={status >= OrderStatus.Delivered}
+                    disabled={isLoading || (orderDetails?.status || 0) > OrderStatus.Delivered}
                     onClick={() =>
                       mutate({
                         id: orderDetails?.id || '',
@@ -116,7 +119,7 @@ export const Invoice: PrivateRouteComponent = ({ viewer }) => {
                       })
                     }
                   >
-                    Update
+                    {isLoading ? 'Updating...' : 'Update'}
                   </Button>
                 </>
               )}

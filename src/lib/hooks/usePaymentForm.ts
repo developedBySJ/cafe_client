@@ -1,5 +1,5 @@
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
-import { FormEvent } from 'react'
+import { FormEvent, useState } from 'react'
 import { useMutation, useQuery } from 'react-query'
 import { CREATE_CHARGE } from '../api/Mutation/createCharge'
 
@@ -14,10 +14,12 @@ export function usePaymentForm(
 ) {
   const stripe = useStripe()
   const elements = useElements()
+  const [isLoading, setIsLoading] = useState(false)
   const pay = useMutation('createCharge', CREATE_CHARGE, {
     onSuccess,
     onError,
   })
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
 
@@ -28,11 +30,19 @@ export function usePaymentForm(
     if (!stripe || !elements || !cardElement) {
       return
     }
-
+    setIsLoading(true)
     const stripeResponse = await stripe.createPaymentMethod({
       type: 'card',
       card: cardElement,
+    }).then(d => {
+      setIsLoading(false)
+      return d
+    }).catch(e => {
+      setIsLoading(false)
+
+      return e
     })
+
 
     const { error, paymentMethod } = stripeResponse
 
@@ -47,5 +57,6 @@ export function usePaymentForm(
   return {
     handleSubmit,
     data: pay,
+    loading: pay.isLoading || isLoading,
   }
 }

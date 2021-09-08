@@ -1,7 +1,7 @@
-import { Container, Step, StepLabel, Stepper } from '@material-ui/core'
+import { Box, Container, Step, StepLabel, Stepper } from '@material-ui/core'
 import React from 'react'
 import { Redirect } from 'react-router-dom'
-import { PrivateRouteComponent } from '../../lib'
+import { PrivateRouteComponent, Spinner } from '../../lib'
 import { Address } from './components'
 import { Payment } from './components/Payment'
 import { Elements } from '@stripe/react-stripe-js'
@@ -10,8 +10,7 @@ import { useMutation } from 'react-query'
 import { CREATE_ORDER } from '../../lib/api/Mutation/createOrder'
 import { useOnErrorNotify, useOnSuccessNotify } from '../../lib/hooks'
 import { OrderStatus } from '../../lib/api/types/order.type'
-
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || '')
+import { stripePromise } from '../../App'
 
 const steps = ['Summery', 'Address', 'Payment']
 
@@ -40,14 +39,24 @@ export const Checkout: PrivateRouteComponent = ({ viewer }) => {
           <Address
             initialValues={{ address: viewer.address || '', notes: '' }}
             onSubmit={({ address, notes }) => {
-              createOrder.mutate({
-                address,
-                total: viewer.total as number,
-                status: OrderStatus.Placed,
-              })
+              createOrder.mutate(
+                {
+                  address,
+                  total: viewer.total as number,
+                  status: OrderStatus.Placed,
+                },
+                {
+                  onSuccess: () => notifySuccess('Order Placed Successfully'),
+                },
+              )
               setActiveStep(2)
             }}
           />
+        )}
+        {activeStep === 2 && createOrder.isLoading && (
+          <Box height="80vh">
+            <Spinner fullWidth />
+          </Box>
         )}
         {activeStep === 2 && orderId && (
           <Payment
@@ -55,7 +64,7 @@ export const Checkout: PrivateRouteComponent = ({ viewer }) => {
             orderId={orderId}
             onSuccess={() => {
               setActiveStep(3)
-              notifySuccess('Order placed successfully')
+              notifySuccess('Payment successful!')
             }}
           />
         )}

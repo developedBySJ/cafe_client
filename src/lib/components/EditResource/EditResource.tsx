@@ -56,6 +56,7 @@ export const ResourceFactory: React.FC<EditResourceProps> = ({
   title,
   id,
   onSubmit: onFormSubmit,
+  children,
 }) => {
   const classes = useStyles()
 
@@ -68,7 +69,17 @@ export const ResourceFactory: React.FC<EditResourceProps> = ({
 
   return (
     <Box>
-      <Typography variant="h5">{title}</Typography>
+      <Box
+        sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Typography variant="h5">{title}</Typography>
+        {children}
+      </Box>
       {id && (
         <Typography variant="h6" gutterBottom color="textSecondary">
           #{id}

@@ -9,9 +9,11 @@ export const columns: ResourceTableColumn[] = [
     suffix: 'edit',
   },
   {
-    type: 'string',
-    header: 'name',
+    type: 'link',
+    header: 'Name',
     field: 'name',
+    prefix: '/menus',
+    linkField: 'id',
   },
   {
     type: 'boolean',

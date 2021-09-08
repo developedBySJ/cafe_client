@@ -203,8 +203,9 @@ export const SignUp: React.FC<SignUpProps> = ({ setViewer }) => {
             fullWidth
             type="submit"
             className={marginTop}
+            disabled={isLoading}
           >
-            Sign Up
+            {isLoading ? 'Loading' : 'Sign Up'}
           </Button>
           <Typography color="textSecondary" className={marginTop} align="center">
             Already Have Account ? <Link to="/login">Login</Link>

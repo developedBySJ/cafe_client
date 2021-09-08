@@ -4,7 +4,9 @@ import { Routes } from "../../../Router";
 import { Inventory, MenuItems, Menus, Orders, Payments, Reviews, Users } from '../components'
 import { InventoryCreate } from "../components/Inventory/InventoryCreate";
 import { InventoryEdit } from "../components/Inventory/InventoryEdit";
+import { MenuCreate } from "../components/Menus/MenuCreate";
 import { MenuEdit } from "../components/Menus/MenuEdit";
+import { UserCreate } from "../components/Users/UserCreate";
 import { UsersEdit } from "../components/Users/UserEdit";
 
 export const viewDataRoutes: Routes[] = [
@@ -28,11 +30,11 @@ export const editDataRoutes: Routes[] = [
 ]
 
 export const createDataRoutes: Routes[] = [
-  { path: `/admin/${Resources.Users}/create`, component: UsersEdit, isPrivate: true, exact: true, sensitive: false, },
+  { path: `/admin/${Resources.Users}/create`, component: UserCreate, isPrivate: true, exact: true, sensitive: false, },
   { path: `/admin/${Resources.Inventory}/create`, component: InventoryCreate, isPrivate: true, exact: true, sensitive: false, },
   { path: `/admin/${Resources.Orders}/create`, component: Orders, isPrivate: true, exact: true, sensitive: false, },
   { path: `/admin/${Resources.MenuItems}/create`, component: MenuItems, isPrivate: true, exact: true, sensitive: false, },
-  { path: `/admin/${Resources.Menus}/create`, component: MenuEdit, isPrivate: true, exact: true, sensitive: false, },
+  { path: `/admin/${Resources.Menus}/create`, component: MenuCreate, isPrivate: true, exact: true, sensitive: false, },
   { path: `/admin/${Resources.Payments}/create`, component: Payments, isPrivate: true, exact: true, sensitive: false, },
   { path: `/admin/${Resources.Reviews}/create`, component: Reviews, isPrivate: true, exact: true, sensitive: false, },
 ]

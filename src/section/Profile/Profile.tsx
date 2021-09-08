@@ -1,7 +1,7 @@
 import { Container, Grid, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 import { PrivateRouteComponent } from '../../lib'
 import { makeStyles } from '@material-ui/core'
-import { User, Heart, Package, Star } from 'react-feather'
+import { User, Heart, Package, Star, LogOut } from 'react-feather'
 import { Link, useLocation } from 'react-router-dom'
 import { Orders } from '../Orders'
 
@@ -37,6 +37,11 @@ const sideBarConfig = [
     name: 'Orders',
     icon: Package,
     path: '/orders',
+  },
+  {
+    name: 'Log Out',
+    icon: LogOut,
+    path: '/logout',
   },
 ]
 

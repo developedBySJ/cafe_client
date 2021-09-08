@@ -16,8 +16,11 @@ import MomentUtils from '@date-io/moment'
 import 'swiper/swiper-bundle.css'
 import { ScrollToTop } from './lib/components/ScrollTop'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
+import { loadStripe } from '@stripe/stripe-js'
 
 SwiperCore.use([Thumbs, Navigation, Pagination, Scrollbar, A11y])
+
+export const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || '')
 
 const useStyle = makeStyles((theme) => ({
   container: { padding: 0 },

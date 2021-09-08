@@ -5,7 +5,8 @@ import { PrivateRouteComponent, Spinner } from '../../lib'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import { AspectRatioBox } from '../../lib/components/AspectRatioBox'
-import { OrderStatus } from '../../lib/api/types/order.type'
+import { OrderSortBy, OrderStatus } from '../../lib/api/types/order.type'
+import { Sort } from '../../lib/types'
 
 const useStyle = makeStyles((theme) => ({
   orderHead: {
@@ -46,7 +47,9 @@ const useStyle = makeStyles((theme) => ({
 }))
 
 export const Orders: PrivateRouteComponent = () => {
-  const { data, isLoading } = useQuery(['getUserOrder'], () => GET_USER_ORDER({}))
+  const { data, isLoading } = useQuery(['getUserOrder'], () =>
+    GET_USER_ORDER({ sort: Sort.DESC, sortBy: OrderSortBy.CreatedAt }),
+  )
   const classes = useStyle()
   if (isLoading || !data) {
     return (

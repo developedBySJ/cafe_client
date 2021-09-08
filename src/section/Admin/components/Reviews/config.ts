@@ -5,7 +5,7 @@ export const columns: ResourceTableColumn[] = [
     type: 'link',
     field: "id",
     header: "ID",
-    prefix: "/reviews"
+    prefix: "/admin/reviews"
   },
 
   {
