@@ -1,8 +1,9 @@
+import { IMenuItem } from './menuItem.type';
 import { IUser } from './user.type'
 
 export interface IReview {
   id: string
-  menuItem: string
+  menuItem: IMenuItem
   title: string
   comment: string
   image?: string
