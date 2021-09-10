@@ -7,11 +7,14 @@ import { columns } from './config'
 
 export const Menus = () => {
   const { query, handlePageChange, handleSortChange } = useHandleQueryChange()
-  const { data, isLoading } = useQuery(['getAllMenus', query], (q) => GET_MENUS(q.queryKey[1]))
+  const { data, isLoading, refetch } = useQuery(['getAllMenus', query], (q) =>
+    GET_MENUS(q.queryKey[1]),
+  )
 
   return (
     <ResourceTable
       columns={columns}
+      refetch={refetch}
       data={data?.data.result || []}
       onPageChange={handlePageChange}
       onSortChange={handleSortChange}

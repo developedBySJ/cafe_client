@@ -168,6 +168,7 @@ export const Admin: PrivateRouteComponent = (parentProps) => {
               />
             )
           })}
+          <Redirect to="/dashboard" />
         </Switch>
       </main>
     </div>

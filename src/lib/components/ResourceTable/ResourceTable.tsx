@@ -72,8 +72,8 @@ const getColumns = (columns: ResourceTableColumn[]): GridColDef[] => {
         }
         if (type === 'money') {
           // @ts-ignore
-          const { precision, prefix } = column
-          return `${prefix || ''}${Number(params.value).toFixed(precision || 0)}`
+          const { precision, prefix, multiplier = 1 } = column
+          return `${prefix || ''}${(Number(params.value) * multiplier).toFixed(precision || 0)}`
         }
         if (type === 'string') {
           return value || '---'

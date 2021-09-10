@@ -1,6 +1,7 @@
 import { Box, Button, makeStyles, Typography } from '@material-ui/core'
 import { useFormik } from 'formik'
 import React from 'react'
+import { AssetType } from '../../types'
 import {
   BooleanInput,
   EmailInput,
@@ -12,6 +13,7 @@ import {
   TextInput,
   ArrayInput,
   DateInput,
+  PasswordInput,
 } from './components'
 
 const useStyles = makeStyles((theme) => ({
@@ -24,6 +26,7 @@ const componentMap = {
   text: TextInput,
   number: NumberInput,
   email: EmailInput,
+  password: PasswordInput,
   longText: TextAreaInput,
   boolean: BooleanInput,
   image: ImageInput,
@@ -40,6 +43,8 @@ interface EditResourceConfig {
   id: string
   disabled?: boolean
   options?: { label: string; value: string }[]
+  multiImage?: boolean
+  imageType?: AssetType
 }
 
 interface EditResourceProps {
@@ -48,6 +53,7 @@ interface EditResourceProps {
   id?: string
   initialValues: { [key: string]: any }
   onSubmit?: (values: { [key: string]: any }) => void
+  disabled?: boolean
 }
 
 export const ResourceFactory: React.FC<EditResourceProps> = ({
@@ -57,11 +63,13 @@ export const ResourceFactory: React.FC<EditResourceProps> = ({
   id,
   onSubmit: onFormSubmit,
   children,
+  disabled = false,
 }) => {
   const classes = useStyles()
 
   const formik = useFormik({
     initialValues,
+    enableReinitialize: true,
     onSubmit: (values) => {
       onFormSubmit && onFormSubmit(values)
     },
@@ -96,6 +104,7 @@ export const ResourceFactory: React.FC<EditResourceProps> = ({
           type="submit"
           className={classes.input}
           size="large"
+          disabled={disabled}
         >
           Submit
         </Button>

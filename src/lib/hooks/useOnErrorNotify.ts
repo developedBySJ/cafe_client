@@ -39,6 +39,16 @@ const useOnErrorNotify = () => {
     if (statusCode === 401) {
       history.push('/login')
     }
+    if (statusCode === 403) {
+      enqueueSnackbar("You don't have enough permissions", {
+        variant: 'error',
+        anchorOrigin: {
+          vertical: 'top',
+          horizontal: 'right',
+        },
+      })
+
+    }
   }
   return notify
 }

@@ -6,7 +6,7 @@ import { columns } from './config'
 
 export const MenuItems = () => {
   const { query, handlePageChange, handleSortChange } = useHandleQueryChange()
-  const { data, isLoading } = useQuery(
+  const { data, isLoading, refetch } = useQuery(
     ['getAllMenuItems', query],
     (q) => GET_MENU_ITEMS(q.queryKey[1]),
     {},
@@ -15,6 +15,7 @@ export const MenuItems = () => {
   return (
     <ResourceTable
       columns={columns}
+      refetch={refetch}
       onPageChange={handlePageChange}
       onSortChange={handleSortChange}
       totalCount={data?.data.totalCount}

@@ -49,6 +49,7 @@ export interface ResourceMoneyOption extends BaseResourceOption {
   type: 'money'
   precision?: number
   prefix?: string
+  multiplier?: number
 }
 
 export type ResourceTableColumn =

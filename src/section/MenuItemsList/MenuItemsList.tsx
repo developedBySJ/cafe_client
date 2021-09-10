@@ -262,11 +262,19 @@ const MenuItemsList = () => {
 
             <Grid container spacing={2}>
               {data.pages.map((page) =>
-                page.data.result.map((menuItem) => (
-                  <Grid item xs={12} sm={6} lg={4} key={menuItem.id}>
-                    <MenuItemCard menuItem={menuItem} />
+                page.data.result.length ? (
+                  page.data.result.map((menuItem) => (
+                    <Grid item xs={12} sm={6} lg={4} key={menuItem.id}>
+                      <MenuItemCard menuItem={menuItem} />
+                    </Grid>
+                  ))
+                ) : (
+                  <Grid item xs={12}>
+                    <Box textAlign="center" marginTop="2rem">
+                      <Typography variant="h5">No Dish Found</Typography>
+                    </Box>
                   </Grid>
-                )),
+                ),
               )}
             </Grid>
             <Box margin="2rem 0">

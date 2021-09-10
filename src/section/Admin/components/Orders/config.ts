@@ -13,7 +13,8 @@ export const columns: ResourceTableColumn[] = [
     type: 'link',
     field: 'user',
     header: 'Customer',
-    prefix: '/users',
+    prefix: '/admin/users',
+    suffix: 'edit'
   },
   {
     type: 'money',

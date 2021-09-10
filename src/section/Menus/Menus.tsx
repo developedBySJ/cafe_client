@@ -31,9 +31,13 @@ const useStyles = makeStyles((theme) => ({
 export const Menus = () => {
   const classes = useStyles()
   const onErrorNotify = useOnErrorNotify()
-  const { data, isLoading, isError } = useQuery(['getMenus'], () => GET_MENUS('?limit=50'), {
-    onError: onErrorNotify,
-  })
+  const { data, isLoading, isError } = useQuery(
+    ['getMenus'],
+    () => GET_MENUS('?limit=50&isActive=true'),
+    {
+      onError: onErrorNotify,
+    },
+  )
 
   if (isLoading) {
     return <MenusSkeleton />

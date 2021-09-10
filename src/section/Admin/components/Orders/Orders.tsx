@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { GET_ALL_ORDER } from '../../../../lib/api/query/allOrders'
 import { ResourceTable } from '../../../../lib/components/ResourceTable'
@@ -7,10 +6,13 @@ import { columns } from './config'
 
 export const Orders = () => {
   const { query, handlePageChange, handleSortChange } = useHandleQueryChange()
-  const { data, isLoading } = useQuery(['getAllOrders', query], (q) => GET_ALL_ORDER(q.queryKey[1]))
+  const { data, isLoading, refetch } = useQuery(['getAllOrders', query], (q) =>
+    GET_ALL_ORDER(q.queryKey[1]),
+  )
 
   return (
     <ResourceTable
+      refetch={refetch}
       columns={columns}
       data={data?.data.result || []}
       onPageChange={handlePageChange}

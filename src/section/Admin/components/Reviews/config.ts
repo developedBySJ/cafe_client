@@ -5,7 +5,8 @@ export const columns: ResourceTableColumn[] = [
     type: 'link',
     field: "id",
     header: "ID",
-    prefix: "/admin/reviews"
+    prefix: "/admin/reviews",
+    suffix: "edit"
   },
 
   {
@@ -36,7 +37,8 @@ export const columns: ResourceTableColumn[] = [
     field: "createdBy.firstName",
     linkField: "createdBy.id",
     header: "Created By",
-    prefix: '/users'
+    prefix: '/admin/users',
+    suffix: "edit"
   },
   {
     type: 'date',

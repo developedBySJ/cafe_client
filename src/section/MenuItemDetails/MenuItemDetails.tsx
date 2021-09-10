@@ -290,7 +290,7 @@ export const MenuItemDetails = () => {
                   <Typography variant="body1">Rated {ratings} out of 5</Typography>
                 </div>
                 <div>
-                  <Link to={`${id}/reviews/new`} className={classes.link}>
+                  <Link to={`reviews/new`} className={classes.link}>
                     Write a review
                   </Link>
                 </div>

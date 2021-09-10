@@ -1,14 +1,35 @@
 import { Box } from '@material-ui/core'
 import React from 'react'
-import { useQuery } from 'react-query'
+import { useMutation, useQuery } from 'react-query'
 import { useParams } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import { Spinner } from '../../../../lib'
+import { DELETE_MENU_ITEM } from '../../../../lib/api/Mutation/deleteMenuItem'
 import { GET_INVENTORY_DETAILS } from '../../../../lib/api/query/inventoryDetails'
 import { ResourceFactory } from '../../../../lib/components/EditResource'
+import { useOnErrorNotify, useOnSuccessNotify } from '../../../../lib/hooks'
 
 export const MenuItemEdit = () => {
   const { id } = useParams<{ id: string }>()
   const { data, isLoading } = useQuery(['getInventoryDetails'], () => GET_INVENTORY_DETAILS(id))
+
+  const notifyError = useOnErrorNotify()
+  const notifySuccess = useOnSuccessNotify()
+
+  const history = useHistory()
+
+  const deleteMenuItem = useMutation(DELETE_MENU_ITEM, {
+    onSuccess: () => {
+      notifySuccess('Menu Item deleted')
+      return history.push('/admin/menu-items')
+    },
+    onError: notifyError,
+  })
+
+  const handleDelete = () => {
+    alert('Are you sure you want to delete this menu-item?')
+    deleteMenuItem.mutate(id)
+  }
 
   if (isLoading) {
     return (

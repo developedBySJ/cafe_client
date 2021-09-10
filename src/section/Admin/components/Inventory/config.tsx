@@ -16,6 +16,18 @@ export const columns: ResourceTableColumn[] = [
     width: 200,
   },
   {
+    type: 'number',
+    field: 'availableStock',
+    header: 'Stock',
+    width: 200,
+  },
+  {
+    type: 'string',
+    field: 'unit',
+    header: 'Current Unit',
+    width: 200,
+  },
+  {
     type: 'array',
     field: 'tags',
     header: 'Tags',
@@ -37,13 +49,6 @@ export const columns: ResourceTableColumn[] = [
       </Typography>
     ),
   },
-  {
-    type: 'string',
-    field: 'unit',
-    header: 'Current Unit',
-    width: 200,
-  },
-
   {
     type: 'date',
     field: 'createdAt',

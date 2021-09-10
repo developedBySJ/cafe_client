@@ -3,9 +3,9 @@ import { Footer, Navbar } from './lib/components'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { PegasusUI } from './Theme'
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
-import { SnackbarProvider } from 'notistack'
+import { SnackbarProvider, useSnackbar } from 'notistack'
 import { ERROR_MAIN, SUCCESS_MAIN, WARNING_MAIN } from './Theme/token'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { WHO_AM_I } from './lib/api/query'
 import { REFRESH_TOKEN } from './lib/api/query/refreshToken'
 import { Viewer } from './lib/types/viewer'
@@ -17,6 +17,7 @@ import 'swiper/swiper-bundle.css'
 import { ScrollToTop } from './lib/components/ScrollTop'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import { loadStripe } from '@stripe/stripe-js'
+import { useOnErrorNotify } from './lib/hooks'
 
 SwiperCore.use([Thumbs, Navigation, Pagination, Scrollbar, A11y])
 
@@ -33,7 +34,7 @@ const useStyle = makeStyles((theme) => ({
     },
   },
 }))
-const useSnackBarStyles = makeStyles(() => ({
+export const useSnackBarStyles = makeStyles(() => ({
   root: {
     margin: '0.25rem 0',
     '& *': {
@@ -73,7 +74,7 @@ export const App = () => {
     onSuccess: ({ data }) => setViewer({ ...data, didRequest: true }),
   })
   useQuery('refreshToken', REFRESH_TOKEN, {
-    refetchOnMount: false,
+    refetchIntervalInBackground: false,
     enabled: !!viewer?.id,
     refetchInterval: 850 * 1000,
   })
@@ -96,26 +97,27 @@ export const App = () => {
   )
 }
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
+const queryClient = (onError: (err: unknown) => void) =>
+  new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        onError,
+      },
     },
-  },
-})
+  })
 
 const AppWrapper = () => {
-  const classes = useSnackBarStyles()
+  const notifyError = useOnErrorNotify()
+  const queryClientRef = useRef(queryClient(notifyError))
   return (
-    <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClientRef.current}>
       <ThemeProvider theme={PegasusUI}>
         <CssBaseline />
         <BrowserRouter>
-          <SnackbarProvider autoHideDuration={3000} preventDuplicate classes={classes}>
-            <MuiPickersUtilsProvider utils={MomentUtils}>
-              <App />
-            </MuiPickersUtilsProvider>
-          </SnackbarProvider>
+          <MuiPickersUtilsProvider utils={MomentUtils}>
+            <App />
+          </MuiPickersUtilsProvider>
         </BrowserRouter>
       </ThemeProvider>
     </QueryClientProvider>

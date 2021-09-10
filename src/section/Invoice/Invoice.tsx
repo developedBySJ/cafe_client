@@ -12,7 +12,7 @@ import { Box, Container, Grid, Typography } from '@material-ui/core'
 import { useState } from 'react'
 import { Printer } from 'react-feather'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { PrivateRouteComponent } from '../../lib'
 import { UPDATE_ORDER } from '../../lib/api/Mutation/updateOrder'
 import { GET_ORDER_DETAIL } from '../../lib/api/query/orderDetail'
@@ -77,12 +77,12 @@ export const Invoice: PrivateRouteComponent = ({ viewer }) => {
       </Box>
       <Container maxWidth="md">
         {/* ACTIONS */}
-        <Box sx={{ display: 'flex', alignItems: 'center', mt: '2rem' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mt: '2rem', flexWrap: 'wrap' }}>
           {(orderDetails?.status || 0) < OrderStatus.Delivered ? (
             <>
               {([UserRole.Admin, UserRole.Manager] as any[]).includes(viewer?.role) && (
                 <>
-                  <Box sx={{ minWidth: 200, mr: '0.5rem', width: '100%' }}>
+                  <Box sx={{ minWidth: 200, mr: '0.5rem', width: '70%', mb: '1rem' }}>
                     <FormControl
                       fullWidth
                       variant="filled"
@@ -111,6 +111,8 @@ export const Invoice: PrivateRouteComponent = ({ viewer }) => {
                     size="large"
                     variant="contained"
                     color="primary"
+                    fullWidth
+                    style={{ minWidth: 100, width: '24%', marginBottom: '1rem' }}
                     disabled={isLoading || (orderDetails?.status || 0) > OrderStatus.Delivered}
                     onClick={() =>
                       mutate({
@@ -121,6 +123,18 @@ export const Invoice: PrivateRouteComponent = ({ viewer }) => {
                   >
                     {isLoading ? 'Updating...' : 'Update'}
                   </Button>
+                  {!orderDetails?.payment && (
+                    <Link to={`/admin/payments/create?order=${orderId}`}>
+                      <Button
+                        size="large"
+                        variant="outlined"
+                        style={{ minWidth: 100, marginBottom: '1rem' }}
+                        disabled={isLoading || (orderDetails?.status || 0) > OrderStatus.Delivered}
+                      >
+                        Create Cash Payment
+                      </Button>
+                    </Link>
+                  )}
                 </>
               )}
             </>

@@ -1,11 +1,21 @@
+import { SnackbarProvider } from 'notistack'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './App'
+import App, { useSnackBarStyles } from './App'
 import reportWebVitals from './reportWebVitals'
+
+const AppWithSnackbar = () => {
+  const classes = useSnackBarStyles()
+  return (
+    <SnackbarProvider autoHideDuration={3000} preventDuplicate classes={classes}>
+      <App />
+    </SnackbarProvider>
+  )
+}
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <AppWithSnackbar />
   </React.StrictMode>,
   document.getElementById('root'),
 )

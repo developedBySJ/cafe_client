@@ -4,22 +4,21 @@ import {
   TextField,
   Box,
   Button,
-  IconButton,
-  Tooltip,
   Typography,
   Chip,
   FormControl,
-  Input,
   InputLabel,
   MenuItem,
   Select,
-  InputBase,
 } from '@material-ui/core'
 import { DatePicker } from '@material-ui/pickers'
 import { useFormik } from 'formik'
-import moment from 'moment'
 
 import React, { useEffect, useRef, useState } from 'react'
+import { useMutation } from 'react-query'
+import { CREATE_ASSET, CREATE_ASSETS } from '../../../../api/Mutation/createAssets'
+import { useOnErrorNotify, useOnSuccessNotify } from '../../../../hooks'
+import { AssetType } from '../../../../types'
 
 type Formik = ReturnType<typeof useFormik>
 
@@ -30,6 +29,10 @@ interface BaseInputProps {
   required?: boolean
   className?: string
   disabled?: boolean
+  multiImage?: boolean
+  imageType?: AssetType
+  min?: number
+  max?: number
   options?: { label: string; value: string }[]
 }
 
@@ -71,6 +74,23 @@ export const NumberInput: React.FC<BaseInputProps> = ({ formik, ...props }) => {
       variant="filled"
       fullWidth
       type="number"
+      inputProps={{ min: props.min, max: props.max }}
+      onBlur={formik.handleBlur}
+      value={formik.values[props.id]}
+      onChange={formik.handleChange}
+      error={formik.touched[props.id] && !!formik.errors[props.id]}
+      helperText={formik.touched[props.id] && formik.errors[props.id]}
+      {...props}
+    />
+  )
+}
+export const PasswordInput: React.FC<BaseInputProps> = ({ formik, ...props }) => {
+  return (
+    <TextField
+      variant="filled"
+      fullWidth
+      type="password"
+      inputProps={{ min: props.min, max: props.max }}
       onBlur={formik.handleBlur}
       value={formik.values[props.id]}
       onChange={formik.handleChange}
@@ -101,18 +121,20 @@ export const TextAreaInput: React.FC<BaseInputProps> = ({ formik, ...props }) =>
 
 export const BooleanInput: React.FC<BaseInputProps> = ({ formik, ...props }) => {
   return (
-    <FormControlLabel
-      labelPlacement="start"
-      control={
-        <Switch
-          checked={!!formik.values[props.id]}
-          onChange={formik.handleChange}
-          name={props.id}
-          color="primary"
-        />
-      }
-      {...props}
-    />
+    <Box>
+      <FormControlLabel
+        labelPlacement="start"
+        control={
+          <Switch
+            checked={!!formik.values[props.id]}
+            onChange={formik.handleChange}
+            name={props.id}
+            color="primary"
+          />
+        }
+        {...props}
+      />
+    </Box>
   )
 }
 
@@ -127,15 +149,50 @@ const toBase64 = (file: File) =>
 
 export const ImageInput: React.FunctionComponent<BaseInputProps> = ({ formik, ...props }) => {
   const [selectedFiles, setSelectedFiles] = React.useState<File[] | null>(null)
-  const [preview, setPreview] = useState<string[]>(formik.values[props.id] || [])
+  const initialValues = props.multiImage
+    ? formik.values[props.id]
+    : formik.values[props.id]
+    ? [formik.values[props.id]]
+    : []
+  const [preview, setPreview] = useState<string[]>(initialValues)
+  const formRef = useRef<HTMLFormElement>(null)
+  const asset = useMutation(CREATE_ASSET)
+  const assets = useMutation(CREATE_ASSETS)
+
+  const notifySuccess = useOnSuccessNotify()
+  const notifyError = useOnErrorNotify()
 
   const handleCapture = ({ target }: any) => {
     setSelectedFiles(Array.from(target.files))
-    console.log(target.files)
   }
 
   const handleSubmit = () => {
-    console.log(selectedFiles)
+    if (!selectedFiles?.length || !formRef.current) return
+
+    const data = new FormData(formRef.current)
+
+    if (selectedFiles?.length === 1) {
+      asset.mutate(data, {
+        onSuccess: (data) => {
+          notifySuccess('File Uploaded')
+          setSelectedFiles(null)
+          formik.setFieldValue(props.id, data.data.url)
+        },
+        onError: notifyError,
+      })
+    } else {
+      assets.mutate(data, {
+        onSuccess: (data) => {
+          notifySuccess('Files Uploaded!')
+          setSelectedFiles(null)
+          formik.setFieldValue(
+            props.id,
+            data.data.map((i) => i.url),
+          )
+        },
+        onError: notifyError,
+      })
+    }
   }
 
   useEffect(() => {
@@ -187,30 +244,34 @@ export const ImageInput: React.FunctionComponent<BaseInputProps> = ({ formik, ..
     )
   }
 
+  const isLoading = asset.isLoading || assets.isLoading
+  const inputId = props.multiImage ? 'files' : 'file'
+
   return (
     <Box>
       <Typography variant="h6" gutterBottom>
         {props.label}
       </Typography>
-      <form encType="multipart/form-data">
-        <label htmlFor="avatar">
+      <form encType="multipart/form-data" ref={formRef}>
+        <label htmlFor={inputId}>
           <Button component="span" size="small" variant="contained">
             Add Images
           </Button>
+
           <input
-            id="avatar"
-            name={'avatar'}
+            id={inputId}
+            name={inputId}
             type={'file'}
             placeholder="Choose Image"
             onChange={handleCapture}
             accept="image/png, image/jpeg"
-            multiple={true}
+            multiple={!!props.multiImage}
             min={1}
             max={5}
             hidden
           />
         </label>
-
+        <input value={props.imageType} id="type" name="type" hidden />
         <Box sx={{ display: 'flex', margin: '1.5rem 0', width: '100%' }}>
           {preview.map((image, index) => (
             <img
@@ -231,8 +292,13 @@ export const ImageInput: React.FunctionComponent<BaseInputProps> = ({ formik, ..
             />
           ))}
         </Box>
-        <Button variant="contained" type="submit" color="primary" disabled={!selectedFiles?.length}>
-          Upload
+        <Button
+          variant="contained"
+          color="primary"
+          disabled={!selectedFiles?.length || isLoading}
+          onClick={handleSubmit}
+        >
+          {isLoading ? 'Uploading...' : 'Upload'}
         </Button>
       </form>
     </Box>
@@ -241,7 +307,7 @@ export const ImageInput: React.FunctionComponent<BaseInputProps> = ({ formik, ..
 
 export const MultiSelectInput: React.FC<BaseInputProps> = ({ formik, options, ...props }) => {
   return (
-    <FormControl fullWidth variant="filled" className={props.className}>
+    <FormControl fullWidth variant="filled" className={props.className} {...props}>
       <InputLabel id={`${props.id}-label`}>{props.label}</InputLabel>
       <Select
         labelId={`${props.id}-label`}
@@ -270,7 +336,7 @@ export const MultiSelectInput: React.FC<BaseInputProps> = ({ formik, options, ..
 }
 export const SelectInput: React.FC<BaseInputProps> = ({ formik, options, ...props }) => {
   return (
-    <FormControl fullWidth variant="filled" className={props.className}>
+    <FormControl fullWidth variant="filled" className={props.className} {...props}>
       <InputLabel id={`${props.id}-label`}>{props.label}</InputLabel>
       <Select
         labelId={`${props.id}-label`}
@@ -317,6 +383,7 @@ export const ArrayInput: React.FC<BaseInputProps> = ({ formik, options, ...props
               key={i}
               label={data}
               color="primary"
+              disabled={props.disabled}
               onDelete={handleDelete(data)}
               style={{ marginRight: '0.5rem', marginBottom: '0.5rem' }}
             />
@@ -331,6 +398,7 @@ export const ArrayInput: React.FC<BaseInputProps> = ({ formik, options, ...props
           variant="filled"
           size="small"
           error={isInvalid}
+          disabled={props.disabled}
           helperText={isInvalid && 'Must have 3 characters'}
         />
         <Button
@@ -343,7 +411,7 @@ export const ArrayInput: React.FC<BaseInputProps> = ({ formik, options, ...props
               setValue(null)
             }
           }}
-          disabled={value === null || isInvalid}
+          disabled={value === null || isInvalid || props.disabled}
         >
           Add
         </Button>
