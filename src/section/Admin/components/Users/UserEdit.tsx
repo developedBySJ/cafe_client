@@ -33,8 +33,10 @@ export const UsersEdit: PrivateRouteComponent = ({ viewer }) => {
   })
 
   const handleDelete = () => {
-    alert('Are you sure you want to delete this user?')
-    deleteUser.mutate(id)
+    const result = window.confirm('Are you sure you want to delete this user?')
+    if (result) {
+      deleteUser.mutate(id)
+    }
   }
 
   const { data, isLoading } = useQuery(['getUserDetails', id], (page) =>

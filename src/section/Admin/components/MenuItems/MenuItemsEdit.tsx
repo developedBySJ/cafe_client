@@ -27,8 +27,10 @@ export const MenuItemEdit = () => {
   })
 
   const handleDelete = () => {
-    alert('Are you sure you want to delete this menu-item?')
-    deleteMenuItem.mutate(id)
+    const result = window.confirm('Are you sure you want to delete this menu-item?')
+    if (result) {
+      deleteMenuItem.mutate(id)
+    }
   }
 
   if (isLoading) {

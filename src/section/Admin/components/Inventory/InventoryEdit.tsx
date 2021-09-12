@@ -36,8 +36,10 @@ export const InventoryEdit = () => {
   })
 
   const handleDelete = () => {
-    alert('Are you sure you want to delete this inventory?')
-    deleteInventory.mutate(id)
+    const result = window.confirm('Are you sure you want to delete this inventory?')
+    if (result) {
+      deleteInventory.mutate(id)
+    }
   }
 
   const { data, isLoading, refetch } = useQuery(
