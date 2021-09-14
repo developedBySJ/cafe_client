@@ -109,6 +109,18 @@ export const Orders: PrivateRouteComponent = () => {
                     <Typography variant="body1" gutterBottom>
                       Payment Status : &nbsp;
                       <Chip label={order.payment ? 'Paid' : 'Not Paid'} component="span" />
+                      {!order.payment && order.status < OrderStatus.Delivered && (
+                        <Link
+                          to={`/payments?order=${order.id}`}
+                          style={{
+                            textDecoration: 'none',
+                            marginLeft: '0.5rem',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          <Chip label="Pay Now" color="primary" />
+                        </Link>
+                      )}
                     </Typography>
                     <Typography variant="body1">
                       Order Status : &nbsp;
@@ -121,6 +133,8 @@ export const Orders: PrivateRouteComponent = () => {
                           ? `Delivered On ${moment(order.deliveredAt).format(
                               'DD MMM YYYY hh:mm:ss',
                             )}`
+                          : order.status === OrderStatus.Cancelled
+                          ? 'Order Cancelled'
                           : 'Order Will Deliver Soon'}
                       </Typography>
                     }

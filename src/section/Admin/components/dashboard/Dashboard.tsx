@@ -49,25 +49,25 @@ export const Dashboard = () => {
         <Grid item xs={12} sm={6} lg={3}>
           <Paper style={{ padding: '1.5rem' }}>
             <Typography variant="body1">Order Placed</Typography>
-            <Typography variant="h4">{orderOverview?.data.count.orderPlaced}</Typography>
+            <Typography variant="h4">{orderOverview?.data.count.orderPlaced || 0}</Typography>
           </Paper>
         </Grid>
         <Grid item xs={12} sm={6} lg={3}>
           <Paper style={{ padding: '1.5rem' }}>
             <Typography variant="body1">Order Pending</Typography>
-            <Typography variant="h4">{orderOverview?.data.count.orderPending}</Typography>
+            <Typography variant="h4">{orderOverview?.data.count.orderPending || 0}</Typography>
           </Paper>
         </Grid>
         <Grid item xs={12} sm={6} lg={3}>
           <Paper style={{ padding: '1.5rem' }}>
             <Typography variant="body1">Order Delivered</Typography>
-            <Typography variant="h4">{orderOverview?.data.count.orderDelivered}</Typography>
+            <Typography variant="h4">{orderOverview?.data.count.orderDelivered || 0}</Typography>
           </Paper>
         </Grid>
         <Grid item xs={12} sm={6} lg={3}>
           <Paper style={{ padding: '1.5rem' }}>
             <Typography variant="body1">Sale Last Month</Typography>
-            <Typography variant="h4">{paymentOverview?.data.count.totalPayment}</Typography>
+            <Typography variant="h4">{paymentOverview?.data.count.totalPayment || 0}</Typography>
           </Paper>
         </Grid>
       </Grid>

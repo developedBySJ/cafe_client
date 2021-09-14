@@ -1,6 +1,6 @@
 import { ThemeProvider, CssBaseline, Container, makeStyles } from '@material-ui/core'
 import { Footer, Navbar } from './lib/components'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { BrowserRouter, Route, Switch, useHistory } from 'react-router-dom'
 import { PegasusUI } from './Theme'
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
 import { SnackbarProvider, useSnackbar } from 'notistack'
@@ -18,6 +18,7 @@ import { ScrollToTop } from './lib/components/ScrollTop'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import { loadStripe } from '@stripe/stripe-js'
 import { useOnErrorNotify } from './lib/hooks'
+import { Alert } from '@material-ui/lab'
 
 SwiperCore.use([Thumbs, Navigation, Pagination, Scrollbar, A11y])
 
@@ -36,6 +37,7 @@ const useStyle = makeStyles((theme) => ({
 }))
 export const useSnackBarStyles = makeStyles(() => ({
   root: {
+    pointerEvents: 'all',
     margin: '0.25rem 0',
     '& *': {
       boxShadow: 'none !important',
@@ -67,19 +69,38 @@ export const App = () => {
   const { container, wrapper } = useStyle()
   const [viewer, setViewer] = useState(initialState)
   const [enabled, setEnabled] = useState(true)
-
+  const { enqueueSnackbar } = useSnackbar()
+  const history = useHistory()
   useQuery('whoAmI', WHO_AM_I, {
     refetchOnMount: false,
     enabled: enabled || !viewer.didRequest,
     onSuccess: ({ data }) => setViewer({ ...data, didRequest: true }),
   })
   useQuery('refreshToken', REFRESH_TOKEN, {
-    refetchIntervalInBackground: false,
+    refetchIntervalInBackground: true,
     enabled: !!viewer?.id,
     refetchInterval: 850 * 1000,
   })
 
   useEffect(() => {
+    enqueueSnackbar('', {
+      anchorOrigin: {
+        horizontal: 'center',
+        vertical: 'top',
+      },
+      onClick: () => window.open('https://github.com/developedBySJ', '_blank'),
+      content: () => {
+        return (
+          <Alert severity="info">
+            Build With ReactJS | NodeJS | TS By{' '}
+            <a href="https://github.com/developedBySJ" target="_blank">
+              {' '}
+              Swapnil J
+            </a>
+          </Alert>
+        )
+      },
+    })
     setEnabled(false)
   }, [])
 
