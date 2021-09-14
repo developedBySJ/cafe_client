@@ -172,7 +172,6 @@ export const MenuItemDetails = () => {
     ratings: fractionRating,
   } = data.data
   const ratings = fractionRating?.toFixed(1)
-  console.log({ data })
 
   const handleAddToCart = () => {
     addToCart({ menuItem: id, qty: 1 })

@@ -29,7 +29,7 @@ export const Search = () => {
   const query = new URLSearchParams(location.search)
   const history = useHistory()
   const searchTerm = query.get('search') || ''
-  console.log(searchTerm)
+  // console.log(searchTerm)
   const classes = useStyle()
   const notifyError = useOnErrorNotify()
 

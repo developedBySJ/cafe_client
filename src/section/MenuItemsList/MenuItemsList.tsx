@@ -90,7 +90,7 @@ const MenuItemsList = () => {
           ...Object.fromEntries(page),
           ...Object.fromEntries(filter),
         })
-        console.log(q.toString())
+        // console.log(q.toString())
 
         return GET_MENU_ITEMS('?' + q.toString())
       },

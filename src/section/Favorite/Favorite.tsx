@@ -13,7 +13,6 @@ export const Favorite: PrivateRouteComponent = () => {
     ['getFavorites', { limit: 50 } as FavoritesQuery],
     () => GET_FAVORITES({}),
     {
-      onSuccess: ({ data }) => console.log(data),
       onError: notifyError,
     },
   )

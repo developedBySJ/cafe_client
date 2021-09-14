@@ -1,8 +1,7 @@
-import { GridSortModel } from "@mui/x-data-grid"
-import { useState } from "react"
+import { GridSortModel } from '@mui/x-data-grid'
+import { useState } from 'react'
 
 export const useHandleQueryChange = (initialQuery: string = '?limit=25') => {
-
   const [query, setQuery] = useState(initialQuery)
 
   const newQuery = new URLSearchParams(query)
@@ -10,7 +9,7 @@ export const useHandleQueryChange = (initialQuery: string = '?limit=25') => {
   const handlePageChange = (page: number) => {
     newQuery.set('page', String(page))
     setQuery('?' + newQuery.toString())
-    console.log(newQuery.toString())
+    // console.log(newQuery.toString())
   }
 
   const handleSortChange = (model: GridSortModel) => {
@@ -29,15 +28,13 @@ export const useHandleQueryChange = (initialQuery: string = '?limit=25') => {
     }
 
     setQuery('?' + newQuery.toString())
-    console.log(newQuery.toString())
+    // console.log(newQuery.toString())
   }
 
   return {
-
     handlePageChange,
     handleSortChange,
     query,
-    setQuery
+    setQuery,
   }
 }
-

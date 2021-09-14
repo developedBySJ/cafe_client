@@ -1,6 +1,5 @@
 import React from 'react'
 
-
 interface UseIntersectionObserverArgs<T, K> {
   root?: React.MutableRefObject<K>
   target?: any
@@ -20,28 +19,25 @@ export const useIntersectionObserver: UseIntersectionObserver = ({
   threshold = 1.0,
   rootMargin = '100px',
   enabled = true,
-  update
+  update,
 }) => {
-
   React.useEffect(() => {
-    console.log({ enabled })
+    // console.log({ enabled })
     if (!enabled) {
       return
     }
 
     const observer = new IntersectionObserver(
-      entries =>
-        entries.forEach(entry => entry.isIntersecting && onIntersect()),
+      (entries) => entries.forEach((entry) => entry.isIntersecting && onIntersect()),
       {
         root: root && root.current,
         rootMargin,
         threshold,
-      }
+      },
     )
 
     const el = target && target.current
 
-    console.log("HERE", el, target);
     if (!el) {
       return
     }

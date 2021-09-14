@@ -92,9 +92,7 @@ export const Home = () => {
   const { data, isError, isLoading } = useQuery(
     ['getNewMenuItems', {} as MenuItemsQuery],
     () => GET_MENU_ITEMS('?sortBy=createdAt&sort=DESC'),
-    {
-      onSuccess: ({ data }) => console.log(data),
-    },
+    {},
   )
   return (
     <div className={classes.wrapper}>

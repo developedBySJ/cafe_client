@@ -199,12 +199,9 @@ export const ImageInput: React.FunctionComponent<BaseInputProps> = ({ formik, ..
     if (selectedFiles && selectedFiles.length) {
       ;(async () => {
         try {
-          console.log(selectedFiles)
           const data = (await Promise.all(selectedFiles.map((file) => toBase64(file)))) as string[]
           setPreview(data)
-        } catch (error) {
-          console.log(error)
-        }
+        } catch (error) {}
       })()
     }
   }, [selectedFiles])
@@ -433,7 +430,7 @@ export const DateInput: React.FC<BaseInputProps> = ({ formik, ...props }) => {
       disableFuture
       value={formik.values[props.id] || null}
       onChange={(date) => {
-        console.log(date?.toString())
+        // console.log(date?.toString())
         formik.setFieldValue(props.id, date?.toString())
       }}
     />

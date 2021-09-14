@@ -21,7 +21,7 @@ export const AppRouter: React.FC<AppRouterProps> = ({ viewer, setViewer }) => {
       </Box>
     )
   }
-  console.log(viewer)
+  // console.log(viewer)
   return (
     <Container maxWidth="xl" style={{ padding: 0, minHeight: '80vh' }}>
       <Switch>
