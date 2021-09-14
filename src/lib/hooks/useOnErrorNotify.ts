@@ -47,7 +47,6 @@ const useOnErrorNotify = () => {
           horizontal: 'right',
         },
       })
-
     }
   }
   return notify

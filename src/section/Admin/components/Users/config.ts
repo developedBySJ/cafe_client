@@ -1,5 +1,5 @@
-import { ResourceTableColumn } from "../../../../lib/components/ResourceTable/type";
-import { UserRole } from "../../../../lib/types";
+import { ResourceTableColumn } from '../../../../lib/components/ResourceTable/type'
+import { UserRole } from '../../../../lib/types'
 
 export const columns: ResourceTableColumn[] = [
   {
@@ -31,7 +31,6 @@ export const columns: ResourceTableColumn[] = [
     header: 'Role',
     field: 'role',
     sortable: true,
-
   },
   {
     type: 'string',
@@ -42,13 +41,13 @@ export const columns: ResourceTableColumn[] = [
     type: 'date',
     header: 'Birth Date',
     field: 'dateOfBirth',
-    sortable: true
+    sortable: true,
   },
   {
     type: 'date',
     header: 'Created At',
     field: 'createdAt',
-    sortable: true
+    sortable: true,
   },
   {
     type: 'date',

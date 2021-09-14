@@ -31,18 +31,20 @@ export function usePaymentForm(
       return
     }
     setIsLoading(true)
-    const stripeResponse = await stripe.createPaymentMethod({
-      type: 'card',
-      card: cardElement,
-    }).then(d => {
-      setIsLoading(false)
-      return d
-    }).catch(e => {
-      setIsLoading(false)
+    const stripeResponse = await stripe
+      .createPaymentMethod({
+        type: 'card',
+        card: cardElement,
+      })
+      .then((d) => {
+        setIsLoading(false)
+        return d
+      })
+      .catch((e) => {
+        setIsLoading(false)
 
-      return e
-    })
-
+        return e
+      })
 
     const { error, paymentMethod } = stripeResponse
 

@@ -15,4 +15,3 @@ export interface CreateMenuItemPayload {
   ingredients?: string[]
   menu: string
 }
-

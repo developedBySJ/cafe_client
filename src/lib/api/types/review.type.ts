@@ -1,4 +1,4 @@
-import { IMenuItem } from './menuItem.type';
+import { IMenuItem } from './menuItem.type'
 import { IUser } from './user.type'
 
 export interface IReview {

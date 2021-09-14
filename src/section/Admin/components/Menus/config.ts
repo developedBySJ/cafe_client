@@ -1,4 +1,4 @@
-import { ResourceTableColumn } from "../../../../lib/components/ResourceTable/type";
+import { ResourceTableColumn } from '../../../../lib/components/ResourceTable/type'
 
 export const columns: ResourceTableColumn[] = [
   {
@@ -26,7 +26,7 @@ export const columns: ResourceTableColumn[] = [
     type: 'date',
     header: 'Created At',
     field: 'createdAt',
-    sortable: true
+    sortable: true,
   },
   {
     type: 'date',

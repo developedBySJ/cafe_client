@@ -46,7 +46,6 @@ export const ROUTES: Routes[] = [
   { path: '/dishes/new', component: RouteNotImplemented, exact: true, isPrivate: true },
   { path: '/dishes/:id', component: MenuItemDetails, exact: true },
 
-
   /* MENUS */
   { path: '/menus', component: Menus, exact: true },
   { path: '/menus/new', component: RouteNotImplemented, exact: true, isPrivate: true },

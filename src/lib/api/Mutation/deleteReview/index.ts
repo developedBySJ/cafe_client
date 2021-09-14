@@ -1,1 +1,1 @@
-export * from './deleteReview';
+export * from './deleteReview'

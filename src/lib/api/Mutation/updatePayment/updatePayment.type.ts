@@ -6,4 +6,3 @@ export interface UpdateInventoryPayload {
   id: string
   orderId?: string
 }
-

@@ -1,4 +1,4 @@
-import { ResourceTableColumn } from "../../../../lib/components/ResourceTable/type";
+import { ResourceTableColumn } from '../../../../lib/components/ResourceTable/type'
 
 export const columns: ResourceTableColumn[] = [
   {
@@ -6,7 +6,7 @@ export const columns: ResourceTableColumn[] = [
     field: 'id',
     header: 'ID',
     prefix: '/admin/menu-items',
-    suffix: 'edit'
+    suffix: 'edit',
   },
   {
     type: 'link',
@@ -14,7 +14,7 @@ export const columns: ResourceTableColumn[] = [
     header: 'Title',
     width: 200,
     prefix: '/dishes',
-    linkField: 'id'
+    linkField: 'id',
   },
   {
     type: 'string',

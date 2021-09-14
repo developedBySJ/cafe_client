@@ -1,5 +1,5 @@
-import { OrderStatus } from "../../../../lib/api/types/order.type";
-import { ResourceTableColumn } from "../../../../lib/components/ResourceTable/type";
+import { OrderStatus } from '../../../../lib/api/types/order.type'
+import { ResourceTableColumn } from '../../../../lib/components/ResourceTable/type'
 
 export const columns: ResourceTableColumn[] = [
   {
@@ -7,14 +7,14 @@ export const columns: ResourceTableColumn[] = [
     field: 'id',
     header: 'ID',
     prefix: '/orders',
-    suffix: 'invoice'
+    suffix: 'invoice',
   },
   {
     type: 'link',
     field: 'user',
     header: 'Customer',
     prefix: '/admin/users',
-    suffix: 'edit'
+    suffix: 'edit',
   },
   {
     type: 'money',

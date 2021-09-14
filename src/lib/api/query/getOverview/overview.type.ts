@@ -1,23 +1,23 @@
 type Summery = {
-  count: number,
+  count: number
   time: string
 }
 export interface OrderOverview {
   count: {
-    orderPlaced: number,
-    orderPending: number,
-    orderDelivered: number,
-  },
+    orderPlaced: number
+    orderPending: number
+    orderDelivered: number
+  }
   summery: {
-    orderPlacedSummery: Summery[],
-    orderPendingSummery: Summery[],
-  },
+    orderPlacedSummery: Summery[]
+    orderPendingSummery: Summery[]
+  }
 }
 export interface PaymentOverview {
   count: {
-    totalPayment: number,
-  },
+    totalPayment: number
+  }
   summery: {
-    paymentSummery: Summery[],
-  },
+    paymentSummery: Summery[]
+  }
 }

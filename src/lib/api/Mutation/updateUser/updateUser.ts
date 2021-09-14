@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { UpdateUserPayload, UserResponse, } from './updateUser.type'
+import { UpdateUserPayload, UserResponse } from './updateUser.type'
 
 export const USERS_URL = (id: string) => `/api/v1/users/${id}`
 

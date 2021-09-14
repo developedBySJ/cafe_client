@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from 'axios'
 
 export const PAYMENT_URL = (id: string) => `/api/v1/payments/${id}`
 

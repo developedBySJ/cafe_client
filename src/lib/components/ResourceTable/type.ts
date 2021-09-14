@@ -1,6 +1,14 @@
-import React, { ReactNode } from "react"
+import React, { ReactNode } from 'react'
 
-export type ResourceType = 'string' | 'number' | 'link' | 'enum' | 'date' | 'money' | 'boolean' | "array"
+export type ResourceType =
+  | 'string'
+  | 'number'
+  | 'link'
+  | 'enum'
+  | 'date'
+  | 'money'
+  | 'boolean'
+  | 'array'
 
 export interface BaseResourceOption {
   type: ResourceType
@@ -15,7 +23,7 @@ export interface ResourceStringOption extends BaseResourceOption {
   type: 'string'
 }
 export interface ResourceArrayOption extends BaseResourceOption {
-  type: 'array',
+  type: 'array'
   mapFunction: (val: any, idx: number) => ReactNode
 }
 

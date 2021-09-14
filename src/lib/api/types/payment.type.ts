@@ -1,5 +1,5 @@
-import { IUser } from "."
-import { IOrder } from "./order.type"
+import { IUser } from '.'
+import { IOrder } from './order.type'
 
 export enum PaymentType {
   Card = 'card',
