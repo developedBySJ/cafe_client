@@ -1,4 +1,4 @@
-import { Book, CreditCard, List, Package, Star, User } from 'react-feather'
+import { Book, CreditCard, Home, List, Package, Star, User } from 'react-feather'
 import { BrandIcon } from '../../../lib/assets'
 
 export enum Resources {
@@ -9,9 +9,11 @@ export enum Resources {
   Menus = 'menus',
   Payments = 'payments',
   Reviews = 'reviews',
+  Home = 'home',
 }
 
 export const resourceMap = {
+  [Resources.Home]: { name: 'Home', icon: <Home /> },
   [Resources.Users]: { name: 'Users', icon: <User /> },
   [Resources.Inventory]: { name: 'Inventory', icon: <List /> },
   [Resources.Orders]: { name: 'Orders', icon: <Package /> },

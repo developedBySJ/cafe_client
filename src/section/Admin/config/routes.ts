@@ -2,6 +2,7 @@ import { Resources } from ".";
 import { Routes } from "../../../Router";
 
 import { Inventory, MenuItems, Menus, Orders, Payments, Reviews, Users } from '../components'
+import { Dashboard } from "../components/dashboard";
 import { InventoryCreate } from "../components/Inventory/InventoryCreate";
 import { InventoryEdit } from "../components/Inventory/InventoryEdit";
 import { MenuCreate } from "../components/Menus/MenuCreate";
@@ -45,6 +46,7 @@ export const createDataRoutes: Routes[] = [
 
 
 export const AdminRoutes: Routes[] = [
+  { path: `/dashboard`, component: Dashboard, isPrivate: true, sensitive: false, },
   ...editDataRoutes,
   ...viewDataRoutes,
   ...createDataRoutes,

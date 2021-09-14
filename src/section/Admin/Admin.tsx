@@ -13,12 +13,14 @@ import IconButton from '@material-ui/core/IconButton'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import { ChevronLeft, Mail, Menu } from 'react-feather'
+import { ChevronLeft, Mail, Menu, User } from 'react-feather'
 import { resourceMap } from './config'
 import { Redirect, Route, Switch, useHistory } from 'react-router'
 import { Link } from 'react-router-dom'
 import { AdminRoutes } from './config/routes'
 import { PrivateRoute, PrivateRouteComponent, PrivateRouteComponentType } from '../../lib'
+import { Dashboard } from './components/dashboard'
+import { UserRole } from '../../lib/types'
 
 const drawerWidth = 240
 
@@ -98,6 +100,9 @@ export const Admin: PrivateRouteComponent = (parentProps) => {
   const handleDrawerClose = () => {
     setOpen(false)
   }
+  if (parentProps.viewer.role === UserRole.Customer) {
+    return <Redirect to="/me" />
+  }
 
   return (
     <div className={classes.root}>
@@ -120,9 +125,17 @@ export const Admin: PrivateRouteComponent = (parentProps) => {
           >
             <Menu />
           </IconButton>
-          <Typography variant="h6" noWrap>
+          <Typography variant="h6" noWrap style={{ flexGrow: 1 }}>
             Dashboard
           </Typography>
+          <IconButton
+            color="inherit"
+            aria-label="profile"
+            edge="start"
+            onClick={() => history.push('/me')}
+          >
+            <User />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -146,7 +159,7 @@ export const Admin: PrivateRouteComponent = (parentProps) => {
         <Divider />
         <List>
           {Object.entries(resourceMap).map(([key, value]) => (
-            <Link to={`/admin/${key}`} key={key}>
+            <Link to={`/admin/${key}`} key={key} style={{ color: 'inherit' }}>
               <ListItem button>
                 <ListItemIcon>{value.icon}</ListItemIcon>
                 <ListItemText primary={value.name} />
